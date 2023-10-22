@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.List;
 
@@ -19,7 +20,6 @@ public class Voter {
 
     private String username;
     private String password;
-    private boolean vote;
-    private List<String> candidates;
-    private List<String> party;
+    @DocumentReference
+    private Vote voteId;
 }

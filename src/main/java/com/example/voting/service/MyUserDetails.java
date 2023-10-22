@@ -3,6 +3,7 @@ package com.example.voting.service;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,7 @@ import java.util.Collections;
 @Setter
 public class MyUserDetails implements UserDetails {
 
-    private String id;
+    private ObjectId id;
 
     private String username;
 
@@ -26,7 +27,7 @@ public class MyUserDetails implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public MyUserDetails(String id, String username, String email, String password,
+    public MyUserDetails(ObjectId id, String username, String email, String password,
                          Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;

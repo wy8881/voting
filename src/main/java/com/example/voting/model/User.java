@@ -17,7 +17,7 @@ import jakarta.validation.constraints.Size;
 @Document(collection = "users")
 public class User {
     @Id
-    private String id;
+    private ObjectId id;
 
     @NotBlank
     @Size(max = 20)

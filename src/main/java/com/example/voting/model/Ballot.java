@@ -9,14 +9,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document(collection = "log")
+@Document(collection = "ballots")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Vote {
+public class Ballot {
     @Id
     private ObjectId id;
-
-    private String username;
-    private List<String> vote;
+    private List<String> ballotBody;
 }
