@@ -1,6 +1,6 @@
 package com.example.voting.component;
 
-import com.example.voting.entity.User;
+import com.example.voting.model.User;
 import com.example.voting.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -19,12 +19,12 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserRepository userRepository;
 
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
-        System.out.println(username);
         String password = authentication.getCredentials().toString();
         String role = ((MyWebAuthenticationDetails) authentication.getDetails()).getRole();
         User user = userRepository.findByUsername(username);

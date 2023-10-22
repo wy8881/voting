@@ -1,4 +1,4 @@
-package com.example.voting.entity;
+package com.example.voting.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

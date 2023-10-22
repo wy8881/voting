@@ -1,6 +1,5 @@
-package com.example.voting.entity;
+package com.example.voting.model;
 
-import com.example.voting.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,13 +10,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "user")
-public class User {
+@Document(collection = "roles")
+public class Role {
     @Id
-    private ObjectId id;
+    private String id;
 
-    private String username;
-    private String password;
-    private String role;
+    private ERole name;
+
+    public ERole getName() {
+        return name;
+    }
 
 }
