@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -21,6 +22,9 @@ public class SecurityConfiguration {
     @Autowired
     private MyAuthenticationProvider authenticationProvider;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -28,12 +32,7 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->{
-                    formLogin.authenticationDetailsSource(new AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails>() {
-                        @Override
-                        public WebAuthenticationDetails buildDetails(HttpServletRequest request) {
-                            return new MyWebAuthenticationDetails(request);
-                        }
-                    })
+                    formLogin.authenticationDetailsSource((AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails>) MyWebAuthenticationDetails::new)
                             .permitAll();
                 });
         return http.build();
