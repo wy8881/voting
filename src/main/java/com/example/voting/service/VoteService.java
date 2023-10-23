@@ -25,7 +25,7 @@ public class VoteService {
 
         mongoTemplate.update(Voter.class)
                 .matching(Criteria.where("username").is(username))
-                .apply(new Update().push("voteId", ballot))
+                .apply(new Update().push("ballotId", ballot))
                 .first();
 
         return ballot;

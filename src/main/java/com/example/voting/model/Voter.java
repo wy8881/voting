@@ -21,5 +21,5 @@ public class Voter {
     private String username;
     private String password;
     @DocumentReference
-    private Vote voteId;
+    private Ballot ballotId;
 }
