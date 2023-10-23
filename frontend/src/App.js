@@ -29,3 +29,32 @@ function App() {
 }
 
 export default App;
+
+// function App() {
+//   return (
+//       <div className="App">
+//         <header className="App-header">
+//           <p>
+//             Movies list
+//           </p>
+//         </header>
+//         {
+//           movies.map(movie => {
+//             return (
+//                 <div className="movie-box">
+//                   <div className="movie-box-header">
+//                   </div>
+//                   <div className="movie-box-body">
+//                     <img alt={movie.name} className="movie-image" src={movie.img} />
+//                   </div>
+//                   <div className="movie-box-footer">
+//                     {movie.name}
+//                     <div className="like-button"><i class="fa fa-heart" style={{"color": "red"}}aria-hidden="true"></i></div>
+//                   </div>
+//                 </div>
+//             )
+//           })
+//         }
+//       </div>
+//   );
+// }

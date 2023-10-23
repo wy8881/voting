@@ -1,0 +1,73 @@
+import React, {useContext, useState} from "react";
+import { useNavigate } from 'react-router-dom';
+import api from "../api/axiosConfig";
+import {UserContext} from "../contexts/UserContext";
+
+export default function Login(props) {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const[response, setResponse] = useState("Hasn't login");
+    const navigate = useNavigate();
+    const {setUser} = useContext(UserContext);
+    const {user} = useContext(UserContext);
+
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        try {
+
+            await api.post('/login', {
+                "username": username,
+                "password": password
+            }).then(resp => {
+                setResponse(resp.data)
+                const newUser = {
+                    username: resp.data.username,
+                    email: resp.data.email,
+                    role: resp.data.role,
+                    isVoted: resp.data.isVoted
+                }
+                setUser(newUser);
+                navigate(`/dashboard/${user.username}`);
+            })
+        }
+        catch (error) {
+            console.log(error);
+        }
+
+        // navigate("/");
+    }
+
+    async function dontClick(e) {
+        e.preventDefault();
+        await api.get('/register').then(resp => {
+            console.log(resp.data)
+        })
+    }
+
+    return (
+        <div>
+            <h1>Login</h1>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="username"
+                    placeholder="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button type={"submit"}>Login</button>
+            </form>
+            Username: {user.username} <br />
+            Email: {user.email} <br />
+            Role: {response.role} <br />
+            <button onClick={dontClick}>Don't click</button>
+        </div>
+
+    );
+}

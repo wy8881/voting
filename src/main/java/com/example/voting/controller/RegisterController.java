@@ -6,12 +6,17 @@ import com.example.voting.payload.request.SignupRequest;
 import com.example.voting.payload.response.MessageResponse;
 import com.example.voting.repositories.RoleRepository;
 import com.example.voting.repositories.UserRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000/", methods = {RequestMethod.GET, RequestMethod.POST}, allowCredentials = "true")
 @RestController
 @RequestMapping("/register")
 public class RegisterController {
@@ -26,8 +31,19 @@ public class RegisterController {
     PasswordEncoder encoder;
 
     @GetMapping()
-    public String signup() {
-        return "signup";
+    public String signup(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                StringBuilder cookieString = new StringBuilder();
+                cookieString.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
+                String auth = cookieString.toString();
+                return auth;
+            }
+            return "no this one";
+        } else {
+            return "no cookies";
+        }
     }
 
     @PostMapping()

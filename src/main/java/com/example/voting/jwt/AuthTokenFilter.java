@@ -4,6 +4,7 @@ import com.example.voting.service.MyUserDetails;
 import com.example.voting.service.MyUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter{
@@ -46,12 +48,20 @@ public class AuthTokenFilter extends OncePerRequestFilter{
     }
 
     private String parseJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
-
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                StringBuilder cookieString = new StringBuilder();
+                cookieString.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
+                String auth = cookieString.toString();
+                if (StringUtils.hasText(auth) && auth.startsWith("Bearer=")) {
+                    return auth.substring(7);
+                }
+            }
+            return null;
+        } else {
+            logger.error("No cookies found");
+            return null;
         }
-
-        return null;
     }
 }
