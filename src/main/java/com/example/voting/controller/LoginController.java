@@ -2,7 +2,7 @@ package com.example.voting.controller;
 
 import com.example.voting.jwt.AuthEntryPointJwt;
 import com.example.voting.payload.request.LoginRequest;
-import com.example.voting.payload.response.LoginResponse;
+import com.example.voting.payload.response.UserResponse;
 import com.example.voting.service.MyUserDetails;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -77,7 +77,7 @@ public class LoginController {
         response.addCookie(cookie);
 
 //TODO: Get a boolean value from the database to check if the user has voted or not
-        return ResponseEntity.ok(new LoginResponse(
+        return ResponseEntity.ok(new UserResponse(
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 role,

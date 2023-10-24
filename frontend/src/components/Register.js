@@ -3,22 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import api from "../api/axiosConfig";
 import {UserContext} from "../contexts/UserContext";
 
-export default function Login(props) {
+export default function Register(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("")
     const[response, setResponse] = useState("Hasn't login");
     const navigate = useNavigate();
     const {setUser} = useContext(UserContext);
     const {user} = useContext(UserContext);
-    const {deleteUser} = useContext(UserContext);
 
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-
-            await api.post('/login', {
+            await api.post('/register', {
                 "username": username,
-                "password": password
+                "password": password,
+                "email": email
             }).then(resp => {
                 setResponse(resp.data)
                 const newUser = {
@@ -34,20 +34,11 @@ export default function Login(props) {
         catch (error) {
             console.log(error);
         }
-
-        // navigate("/");
-    }
-
-    async function dontClick(e) {
-        e.preventDefault();
-        await api.get('/register').then(resp => {
-            console.log(resp.data)
-        })
     }
 
     return (
         <div>
-            <h1>Login</h1>
+            <h1>Register</h1>
             <form onSubmit={handleSubmit}>
                 <input
                     type="username"
@@ -61,21 +52,15 @@ export default function Login(props) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button type={"submit"}>Login</button>
+                <input
+                    type="email"
+                    placeholder="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <button type="submit">Register</button>
             </form>
-            {
-                user &&
-                <>
-                Username: {user.username} <br />
-                Email: {user.email} <br />
-                Role: {user.role} <br />
-                Status: {response.status} <br />
-                </>
-            }
-
-            <button onClick={dontClick}>Don't click</button>
-            <button onClick={deleteUser}>DeleteUser</button>
+            <p>{response}</p>
         </div>
-
     );
 }

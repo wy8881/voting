@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponse {
+public class UserResponse {
 	private String username;
 	private String email;
 	private String role;
