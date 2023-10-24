@@ -21,7 +21,7 @@ import com.example.voting.jwt.JwtUtils;
 
 @CrossOrigin(origins = "http://localhost:3000/", methods = {RequestMethod.GET, RequestMethod.POST}, allowCredentials = "true")
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api/auth/login")
 public class LoginController {
 
     @Autowired

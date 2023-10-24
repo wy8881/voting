@@ -15,7 +15,7 @@ export default function Register(props) {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            await api.post('/register', {
+            await api.post('/api/auth/register', {
                 "username": username,
                 "password": password,
                 "email": email

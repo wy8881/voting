@@ -16,7 +16,7 @@ export default function Login(props) {
         e.preventDefault();
         try {
 
-            await api.post('/login', {
+            await api.post('/api/auth/login', {
                 "username": username,
                 "password": password
             }).then(resp => {

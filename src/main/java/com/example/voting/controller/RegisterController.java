@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:3000/", methods = {RequestMethod.GET, RequestMethod.POST}, allowCredentials = "true")
 @RestController
-@RequestMapping("/register")
+@RequestMapping("/api/auth/register")
 public class RegisterController {
 
     @Autowired

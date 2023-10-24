@@ -51,16 +51,13 @@ public class AuthTokenFilter extends OncePerRequestFilter{
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                StringBuilder cookieString = new StringBuilder();
-                cookieString.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
-                String auth = cookieString.toString();
+                String auth = cookie.getName() + "=" + cookie.getValue() + "; ";
                 if (StringUtils.hasText(auth) && auth.startsWith("Bearer=")) {
                     return auth.substring(7);
                 }
             }
             return null;
         } else {
-            logger.error("No cookies found");
             return null;
         }
     }
