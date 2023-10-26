@@ -16,7 +16,7 @@ export default function Dashboard(props) {
     async function handleLogout() {
         try {
             deleteUser();
-            await api.post('/api/auth/logout').then(navigate('/login'));
+            await api.post('api/auth/logout').then(navigate('/login'));
         }
         catch (error) {
             console.log(error);
@@ -25,7 +25,7 @@ export default function Dashboard(props) {
 
     async function dontClick(e) {
         e.preventDefault();
-        await api.get('/').then(resp => {
+        await api.get('api/voter').then(resp => {
             console.log(resp.data)
         })
     }

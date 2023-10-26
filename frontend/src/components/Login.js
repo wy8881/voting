@@ -16,7 +16,7 @@ export default function Login(props) {
         e.preventDefault();
         try {
 
-            await api.post('/api/auth/authenticate', {
+            await api.post('api/auth/authenticate', {
                 "username": username,
                 "password": password
             }).then(resp => {
@@ -40,7 +40,7 @@ export default function Login(props) {
 
     async function dontClick(e) {
         e.preventDefault();
-        await api.get('/').then(resp => {
+        await api.get('api/voter').then(resp => {
             console.log(resp.data)
         })
     }

@@ -76,10 +76,9 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .authenticationEntryPoint(unauthorizedHandler)
-                ).cors(withDefaults())
+                        .authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .logout((logout) -> logout.logoutUrl("/api/auth/logout").permitAll().addLogoutHandler(cookies).logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()))
+                .logout((logout) -> logout.addLogoutHandler(cookies).logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()))
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/api/auth/*").permitAll()
                         .anyRequest().authenticated()
