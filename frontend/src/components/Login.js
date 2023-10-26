@@ -40,7 +40,7 @@ export default function Login(props) {
 
     async function dontClick(e) {
         e.preventDefault();
-        await api.get('/register').then(resp => {
+        await api.get('/').then(resp => {
             console.log(resp.data)
         })
     }

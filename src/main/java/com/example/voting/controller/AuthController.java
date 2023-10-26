@@ -1,5 +1,6 @@
 package com.example.voting.controller;
 
+import com.example.voting.jwt.AuthEntryPointJwt;
 import com.example.voting.jwt.JwtUtils;
 import com.example.voting.model.ERole;
 import com.example.voting.model.User;
@@ -13,6 +14,8 @@ import com.example.voting.service.MyUserDetails;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:3000/", methods = {RequestMethod.GET, RequestMethod.POST}, allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST}, allowCredentials = "true" )
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -42,6 +45,8 @@ public class AuthController {
     @Autowired
     PasswordEncoder encoder;
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 
@@ -58,6 +63,7 @@ public class AuthController {
 
         Cookie cookie = new Cookie("Bearer", jwt);
         cookie.setHttpOnly(true);
+        cookie.setPath("/");
         response.addCookie(cookie);
 
 //TODO: Get a boolean value from the database to check if the user has voted or not
@@ -91,6 +97,7 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(signUpRequest.getUsername());
         Cookie cookie = new Cookie("Bearer", jwt);
         cookie.setHttpOnly(true);
+        cookie.setPath("/");
         response.addCookie(cookie);
 
         return ResponseEntity.ok(new UserResponse(
@@ -99,5 +106,21 @@ public class AuthController {
                 user.getRole().toString(),
                 true));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser(HttpServletResponse response) {
+        Cookie cookie = new Cookie("Bearer", null);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return ResponseEntity.ok(new MessageResponse("User logged out successfully!"));
+    }
+
+    @GetMapping("/user")
+    public String userAccess() {
+        return "User Content.";
+    }
+
 
 }

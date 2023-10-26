@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @SpringBootApplication
 @RestController
-@CrossOrigin(origins = "http://localhost:3000/", methods = {RequestMethod.GET}, allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET}, allowCredentials = "true")
 public class VotingApplication {
 
     public static void main(String[] args) {

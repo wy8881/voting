@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
+import api from '../api/axiosConfig';
 
 export default function Dashboard(props) {
     const { user, deleteUser } = useContext(UserContext);
@@ -12,10 +13,21 @@ export default function Dashboard(props) {
         }
     }, [user, navigate]);
 
-    function handleLogout() {
-        deleteUser();
-        //Todo: add a logout endpoint in the backend which can delete the cookie
-        navigate('/login');
+    async function handleLogout() {
+        try {
+            deleteUser();
+            await api.post('/api/auth/logout').then(navigate('/login'));
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function dontClick(e) {
+        e.preventDefault();
+        await api.get('/').then(resp => {
+            console.log(resp.data)
+        })
     }
 
     return (
@@ -24,6 +36,7 @@ export default function Dashboard(props) {
                 <>
                 <p>Welcome, {user.username}!</p>
                 <button onClick={handleLogout}>Logout</button>
+                <button onClick={dontClick}>Don't click</button>
                 </>
             ) : (
                 <p>Loading...</p>
