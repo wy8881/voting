@@ -1,0 +1,32 @@
+.App {
+    font-family: 'Arial', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2, h3, p {
+    text-align: center;
+}
+
+.above-line, .below-line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.party, .candidate {
+    flex: 1;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input[type="number"] {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 10px;
+}

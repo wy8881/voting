@@ -8,24 +8,22 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            console.log('getting user' + JSON.parse(storedUser))
             setUser(JSON.parse(storedUser));
         }
+
     }, []);
 
     useEffect(() => {
         if (user) {
-            console.log('setting user')
             localStorage.setItem('user', JSON.stringify(user));
-        } else {
-            console.log('removing user')
+        }
+        else {
             localStorage.removeItem('user');
         }
     }, [user]);
 
     const deleteUser = () => {
         localStorage.removeItem('user');
-        setUser(null);
     };
 
 

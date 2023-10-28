@@ -7,14 +7,10 @@ export default function Dashboard(props) {
     const { user, deleteUser } = useContext(UserContext);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!user || !user.username) {
-            navigate('/login');
-        }
-    }, [user, navigate]);
 
     async function handleLogout() {
         try {
+            console.log('logging out')
             deleteUser();
             await api.post('api/auth/logout').then(navigate('/login'));
         }
@@ -37,6 +33,7 @@ export default function Dashboard(props) {
                 <p>Welcome, {user.username}!</p>
                 <button onClick={handleLogout}>Logout</button>
                 <button onClick={dontClick}>Don't click</button>
+                <button onClick={() => navigate('/dashboard/ballot')}>Vote</button>
                 </>
             ) : (
                 <p>Loading...</p>

@@ -4,26 +4,23 @@ import { UserContext } from '../contexts/UserContext';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import Register from './Register';
+import Ballot from './Ballot';
 
 const RouterComponent = () => {
     const { user } = useContext(UserContext);
 
     function LoggedRoute({Component}) {
-        if (user) {
-            console.log("user is logged in")
+        if (user || localStorage.getItem('user')) {
             return <Component/>;
         } else {
-            console.log("user is not logged in")
             return <Navigate to="/login" replace />;
         }
     }
 
     function NotloggedRoute({Component}) {
-        if (!user) {
-            console.log("user is not logged in")
+        if (!user && !localStorage.getItem('user')) {
             return <Component/>;
         } else {
-            console.log("user is logged in")
             return <Navigate to="/dashboard" replace />;
         }
     }
@@ -34,6 +31,7 @@ const RouterComponent = () => {
                 <Route path="/login" element={<NotloggedRoute Component={Login} />}/>
                 <Route path="/signup" element={<NotloggedRoute Component={Register} />}/>
                 <Route path="/dashboard" element={<LoggedRoute Component={Dashboard} />}/>
+                <Route path="/dashboard/ballot" element = {<LoggedRoute Component={Ballot} />}/>
             </Routes>
         </Router>
     );
