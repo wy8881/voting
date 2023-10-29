@@ -11,8 +11,9 @@ export default function Dashboard(props) {
     async function handleLogout() {
         try {
             console.log('logging out')
-            deleteUser();
             await api.post('api/auth/logout').then(navigate('/login'));
+            deleteUser();
+
         }
         catch (error) {
             console.log(error);
@@ -26,6 +27,26 @@ export default function Dashboard(props) {
         })
     }
 
+    async function getUserDetails() {
+        try {
+            const response = await api.get('api/auth/user');
+            console.log(response.data);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function getAuthDetails() {
+        try {
+            const response = await api.get('api/auth/checkCookie');
+            console.log(response.data);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div>
             {user && user.username ? (
@@ -34,6 +55,8 @@ export default function Dashboard(props) {
                 <button onClick={handleLogout}>Logout</button>
                 <button onClick={dontClick}>Don't click</button>
                 <button onClick={() => navigate('/dashboard/ballot')}>Vote</button>
+                <button onClick={getUserDetails}>Get user details</button>
+                <button onClick={getAuthDetails}>Get auth details</button>
                 </>
             ) : (
                 <p>Loading...</p>

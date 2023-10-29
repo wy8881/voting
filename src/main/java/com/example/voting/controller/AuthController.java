@@ -11,6 +11,7 @@ import com.example.voting.repositories.RoleRepository;
 import com.example.voting.repositories.UserRepository;
 import com.example.voting.service.MyUserDetails;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -119,10 +121,33 @@ public class AuthController {
 
     @GetMapping("/user")
     public String userAccess() {
-        return "User Content.";
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList().get(0);
+        return "User Content: " + username + " " + role;
     }
 
+    @GetMapping("/checkCookie")
+    public boolean checkCookie(HttpServletRequest request) {
+        String jwt = parseJwt(request);
+        return jwt != null && jwtUtils.validateJwtToken(jwt);
+    }
 
+    private String parseJwt(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                String auth = cookie.getName() + "=" + cookie.getValue() + "; ";
+                if (StringUtils.hasText(auth) && auth.startsWith("Bearer=")) {
+                    return auth.substring(7);
+                }
+            }
+            return null;
+        } else {
+            return null;
+        }
+    }
 
 
 }
