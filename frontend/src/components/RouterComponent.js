@@ -5,12 +5,15 @@ import Login from './Login';
 import Dashboard from './Dashboard';
 import Register from './Register';
 import Ballot from './Ballot';
+import MainContent from './MainContent';
+import Candidates from "./Candidates";
+import Parties from "./Parties";
 
 const RouterComponent = () => {
     const { user } = useContext(UserContext);
 
     function LoggedRoute({Component}) {
-        if (user) {
+        if (user || localStorage.getItem('user')) {
             return <Component/>;
         } else {
             return <Navigate to="/login" replace />;
@@ -18,7 +21,7 @@ const RouterComponent = () => {
     }
 
     function NotloggedRoute({Component}) {
-        if (!(user && user.username)) {
+        if (!((user || localStorage.getItem('user')))) {
             return <Component/>;
         } else {
             return <Navigate to="/dashboard" replace />;
@@ -32,6 +35,10 @@ const RouterComponent = () => {
                 <Route path="/signup" element={<NotloggedRoute Component={Register} />}/>
                 <Route path="/dashboard" element={<LoggedRoute Component={Dashboard} />}/>
                 <Route path="/dashboard/ballot" element = {<LoggedRoute Component={Ballot} />}/>
+                <Route path="/dashboard/candidates" element={<LoggedRoute Component={Candidates} /> } />
+                <Route path="/dashboard/parties" element={<LoggedRoute Component={Parties} /> } />
+                <Route path="/page3" component={() => <MainContent content="Page 3 Content" />} />
+                <Route path="/" exact component={() => <MainContent content="Welcome, user!" />} />
             </Routes>
         </Router>
     );

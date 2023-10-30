@@ -1,0 +1,10 @@
+.sidebar-container {
+    display: flex;
+    justify-content: flex-end;
+
+
+}
+
+.sidebar-button {
+    width: 100%;
+}

@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.List;
 
-@Document(collection = "voter")
+@Document(collection = "voters")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +19,10 @@ public class Voter {
     private ObjectId id;
 
     private String username;
-    private String password;
     @DocumentReference
     private Ballot ballotId;
+
+    public Voter(String username) {
+        this.username = username;
+    }
 }

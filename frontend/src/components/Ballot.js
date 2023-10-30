@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/Ballot.css';
+import Sidebar from "./Sidebar";
 
 export default function Ballot() {
     const [votes, setVotes] = useState({});
@@ -74,19 +75,14 @@ export default function Ballot() {
                 return false;
             }
         }
-
-
         return true;
     }
 
-    function checkValid() {
-
-
-    }
 
 
     return (
         <div className="Ballot">
+            <Sidebar />
             <h2>Senate Ballot Paper</h2>
             <p>You may vote in one of two ways</p>
             <h3>Either</h3>

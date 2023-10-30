@@ -1,24 +1,23 @@
 package com.example.voting.service;
 
-import com.example.voting.model.Ballot;
-import com.example.voting.model.Candidate;
-import com.example.voting.model.Party;
-import com.example.voting.model.Voter;
-import com.example.voting.repositories.BallotRepository;
-import com.example.voting.repositories.CandidateRepository;
-import com.example.voting.repositories.PartyRepository;
-import com.example.voting.repositories.VoterRepository;
+import com.example.voting.model.*;
+import com.example.voting.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
 @Service
-public class UpdateDBService {
+public class DBService {
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private VoterRepository voterRepository;
     @Autowired
     private BallotRepository  ballotRepository;
     @Autowired
@@ -29,6 +28,30 @@ public class UpdateDBService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public boolean candidateExistsByName(String name) {
+        return candidateRepository.existsByName(name);
+    }
+
+    public boolean partyExistsByName(String name) {
+        return partyRepository.existsByName(name);
+    }
+
+    public void createUser(User user) {
+        userRepository.save(user);
+    }
+    public void createVoter(String username) {voterRepository.insert(new Voter(username));}
+    public boolean hasVote(String username) {
+        Voter voter = voterRepository.findByUsername(username);
+        return voter.getBallotId() != null;
+    }
     public Ballot vote(List<String> ballotBody, String username) {
         Ballot ballot = ballotRepository.insert(new Ballot(username, ballotBody));
 
@@ -56,6 +79,14 @@ public class UpdateDBService {
 
     public Party createParty(String name) {
         return partyRepository.insert(new Party(name));
+    }
+
+    public List<Candidate> getAllCandidates() {
+        return candidateRepository.findAll();
+    }
+
+    public List<Party> getAllParties() {
+        return partyRepository.findAll();
     }
 
 }

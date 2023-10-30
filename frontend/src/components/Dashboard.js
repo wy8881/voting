@@ -1,24 +1,13 @@
-import React, { useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import {useNavigate} from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import api from '../api/axiosConfig';
+import Sidebar from "./Sidebar";
+import '../styles/Dashboard.css';
 
 export default function Dashboard(props) {
-    const { user, deleteUser } = useContext(UserContext);
+    const { user  } = useContext(UserContext);
     const navigate = useNavigate();
-
-
-    async function handleLogout() {
-        try {
-            console.log('logging out')
-            await api.post('api/auth/logout').then(navigate('/login'));
-            deleteUser();
-
-        }
-        catch (error) {
-            console.log(error);
-        }
-    }
 
     async function dontClick(e) {
         e.preventDefault();
@@ -35,6 +24,11 @@ export default function Dashboard(props) {
         catch (error) {
             console.log(error);
         }
+    }
+
+    function getUser() {
+        console.log(user);
+        console.log(user.isVoted)
     }
 
     async function getAuthDetails() {
@@ -61,13 +55,27 @@ export default function Dashboard(props) {
         <div>
             {user && user.username ? (
                 <>
-                <p>Welcome, {user.username}!</p>
-                <button onClick={handleLogout}>Logout</button>
-                <button onClick={dontClick}>Don't click</button>
-                <button onClick={() => navigate('/dashboard/ballot')}>Vote</button>
-                <button onClick={getUserDetails}>Get user details</button>
-                <button onClick={getAuthDetails}>Get auth details</button>
-                <button onClick={getTestDelegate}>Get test delegate</button>
+                    <div className="dashboardContainer">
+                        <Sidebar />
+                        <h1 className="dashboardText"> Welcome {user.username} </h1>
+                        {user && user.role === 'ROLE_DELEGATE' ? (
+                            <>
+                            <h1 className="dashboardText"> You are a delegate </h1>
+                            </>
+                        ) : (
+                            <>
+                            {user.isVoted.toString() === 'true' ? (
+                                <>
+                                    <h1 className="dashboardText"> You have voted </h1>
+                                </>
+                            ) : (
+                                <>
+                                    <h1 className="dashboardText"> You have not voted </h1>
+                                </>
+                            )}
+                            </>
+                        )}
+                    </div>
                 </>
             ) : (
                 <p>Loading...</p>

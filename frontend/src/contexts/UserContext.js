@@ -5,37 +5,36 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
 
+    console.log("user context amount")
+
     async function checkCookie() {
         try {
             const response = await api.get('api/auth/checkCookie');
             const isAuth = response.data;
-            if(isAuth === false) {
-                localStorage.removeItem('user');
+            if (isAuth === false) {
+                console.log("not auth")
+                deleteUser();
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.log(error);
         }
     }
-    checkCookie();
+
 
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-
+        checkCookie().then(r => {
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+            }
+        });
     }, []);
 
     useEffect(() => {
         if (user) {
             localStorage.setItem('user', JSON.stringify(user));
-        }
-        else {
-            localStorage.removeItem('user');
         }
     }, [user]);
 

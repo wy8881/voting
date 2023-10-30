@@ -1,5 +1,6 @@
 package com.example.voting.service;
 
+import com.example.voting.model.Ballot;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;

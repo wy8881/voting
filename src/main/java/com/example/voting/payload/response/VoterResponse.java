@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserResponse {
+public class VoterResponse {
 	private String username;
 	private String email;
 	private String role;
