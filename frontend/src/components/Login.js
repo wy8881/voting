@@ -2,6 +2,7 @@ import React, {useContext, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import api from "../api/axiosConfig";
 import {UserContext} from "../contexts/UserContext";
+import {isUsernameValid} from "../utils/Utils";
 
 export default function Login(props) {
     const [username, setUsername] = useState("");
@@ -12,10 +13,16 @@ export default function Login(props) {
     const {user} = useContext(UserContext);
     const {deleteUser} = useContext(UserContext);
 
+
     async function handleSubmit(e) {
         e.preventDefault();
+        if(!isUsernameValid(username)) {
+            window.alert("Username can only contain numbers and alphabets");
+            setUsername("");
+            setPassword("");
+            return;
+        }
         try {
-
             await api.post('api/auth/authenticate', {
                 "username": username,
                 "password": password
@@ -53,12 +60,14 @@ export default function Login(props) {
                     type="username"
                     placeholder="username"
                     value={username}
+                    maxLength={10}
                     onChange={(e) => setUsername(e.target.value)}
                 />
                 <input
                     type="password"
                     placeholder="password"
                     value={password}
+                    maxLength={20}
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <button type={"submit"}>Login</button>

@@ -1,0 +1,53 @@
+/* RegisterPage.css */
+
+.register-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* Center content horizontally */
+    /*justify-content: center; !* Center content vertically *!*/
+    height: 100vh;  /* take the full height of the viewport */
+    font-size: 20px;
+}
+
+.input-container {
+    margin-bottom: 10px; /* Add some spacing between each input group */
+    display: flex; /* Using flexbox to align items in a row */
+    align-items: center; /* Vertically align items in the center */
+}
+
+.input-label {
+    display: inline-flex;
+    width: 100px; /* Set a fixed width to make sure all labels have the same width */
+    text-align: right;
+    margin-right: 10px; /* Add some spacing between the label and the input */
+    }
+
+
+.input-field {
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.register-button {
+    display: block;
+    margin: 20px auto; /* Top and bottom margin of 20px and auto left-right margin will center the button */
+    padding: 10px 20px;
+    background-color: #007bff; /* example color, adjust as needed */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: #0056b3;
+    }
+}
+
+.helper-text {
+    margin-left: 10px; /* Add spacing above password strength text */
+    margin-top: 5px;
+    font-size: 12px;
+    color: grey;
+}

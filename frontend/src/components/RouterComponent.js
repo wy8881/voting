@@ -10,7 +10,7 @@ const RouterComponent = () => {
     const { user } = useContext(UserContext);
 
     function LoggedRoute({Component}) {
-        if (user || localStorage.getItem('user')) {
+        if (user) {
             return <Component/>;
         } else {
             return <Navigate to="/login" replace />;
@@ -18,7 +18,7 @@ const RouterComponent = () => {
     }
 
     function NotloggedRoute({Component}) {
-        if (!user && !localStorage.getItem('user')) {
+        if (!(user && user.username)) {
             return <Component/>;
         } else {
             return <Navigate to="/dashboard" replace />;

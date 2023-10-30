@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Ballot.css';
+import '../styles/Ballot.css';
 
 export default function Ballot() {
     const [votes, setVotes] = useState({});

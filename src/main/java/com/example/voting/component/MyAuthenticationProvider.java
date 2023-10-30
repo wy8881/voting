@@ -29,7 +29,6 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         String role = ((MyWebAuthenticationDetails) authentication.getDetails()).getRole();
         User user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(password, user.getPassword())
-//                && user.getRole().name().equals(role)
         ) {
             return new UsernamePasswordAuthenticationToken(username, password, new ArrayList<>());
         } else {

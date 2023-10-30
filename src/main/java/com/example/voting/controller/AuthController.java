@@ -110,6 +110,38 @@ public class AuthController {
                 true));
     }
 
+    @PostMapping("/registerDelegate")
+    public ResponseEntity<?> registeDelegate(@Valid @RequestBody SignupRequest signUpRequest, HttpServletResponse response) {
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Username is already taken!"));
+        }
+
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+        // Create new user's account
+        User user = new User(signUpRequest.getUsername(),
+                signUpRequest.getEmail(),
+                encoder.encode(signUpRequest.getPassword()));
+        user.setRole(ERole.ROLE_DELEGATE);
+        userRepository.save(user);
+
+        String jwt = jwtUtils.generateJwtToken(signUpRequest.getUsername());
+        Cookie cookie = new Cookie("Bearer", jwt);
+        setCookie(cookie);
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok(new UserResponse(
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole().toString(),
+                true));
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser(HttpServletResponse response) {
         Cookie cookie = new Cookie("Bearer", null);

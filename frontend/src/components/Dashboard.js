@@ -47,6 +47,16 @@ export default function Dashboard(props) {
         }
     }
 
+    async function getTestDelegate(){
+        try {
+            const response = await api.get('api/delegate/test');
+            console.log(response.data);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div>
             {user && user.username ? (
@@ -57,6 +67,7 @@ export default function Dashboard(props) {
                 <button onClick={() => navigate('/dashboard/ballot')}>Vote</button>
                 <button onClick={getUserDetails}>Get user details</button>
                 <button onClick={getAuthDetails}>Get auth details</button>
+                <button onClick={getTestDelegate}>Get test delegate</button>
                 </>
             ) : (
                 <p>Loading...</p>

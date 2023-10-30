@@ -10,19 +10,18 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.List;
 
-@Document(collection = "ballots")
+@Document(collection = "parties")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ballot {
+public class Party {
     @Id
     private ObjectId id;
+    private String name;
     @DocumentReference
-    private String voter;
-    private List<String> ballotBody;
+    private List<Candidate> candidatesID;
 
-    public Ballot(String voter, List<String> ballotBody) {
-        this.voter = voter;
-        this.ballotBody = ballotBody;
+    public Party(String name) {
+        this.name = name;
     }
 }

@@ -8,21 +8,23 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import java.util.List;
-
-@Document(collection = "ballots")
+@Document(collection = "candidates")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ballot {
+public class Candidate {
     @Id
     private ObjectId id;
+    private String name;
     @DocumentReference
-    private String voter;
-    private List<String> ballotBody;
+    private Party partyID;
 
-    public Ballot(String voter, List<String> ballotBody) {
-        this.voter = voter;
-        this.ballotBody = ballotBody;
+    public Candidate(String name, Party partyID) {
+        this.name = name;
+        this.partyID = partyID;
+    }
+
+    public Candidate(String name) {
+        this.name = name;
     }
 }
