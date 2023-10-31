@@ -64,6 +64,7 @@ export default function Register(props) {
 
     return (
         <div className="register-container">
+            <h1>Register</h1>
             <form onSubmit={handleSubmit}>
                 <div className="input-container">
                     <label className="input-label" htmlFor="username">Username</label>

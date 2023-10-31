@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import {BrowserRouter as Router, Route, Redirect, Switch, Routes, Navigate} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import Login from './Login';
 import Dashboard from './Dashboard';
@@ -8,6 +8,7 @@ import Ballot from './Ballot';
 import MainContent from './MainContent';
 import Candidates from "./Candidates";
 import Parties from "./Parties";
+import App from "../App";
 
 const RouterComponent = () => {
     const { user } = useContext(UserContext);
@@ -31,6 +32,7 @@ const RouterComponent = () => {
     return (
         <Router>
             <Routes>
+                <Route path="/" element={<App/>} />
                 <Route path="/login" element={<NotloggedRoute Component={Login} />}/>
                 <Route path="/signup" element={<NotloggedRoute Component={Register} />}/>
                 <Route path="/dashboard" element={<LoggedRoute Component={Dashboard} />}/>

@@ -83,7 +83,7 @@ export default function Ballot() {
     return (
         <div className="Ballot">
             <Sidebar />
-            <h2>Senate Ballot Paper</h2>
+            <h1>Senate Ballot</h1>
             <p>You may vote in one of two ways</p>
             <h3>Either</h3>
             <div className="above-line">

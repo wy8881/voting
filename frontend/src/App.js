@@ -1,31 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
-import api from './api/axiosConfig';
-import { useEffect, useState } from 'react';
+import {Link} from "react-router-dom";
 
 function App() {
 
-  const [output, setOutput] = useState();
-
-  const setOutputText = async()=> {
-    try{
-      const response = await api.get('/login');
-      setOutput(response.data);
-      console.log(response.data)
-    }
-    catch (error){
-      console.log(error);
-    }
-  }
-
-  useEffect(()=>{
-    setOutputText();
-  },[])
-
   return (
     <div className="App">
+        <h1> Senta Voting System </h1>
+        <div className="button-container">
+            <Link to={"/login"}>
+                <button className="button" style={{marginRight:'50px'}}> Login </button>
+            </Link>
+            <Link to={"/signup"}>
+                <button className="button" > Register </button>
+            </Link>
+        </div>
     </div>
-  );
+    );
 }
 
 export default App;

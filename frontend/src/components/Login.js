@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from "../api/axiosConfig";
 import {UserContext} from "../contexts/UserContext";
 import {isUsernameValid} from "../utils/Utils";
+import '../styles/Register.css'
 
 export default function Login(props) {
     const [username, setUsername] = useState("");
@@ -53,24 +54,34 @@ export default function Login(props) {
     }
 
     return (
-        <div>
+        <div className="register-container">
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
-                <input
-                    type="username"
-                    placeholder="username"
-                    value={username}
-                    maxLength={10}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="password"
-                    value={password}
-                    maxLength={20}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button type={"submit"}>Login</button>
+                <div className="input-container">
+                    <label className = 'input-label' htmlFor='username'>Username</label>
+                    <input
+                        className="input-field"
+                        id="username"
+                        type="username"
+                        placeholder="username"
+                        value={username}
+                        maxLength={10}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </div>
+                <div className="input-container">
+                    <label className = 'input-label' htmlFor='password'>Password</label>
+                    <input
+                        className="input-field"
+                        id="password"
+                        type="password"
+                        placeholder="password"
+                        value={password}
+                        maxLength={20}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+                <button className='register-button' type={"submit"}>Login</button>
             </form>
             {
                 user &&
