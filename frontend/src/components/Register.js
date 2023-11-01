@@ -1,10 +1,11 @@
 import React, {useContext, useState} from "react";
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import api from "../api/axiosConfig";
 import {UserContext} from "../contexts/UserContext";
 import '../styles/Register.css'
 import {isUsernameValid} from "../utils/Utils";
 import {checkPasswordStrength} from "../utils/passwordStrengthChecker";
+import Sidebar from "./Sidebar";
 
 export default function Register(props) {
     const [username, setUsername] = useState("");
@@ -29,11 +30,15 @@ export default function Register(props) {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        if (username === "" || password === "" || email === "") {
+            handleError("Username, password and email cannot be empty")
+            return;
+        }
         if(!isUsernameValid(username)) {
             handleError("Username can only contain numbers and alphabets")
             return;
         }
-        let type = "voter"
+        let type = "voter";
         try {
             let endpoint = ""
             if(type === "voter") {
@@ -58,7 +63,9 @@ export default function Register(props) {
             })
         }
         catch (error) {
-            console.log(error);
+            if(error.response.status === 400) {
+                handleError(error.response.data.message)
+            }
         }
     }
 
@@ -113,7 +120,13 @@ export default function Register(props) {
                         <li key={index} style={{ color: 'red' }}>{criteria.message}</li>
                     ))}
                 </ul>
-                <button className="register-button" type="submit">Register</button>
+                <div className="button-container">
+                    <button className="register-button" type="submit">Register</button>
+                    <Link to={"/login"}>
+                        <button className="button" style={{marginRight:'50px'}}> Return to Log in</button>
+                    </Link>
+                </div>
+
             </form>
         </div>
     );

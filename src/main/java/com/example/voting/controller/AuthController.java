@@ -7,8 +7,6 @@ import com.example.voting.payload.request.LoginRequest;
 import com.example.voting.payload.request.SignupRequest;
 import com.example.voting.payload.response.MessageResponse;
 import com.example.voting.payload.response.VoterResponse;
-import com.example.voting.repositories.RoleRepository;
-import com.example.voting.repositories.UserRepository;
 import com.example.voting.service.DBService;
 import com.example.voting.service.MyUserDetails;
 import jakarta.servlet.http.Cookie;
@@ -48,9 +46,13 @@ public class AuthController {
         cookie.setPath("/");
     }
 
+    @PostMapping("/test")
+    public String test() {
+        return "Test Auth";
+    }
+
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-
         Authentication authentication = authenticationProvider.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 

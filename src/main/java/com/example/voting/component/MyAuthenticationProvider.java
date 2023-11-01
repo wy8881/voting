@@ -1,7 +1,10 @@
 package com.example.voting.component;
 
+import com.example.voting.controller.AuthController;
 import com.example.voting.model.User;
 import com.example.voting.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,13 +24,15 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    private static final Logger logger = LoggerFactory.getLogger(MyAuthenticationProvider.class);
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
-        String role = ((MyWebAuthenticationDetails) authentication.getDetails()).getRole();
+        logger.error("username: " + username);
         User user = userRepository.findByUsername(username);
+        logger.error("user: " + user);
         if (user != null && passwordEncoder.matches(password, user.getPassword())
         ) {
             return new UsernamePasswordAuthenticationToken(username, password, new ArrayList<>());

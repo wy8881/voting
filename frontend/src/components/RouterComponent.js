@@ -5,10 +5,10 @@ import Login from './Login';
 import Dashboard from './Dashboard';
 import Register from './Register';
 import Ballot from './Ballot';
-import MainContent from './MainContent';
 import Candidates from "./Candidates";
 import Parties from "./Parties";
 import App from "../App";
+import CreateNewParty from "./CreateNewParty";
 
 const RouterComponent = () => {
     const { user } = useContext(UserContext);
@@ -39,8 +39,7 @@ const RouterComponent = () => {
                 <Route path="/dashboard/ballot" element = {<LoggedRoute Component={Ballot} />}/>
                 <Route path="/dashboard/candidates" element={<LoggedRoute Component={Candidates} /> } />
                 <Route path="/dashboard/parties" element={<LoggedRoute Component={Parties} /> } />
-                <Route path="/page3" component={() => <MainContent content="Page 3 Content" />} />
-                <Route path="/" exact component={() => <MainContent content="Welcome, user!" />} />
+                <Route path="/dashboard/parties/create" element={<LoggedRoute Component={CreateNewParty} /> } />
             </Routes>
         </Router>
     );

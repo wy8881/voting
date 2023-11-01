@@ -4,10 +4,12 @@ import com.example.voting.model.Candidate;
 import com.example.voting.model.Party;
 import com.example.voting.payload.request.CreateCandidateRequest;
 import com.example.voting.payload.request.CreatePartyRequest;
-import com.example.voting.repositories.CandidateRepository;
-import com.example.voting.repositories.PartyRepository;
+import com.example.voting.payload.response.MessageResponse;
 import com.example.voting.service.DBService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +20,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/delegate")
-@PreAuthorize("hasRole('DELEGATE')")
+//@PreAuthorize("hasRole('ROLE_DELEGATE')")
 public class DelegateController {
     @Autowired
     DBService DBService;
+    private static final Logger logger = LoggerFactory.getLogger(DelegateController.class);
 
     @GetMapping("/test")
     public String test() {
         return "Test Delegate";
     }
+
     @PostMapping("/createCandidate")
     public String CreateCandidate(@Valid @RequestBody CreateCandidateRequest createCandidateRequest) {
         if(DBService.candidateExistsByName(createCandidateRequest.getName()))
@@ -38,11 +42,13 @@ public class DelegateController {
     }
 
     @PostMapping("/createParty")
-    public String CreateParty(@Valid @RequestBody CreatePartyRequest createPartyRequest) {
+    public ResponseEntity<?> CreateParty(@Valid @RequestBody CreatePartyRequest createPartyRequest) {
         if(DBService.partyExistsByName(createPartyRequest.getName()))
-            return "The party is already taken!";
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Party name is already taken!"));
         DBService.createParty(createPartyRequest.getName());
-        return "Create Party";
+        return ResponseEntity.ok(new MessageResponse("Party created successfully!"));
     }
 
     @GetMapping("/allCandidates")

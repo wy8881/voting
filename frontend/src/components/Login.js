@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react";
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import api from "../api/axiosConfig";
 import {UserContext} from "../contexts/UserContext";
 import {isUsernameValid} from "../utils/Utils";
@@ -8,19 +8,25 @@ import '../styles/Register.css'
 export default function Login(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const[response, setResponse] = useState("Hasn't login");
+    const [status, setStatus] = useState("");
     const navigate = useNavigate();
     const {setUser} = useContext(UserContext);
-    const {user} = useContext(UserContext);
     const {deleteUser} = useContext(UserContext);
 
 
+    function handleError(message) {
+        window.alert(message);
+        setUsername("");
+        setPassword("");
+    }
     async function handleSubmit(e) {
         e.preventDefault();
+        if(username === "" || password === "") {
+            handleError("Username and password cannot be empty")
+            return;
+        }
         if(!isUsernameValid(username)) {
-            window.alert("Username can only contain numbers and alphabets");
-            setUsername("");
-            setPassword("");
+            handleError("Username can only contain numbers and alphabets")
             return;
         }
         try {
@@ -28,7 +34,6 @@ export default function Login(props) {
                 "username": username,
                 "password": password
             }).then(resp => {
-                setResponse(resp.data)
                 const newUser = {
                     username: resp.data.username,
                     email: resp.data.email,
@@ -40,10 +45,10 @@ export default function Login(props) {
             })
         }
         catch (error) {
-            console.log(error);
+            if(error.response.status === 401) {
+                handleError("Invalid username or password")
+            }
         }
-
-        // navigate("/");
     }
 
     async function dontClick(e) {
@@ -81,18 +86,14 @@ export default function Login(props) {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                <button className='register-button' type={"submit"}>Login</button>
-            </form>
-            {
-                user &&
-                <>
-                Username: {user.username} <br />
-                Email: {user.email} <br />
-                Role: {user.role} <br />
-                Status: {response.status} <br />
-                </>
-            }
+                <div className="button-container">
+                    <button className='register-button' type={"submit"}>Login</button>
+                    <Link to={"/signup"}>
+                        <button className="button" > Go to Register </button>
+                    </Link>
+                </div>
 
+            </form>
             <button onClick={dontClick}>Don't click</button>
             <button onClick={deleteUser}>DeleteUser</button>
         </div>

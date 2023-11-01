@@ -1,4 +1,10 @@
-/* RegisterPage.css */
+.container{
+    font-family: 'Arial', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
 
 .register-container {
     width: 100%;
@@ -8,6 +14,7 @@
     /*justify-content: center; !* Center content vertically *!*/
     height: 100vh;  /* take the full height of the viewport */
     font-size: 20px;
+
 }
 
 .input-container {
@@ -30,7 +37,25 @@
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+.button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 
+.button {
+    margin: 20px auto; /* Top and bottom margin of 20px and auto left-right margin will center the button */
+    padding: 10px 20px;
+    background-color: #007bff; /* example color, adjust as needed */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: #0056b3;
+    }
+}
 .register-button {
     display: block;
     margin: 20px auto; /* Top and bottom margin of 20px and auto left-right margin will center the button */
@@ -44,6 +69,8 @@
         background-color: #0056b3;
     }
 }
+
+
 
 .helper-text {
     margin-left: 10px; /* Add spacing above password strength text */

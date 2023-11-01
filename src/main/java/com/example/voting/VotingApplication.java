@@ -19,17 +19,19 @@ public class VotingApplication {
         return "hello";
     }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(org.springframework.web.servlet.config.annotation.CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedMethods("*")
-                        .allowedOrigins("http://localhost:3000")
-                        .allowCredentials(true)
-                        .allowedHeaders("*");
-            }
-        };
-    }
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(org.springframework.web.servlet.config.annotation.CorsRegistry registry) {
+//                registry.addMapping("/**")
+//                        .allowCredentials(true)
+//                        .allowedOrigins("http://localhost:3000")
+//                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+//                        .allowedHeaders("*");
+//
+//
+//            }
+//        };
+//    }
 }

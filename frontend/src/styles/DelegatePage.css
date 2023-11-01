@@ -5,3 +5,23 @@
     padding: 20px;
     text-align: center;
 }
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    margin: 20px auto; /* Top and bottom margin of 20px and auto left-right margin will center the button */
+    padding: 10px 20px;
+    background-color: #007bff; /* example color, adjust as needed */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: #0056b3;
+    }
+}
