@@ -1,5 +1,6 @@
 package com.example.voting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Ballot {
     @Id
+    @JsonIgnore
     private ObjectId id;
     @DocumentReference
     private String voter;

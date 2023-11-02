@@ -59,7 +59,7 @@ export default function Login(props) {
     }
 
     return (
-        <div className="register-container">
+        <div className="container">
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
                 <div className="input-container">

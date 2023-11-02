@@ -10,12 +10,13 @@ import Parties from "./Parties";
 import App from "../App";
 import CreateNewParty from "./CreateNewParty";
 import ManageParties from "./ManageParties";
+import CreateNewCandidate from "./CreateNewCandidate";
+import ManageCandidates from "./ManageCandidates";
 
 function PageTitle() {
     const location = useLocation();
     useEffect(()=> {
         let title;
-        console.log(location.pathname);
         switch (location.pathname) {
             case '/':
                 title = "E-Voting System";
@@ -43,6 +44,9 @@ function PageTitle() {
                 break;
             case '/dashboard/parties/manage':
                 title = "Manage Parties";
+                break;
+            case '/dashboard/candidates/create':
+                title = "Create New Candidate";
                 break;
             default:
                 title = "E-Voting System";
@@ -83,8 +87,9 @@ export default function RouterComponent() {
                 <Route path="/dashboard/candidates" element={<LoggedRoute Component={Candidates} /> } />
                 <Route path="/dashboard/parties" element={<LoggedRoute Component={Parties} /> } />
                 <Route path="/dashboard/parties/create" element={<LoggedRoute Component={CreateNewParty} /> } />
-                {/*<Route path="/dashboard/parties/manage" element={<LoggedRoute Component={ManageParties} /> } />*/}
                 <Route path="/dashboard/parties/manage" element={<ManageParties/>} />
+                <Route path="/dashboard/candidates/create" element={<LoggedRoute Component={CreateNewCandidate} /> } />
+                <Route path="/dashboard/candidates/manage" element={<ManageCandidates/>} />
             </Routes>
         </Router>
     );

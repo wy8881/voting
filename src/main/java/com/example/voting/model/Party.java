@@ -1,8 +1,10 @@
 package com.example.voting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,10 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 public class Party {
     @Id
+    @JsonIgnore
     private ObjectId id;
     private String name;
-    @DocumentReference
-    private List<Candidate> candidatesID;
+    private List<String> candidates;
 
     public Party(String name) {
         this.name = name;

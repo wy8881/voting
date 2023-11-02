@@ -63,15 +63,10 @@ public class DBService {
     }
 
     public Candidate createCandidate(String name, String partyName) {
-        Candidate candidate = candidateRepository.insert(new Candidate(name));
-        Party party = partyRepository.findByName(partyName);
-        mongoTemplate.update(Candidate.class)
-                .matching(Criteria.where("name").is(name))
-                .apply(new Update().push("partyID", party))
-                .first();
+        candidateRepository.insert(new Candidate(name, partyName));
         mongoTemplate.update(Party.class)
                 .matching(Criteria.where("name").is(partyName))
-                .apply(new Update().push("candidatesID", candidate))
+                .apply(new Update().push("candidates", name))
                 .first();
         return candidateRepository.findByName(name);
     }

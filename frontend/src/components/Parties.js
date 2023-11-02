@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import {Link} from "react-router-dom";
 export default function Parties() {
     return (
-        <div className="container">
+        <div className="delegate-container">
             <Sidebar />
             <h1>Parties</h1>
             <div className="button-container">

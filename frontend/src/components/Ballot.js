@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/Common.css'
 import '../styles/Ballot.css';
 import Sidebar from "./Sidebar";
 

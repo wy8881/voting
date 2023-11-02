@@ -1,5 +1,6 @@
 package com.example.voting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,7 @@ import jakarta.validation.constraints.Size;
 @Document(collection = "users")
 public class User {
     @Id
+    @JsonIgnore
     private ObjectId id;
 
     @NotBlank

@@ -5,7 +5,6 @@ import {UserContext} from "../contexts/UserContext";
 import '../styles/Register.css'
 import {isUsernameValid} from "../utils/Utils";
 import {checkPasswordStrength} from "../utils/passwordStrengthChecker";
-import Sidebar from "./Sidebar";
 
 export default function Register(props) {
     const [username, setUsername] = useState("");
@@ -70,7 +69,7 @@ export default function Register(props) {
     }
 
     return (
-        <div className="register-container">
+        <div className="container">
             <h1>Register</h1>
             <form onSubmit={handleSubmit}>
                 <div className="input-container">

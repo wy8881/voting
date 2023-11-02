@@ -5,31 +5,31 @@ import {useNavigate} from "react-router-dom";
 import Sidebar from "./Sidebar";
 import '../styles/DelegatePage.css';
 
-export default function ManageParties() {
-    const [parties, setParties] = useState([]);
+export default function ManageCandidates() {
+    const [candidates, setCandidates] = useState([]);
     const [received, setReceived] = useState(false);
     const navigate = useNavigate();
     const {user} = useContext(UserContext);
 
     useEffect(() => {
-        async function fetchParties() {
+        async function fetchCandidates() {
             try {
-                await api.get('api/delegate/allParties').then(resp => {
-                    setParties(resp.data);
+                await api.get('api/delegate/allCandidates').then(resp => {
+                    setCandidates(resp.data);
                     setReceived(true)
                 })
             } catch (error) {
                 console.log(error)
             }
         }
-        fetchParties();
+        fetchCandidates();
     },[]);
 
     useEffect(() => {
-            if (!user && !localStorage.getItem('user')) {
-                navigate('/login')
-            }
-        })
+        if (!user && !localStorage.getItem('user')) {
+            navigate('/login')
+        }
+    })
 
     return (
         <div className="delegate-container">
@@ -39,14 +39,14 @@ export default function ManageParties() {
                 <div>Loading...</div>
             ) : (
                 <>
-                    {parties && parties.length > 0 && parties.map(party => (
+                    {candidates && candidates.length > 0 && candidates.map(candidate => (
                         <div className={'delegate-row'}>
-                            <div>Name: {party.name}</div>
-                            {party.candidates.length > 0 ? <div>Candidates: {party.candidates.join(', ')}</div> : <div>No Candidates</div>}
+                            <div>Name: {candidate.name}</div>
+                            <div>Party: {candidate.party}</div>
                         </div>
                     ))}
-                    {parties && parties.length === 0 && (
-                        <div>No parties</div>
+                    {candidates && candidates.length === 0 && (
+                        <div>No candidates</div>
                     )}
                 </>
             )}
