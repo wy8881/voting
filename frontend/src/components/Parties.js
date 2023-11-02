@@ -10,7 +10,7 @@ export default function Parties() {
                 <Link to={"/dashboard/parties/create"}>
                     <button className="button" style={{marginRight:'50px'}}> Create New </button>
                 </Link>
-                <Link to={"/signup"}>
+                <Link to={"/dashboard/parties/manage"}>
                     <button className="button" > Manage All </button>
                 </Link>
             </div>

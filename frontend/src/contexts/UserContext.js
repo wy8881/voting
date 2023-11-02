@@ -5,8 +5,6 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
 
-    console.log("user context amount")
-
     async function checkCookie() {
         try {
             const response = await api.get('api/auth/checkCookie');

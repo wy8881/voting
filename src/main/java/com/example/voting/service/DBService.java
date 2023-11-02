@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -77,8 +76,8 @@ public class DBService {
         return candidateRepository.findByName(name);
     }
 
-    public Party createParty(String name) {
-        return partyRepository.insert(new Party(name));
+    public void createParty(String name) {
+        partyRepository.insert(new Party(name));
     }
 
     public List<Candidate> getAllCandidates() {

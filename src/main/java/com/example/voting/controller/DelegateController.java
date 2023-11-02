@@ -32,13 +32,17 @@ public class DelegateController {
     }
 
     @PostMapping("/createCandidate")
-    public String CreateCandidate(@Valid @RequestBody CreateCandidateRequest createCandidateRequest) {
+    public ResponseEntity<?> CreateCandidate(@Valid @RequestBody CreateCandidateRequest createCandidateRequest) {
         if(DBService.candidateExistsByName(createCandidateRequest.getName()))
-            return "The name is already taken!";
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Candidate name is already taken!"));
         if(!DBService.partyExistsByName(createCandidateRequest.getParty()))
-            return "The party does not exist!";
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Party does not exist!"));
         Candidate candidate = DBService.createCandidate(createCandidateRequest.getName(), createCandidateRequest.getParty());
-        return "Create Candidate";
+        return ResponseEntity.ok(new MessageResponse("Candidate created successfully!"));
     }
 
     @PostMapping("/createParty")
