@@ -83,7 +83,7 @@ export default function RouterComponent() {
                 <Route path="/login" element={<NotloggedRoute Component={Login} />}/>
                 <Route path="/signup" element={<NotloggedRoute Component={Register} />}/>
                 <Route path="/dashboard" element={<LoggedRoute Component={Dashboard} />}/>
-                <Route path="/dashboard/ballot" element = {<LoggedRoute Component={Ballot} />}/>
+                <Route path="/dashboard/ballot" element = {<Ballot/>}/>
                 <Route path="/dashboard/candidates" element={<LoggedRoute Component={Candidates} /> } />
                 <Route path="/dashboard/parties" element={<LoggedRoute Component={Parties} /> } />
                 <Route path="/dashboard/parties/create" element={<LoggedRoute Component={CreateNewParty} /> } />

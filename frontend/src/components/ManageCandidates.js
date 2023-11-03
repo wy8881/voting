@@ -14,7 +14,7 @@ export default function ManageCandidates() {
     useEffect(() => {
         async function fetchCandidates() {
             try {
-                await api.get('api/delegate/allCandidates').then(resp => {
+                await api.get('api/user/allCandidates').then(resp => {
                     setCandidates(resp.data);
                     setReceived(true)
                 })

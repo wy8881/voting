@@ -14,7 +14,7 @@ export default function ManageParties() {
     useEffect(() => {
         async function fetchParties() {
             try {
-                await api.get('api/delegate/allParties').then(resp => {
+                await api.get('api/user/allParties').then(resp => {
                     setParties(resp.data);
                     setReceived(true)
                 })

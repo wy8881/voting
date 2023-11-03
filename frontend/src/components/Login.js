@@ -8,7 +8,6 @@ import '../styles/Register.css'
 export default function Login(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [status, setStatus] = useState("");
     const navigate = useNavigate();
     const {setUser} = useContext(UserContext);
     const {deleteUser} = useContext(UserContext);
@@ -59,7 +58,7 @@ export default function Login(props) {
     }
 
     return (
-        <div className="container">
+        <div className="register-container">
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
                 <div className="input-container">

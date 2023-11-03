@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/delegate")
-//@PreAuthorize("hasRole('ROLE_DELEGATE')")
+@PreAuthorize("hasRole('ROLE_DELEGATE')")
 public class DelegateController {
     @Autowired
     DBService DBService;
@@ -55,13 +55,4 @@ public class DelegateController {
         return ResponseEntity.ok(new MessageResponse("Party created successfully!"));
     }
 
-    @GetMapping("/allCandidates")
-    public ResponseEntity<List<Candidate>> getAllCandidates() {
-        return new ResponseEntity<List<Candidate>>(DBService.getAllCandidates(), HttpStatus.OK);
-    }
-
-    @GetMapping("/allParties")
-    public ResponseEntity<List<Party>> getAllParties() {
-        return new ResponseEntity<List<Party>>(DBService.getAllParties(), HttpStatus.OK);
-    }
 }
