@@ -37,16 +37,8 @@ export default function Register(props) {
             handleError("Username can only contain numbers and alphabets")
             return;
         }
-        let type = "voter";
         try {
-            let endpoint = ""
-            if(type === "voter") {
-                endpoint = 'api/auth/register'
-            }
-            // else if(type === "delegate") {
-            //     endpoint = 'api/auth/registerDelegate'
-            // }
-            await api.post(endpoint, {
+            await api.post('api/auth/register', {
                 "username": username,
                 "password": password,
                 "email": email

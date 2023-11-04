@@ -9,12 +9,13 @@ export const UserProvider = ({ children }) => {
         try {
             const response = await api.get('api/auth/checkCookie');
             const isAuth = response.data;
-            if (isAuth === false) {
+            if (isAuth === false ) {
                 console.log("not auth")
                 deleteUser();
             }
         } catch (error) {
             console.log(error);
+            deleteUser();
         }
     }
 

@@ -23,7 +23,6 @@ public class DBService {
     private CandidateRepository candidateRepository;
     @Autowired
     private PartyRepository partyRepository;
-
     @Autowired
     private MongoTemplate mongoTemplate;
 

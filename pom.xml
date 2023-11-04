@@ -13,8 +13,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>voting</name>
     <description>voting</description>
+<!--    <properties>-->
+<!--        <java.version>21</java.version>-->
+<!--    </properties>-->
     <properties>
-        <java.version>21</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
@@ -94,7 +98,6 @@
             <groupId>org.springframework.data </groupId>
             <artifactId>spring-data-jpa</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

@@ -1,6 +1,5 @@
 package com.example.voting.component;
 
-import com.example.voting.controller.AuthController;
 import com.example.voting.model.User;
 import com.example.voting.repositories.UserRepository;
 import org.slf4j.Logger;

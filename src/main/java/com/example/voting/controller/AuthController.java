@@ -1,6 +1,7 @@
 package com.example.voting.controller;
 
 import com.example.voting.jwt.JwtUtils;
+import com.example.voting.model.Action;
 import com.example.voting.model.ERole;
 import com.example.voting.model.User;
 import com.example.voting.payload.request.LoginRequest;
@@ -8,6 +9,7 @@ import com.example.voting.payload.request.SignupRequest;
 import com.example.voting.payload.response.MessageResponse;
 import com.example.voting.payload.response.VoterResponse;
 import com.example.voting.service.DBService;
+import com.example.voting.service.LogService;
 import com.example.voting.service.MyUserDetails;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +39,9 @@ public class AuthController {
     @Autowired
     PasswordEncoder encoder;
     @Autowired
-    DBService DBService;
+    DBService dbService;
+    @Autowired
+    LogService logService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -67,23 +71,24 @@ public class AuthController {
         setCookie(cookie);
         response.addCookie(cookie);
 
-//TODO: Get a boolean value from the database to check if the user has voted or not
+        logService.log(userDetails.getUsername(), Action.LOGIN);
+
         return ResponseEntity.ok(new VoterResponse(
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 role,
-                DBService.hasVote(userDetails.getUsername())));
+                dbService.hasVote(userDetails.getUsername())));
     }
 
     @PostMapping("register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest, HttpServletResponse response) {
-        if (DBService.existsByUsername(signUpRequest.getUsername())) {
+        if (dbService.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
-        if (DBService.existsByEmail(signUpRequest.getEmail())) {
+        if (dbService.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
@@ -93,13 +98,15 @@ public class AuthController {
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
         user.setRole(ERole.ROLE_VOTER);
-        DBService.createUser(user);
-        DBService.createVoter(user.getUsername());
+        dbService.createUser(user);
+        dbService.createVoter(user.getUsername());
 
         String jwt = jwtUtils.generateJwtToken(signUpRequest.getUsername());
         Cookie cookie = new Cookie("Bearer", jwt);
         setCookie(cookie);
         response.addCookie(cookie);
+
+        logService.log(user.getUsername(), Action.REGISTER_VOTER);
 
         return ResponseEntity.ok(new VoterResponse(
                 user.getUsername(),
@@ -108,44 +115,15 @@ public class AuthController {
                 false));
     }
 
-    @PostMapping("/registerDelegate")
-    public ResponseEntity<?> registeDelegate(@Valid @RequestBody SignupRequest signUpRequest, HttpServletResponse response) {
-        if (DBService.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
-        }
-
-        if (DBService.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
-        }
-        // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-        user.setRole(ERole.ROLE_DELEGATE);
-        DBService.createUser(user);
-
-        String jwt = jwtUtils.generateJwtToken(signUpRequest.getUsername());
-        Cookie cookie = new Cookie("Bearer", jwt);
-        setCookie(cookie);
-        response.addCookie(cookie);
-
-        return ResponseEntity.ok(new VoterResponse(
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole().toString(),
-                true));
-    }
-
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser(HttpServletResponse response) {
         Cookie cookie = new Cookie("Bearer", null);
         cookie.setMaxAge(0);
         setCookie(cookie);
         response.addCookie(cookie);
+
+        logService.log(SecurityContextHolder.getContext().getAuthentication().getName(), Action.LOGOUT);
+
         return ResponseEntity.ok(new MessageResponse("User logged out successfully!"));
     }
 
