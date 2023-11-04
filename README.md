@@ -1,2 +1,4 @@
 # voting
-If you want to connect to the database, please go to create an account in https://cloud.mongodb.com/
+1. If you want to connect to the database, please create an account at https://cloud.mongodb.com/
+2. Click 'connect'
+3. Download 'Compass'
