@@ -6,26 +6,28 @@ import com.example.voting.repositories.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class LogService {
     @Autowired
-    private LogRepository logRepoistory;
+    private LogRepository logRepository;
 
     public void log(String username, Action action, String body) {
-        logRepoistory.insert(new Log(username, action, body));
+        logRepository.insert(new Log(username, action.getName(), body));
     }
 
     public void log(String username, Action action) {
-        logRepoistory.insert(new Log(username, action, ""));
+        logRepository.insert(new Log(username, action.getName(), ""));
     }
 
     public List<Log> findLogByUsername(String name) {
-        return logRepoistory.findAllByUsername(name);
+        return logRepository.findAllByUsername(name);
     }
 
     public List<Log> findLogByAction(String action) {
-        return logRepoistory.findAllByAction(action);
+        return logRepository.findAllByAction(action);
     }
+
 }

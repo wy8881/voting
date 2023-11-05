@@ -1,5 +1,6 @@
 package com.example.voting.repositories;
 
+import com.example.voting.model.Action;
 import com.example.voting.model.Log;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -16,7 +17,8 @@ public interface LogRepository extends MongoRepository<Log, ObjectId> {
     List<Log> findAllByUsername(String name);
 
 
-    @Query("{ 'action' : ?0 }")
-    List<Log> findAllByAction(String action);
 
+
+    @Query("{ 'action' : { $regex: ?0, $options: 'i' } }")
+    List<Log> findAllByAction(String action);
 }

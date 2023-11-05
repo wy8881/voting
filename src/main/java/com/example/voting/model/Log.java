@@ -15,10 +15,10 @@ public class Log {
     @Id
     private ObjectId id;
     private String username;
-    private Action action;
+    private String action;
     private String body;
 
-    public Log(String username, Action action, String body) {
+    public Log(String username, String action, String body) {
         this.username = username;
         this.action = action;
         this.body = body;

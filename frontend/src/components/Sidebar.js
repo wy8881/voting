@@ -10,7 +10,7 @@ export default function Sidebar() {
     async function handleLogout() {
         try {
             console.log('logging out')
-            await api.post('api/auth/logout').then(navigate('/login'));
+            await api.get('api/auth/logout').then(navigate('/login'));
             deleteUser();
 
         }

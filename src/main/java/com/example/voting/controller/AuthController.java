@@ -72,12 +72,18 @@ public class AuthController {
         response.addCookie(cookie);
 
         logService.log(userDetails.getUsername(), Action.LOGIN);
+        boolean hasVoted;
+        if(role.equals(ERole.ROLE_VOTER.toString())) {
+            hasVoted = dbService.hasVote(userDetails.getUsername());
+        } else {
+            hasVoted = false;
+        }
 
         return ResponseEntity.ok(new VoterResponse(
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 role,
-                dbService.hasVote(userDetails.getUsername())));
+                hasVoted));
     }
 
     @PostMapping("register")
@@ -115,7 +121,7 @@ public class AuthController {
                 false));
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public ResponseEntity<?> logoutUser(HttpServletResponse response) {
         Cookie cookie = new Cookie("Bearer", null);
         cookie.setMaxAge(0);
