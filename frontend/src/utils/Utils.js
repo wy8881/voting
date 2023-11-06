@@ -1,3 +1,4 @@
+
 export function isUsernameValid(username) {
     const regex = /^[A-Za-z0-9]+$/;
     return regex.test(username);
@@ -8,4 +9,11 @@ export function isNameValid(input) {
     // uppercase letters, and lowercase letters
     const regex = /^[a-zA-Z\s]*$/;
     return regex.test(input);
+}
+
+export function checkAccess(role, allowedRole, navigate) {
+    if(role !== allowedRole) {
+        navigate(`/dashboard`);
+    }
+
 }

@@ -4,8 +4,10 @@ import {UserContext} from "../contexts/UserContext";
 import {useNavigate} from "react-router-dom";
 import Sidebar from "./Sidebar";
 import '../styles/DelegatePage.css';
+import {checkAccess} from "../utils/Utils";
+import withRoleAccess from "./withRoleAcess";
 
-export default function ManageParties() {
+const ManageParties = () =>{
     const [parties, setParties] = useState([]);
     const [received, setReceived] = useState(false);
     const navigate = useNavigate();
@@ -25,11 +27,6 @@ export default function ManageParties() {
         fetchParties();
     },[]);
 
-    useEffect(() => {
-            if (!user && !localStorage.getItem('user')) {
-                navigate('/login')
-            }
-        })
 
     return (
         <div className="delegate-container">
@@ -53,3 +50,5 @@ export default function ManageParties() {
         </div>
     );
 }
+
+export default withRoleAccess(ManageParties, "ROLE_DELEGATE");

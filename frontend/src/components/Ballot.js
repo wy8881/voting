@@ -4,8 +4,9 @@ import Sidebar from "./Sidebar";
 import {useNavigate} from "react-router-dom";
 import {UserContext} from "../contexts/UserContext";
 import api from "../api/axiosConfig";
+import withRoleAccess from "./withRoleAcess";
 
-export default function Ballot() {
+const Ballot = () => {
     const [votes, setVotes] = useState({});
     const [parties, setParties] = useState([]);
     const [candidates, setCandidates] = useState([]);
@@ -38,11 +39,6 @@ export default function Ballot() {
 
     }, []);
 
-    useEffect(() => {
-        if (!user && !localStorage.getItem('user')) {
-            navigate('/login')
-        }
-    })
 
     function handleVoteChange (id, value) {
         setVotes({
@@ -157,3 +153,5 @@ export default function Ballot() {
         )
     );
 }
+
+export default withRoleAccess(Ballot, "ROLE_USER");

@@ -1,7 +1,8 @@
 import "../styles/DelegatePage.css"
 import Sidebar from "./Sidebar";
 import {Link} from "react-router-dom";
-export default function Candidates(props) {
+import withRoleAccess from "./withRoleAcess";
+const Candidates = () =>{
     return (
         <div className="delegate-container">
             <Sidebar />
@@ -17,3 +18,5 @@ export default function Candidates(props) {
         </div>
     );
 }
+
+export default withRoleAccess(Candidates, "ROLE_DELEGATE");

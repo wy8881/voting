@@ -4,8 +4,10 @@ import {UserContext} from "../contexts/UserContext";
 import {useNavigate} from "react-router-dom";
 import Sidebar from "./Sidebar";
 import '../styles/DelegatePage.css';
+import {checkAccess} from "../utils/Utils";
+import withRoleAccess from "./withRoleAcess";
 
-export default function ManageCandidates() {
+const ManageCandidates = () => {
     const [candidates, setCandidates] = useState([]);
     const [received, setReceived] = useState(false);
     const navigate = useNavigate();
@@ -25,11 +27,6 @@ export default function ManageCandidates() {
         fetchCandidates();
     },[]);
 
-    useEffect(() => {
-        if (!user && !localStorage.getItem('user')) {
-            navigate('/login')
-        }
-    })
 
     return (
         <div className="delegate-container">
@@ -53,3 +50,5 @@ export default function ManageCandidates() {
         </div>
     );
 }
+
+export default withRoleAccess(ManageCandidates, "ROLE_DELEGATE");

@@ -24,18 +24,30 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => {
         checkCookie().then(r => {
-            const storedUser = localStorage.getItem('user');
-            if (storedUser) {
-                setUser(JSON.parse(storedUser));
-            }
+            reloadUser();
         });
     }, []);
 
     useEffect(() => {
         if (user) {
-            localStorage.setItem('user', JSON.stringify(user));
+            const storedUser = localStorage.getItem('user');
+            if(!storedUser || storedUser !== JSON.stringify(user)) {
+                localStorage.setItem('user', JSON.stringify(user));
+            }
+        }
+        if(user === null) {
+            reloadUser();
         }
     }, [user]);
+
+    function reloadUser() {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+            return true;
+        }
+        return false;
+    }
 
     const deleteUser = () => {
         localStorage.removeItem('user');
@@ -45,7 +57,7 @@ export const UserProvider = ({ children }) => {
 
 
     return (
-        <UserContext.Provider value={{ user, setUser, deleteUser }}>
+        <UserContext.Provider value={{ user, setUser, deleteUser, reloadUser }}>
             {children}
         </UserContext.Provider>
     );
