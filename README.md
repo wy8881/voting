@@ -10,8 +10,8 @@
 8. Click 'Save & Connect'.
 9. Create a database. -- Remember the database's name
 # If you haven't used IntelliJ IDEA Community before, follow these steps:
-(1) Download and install IntelliJ IDEA Community Edition at https://www.jetbrains.com/idea/download/?section=windows \n
-(2) Download this voting system and open it as a project in IntelliJ IDEA.
+1. Download and install IntelliJ IDEA Community Edition at https://www.jetbrains.com/idea/download/?section=windows
+2. Download this voting system and open it as a project in IntelliJ IDEA.
 # B. Using System
 1. Go to the 'voting\src\main\resources' folder, and build a new '.env' document.
 2. Rewrite this '.env' document as '.env.example'.
