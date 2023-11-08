@@ -13,9 +13,9 @@
 1. Download and install IntelliJ IDEA Community Edition at https://www.jetbrains.com/idea/download/?section=windows
 2. Download this voting system and open it as a project in IntelliJ IDEA.
 ## B. Using System
-1. Go to the 'voting\src\main\resources' folder, and build a new '.env' document.
-2. Rewrite this '.env' document as '.env.example'.
-3. Add real values with " " after every "`=`".
+1. Go to the `voting\src\main\resources` folder, and build a new `.env` document.
+2. Rewrite this `.env` document as `.env.example`.
+3. Add real values with `" "` after every "`=`".
    
    To fill out the `MONGO_DATABASE`, you need to copy the database's name and paste it here.
    
