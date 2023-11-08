@@ -21,9 +21,13 @@
    MONGO_USER and MONGO_PASSWORD are your account user's name and password.
    
    For example:
+   
         MONGO_DATABASE="abc-voting"
+   
         MONGO_USER="abc"
+   
         MONGO_PASSWORD="abc"
+   
         MONGO_CLUSTER="cluster0.edplh85.mongodb.net"
 5. Open 'VotingApplication.java' and run.
 6. Open 'Terminal' (tap Alt+F12).
