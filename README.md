@@ -16,8 +16,11 @@
 1. Go to the 'voting\src\main\resources' folder, and build a new '.env' document.
 2. Rewrite this '.env' document as '.env.example'.
 3. Add real values with " " after every "=".
-   To fill out the MONGO_DATABASE, you need to copy the database's name and paste here.
+   
+   To fill out the MONGO_DATABASE, you need to copy the database's name and paste it here.
+   
    To fill out the MONGO_CLUSTER, you need to copy the string behind '@' in the connection string we copied before.
+   
    MONGO_USER and MONGO_PASSWORD are your account user's name and password.
    
    For example:
