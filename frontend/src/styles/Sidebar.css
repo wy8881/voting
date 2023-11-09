@@ -1,8 +1,9 @@
 .sidebar-container {
     display: flex;
     justify-content: flex-end;
+    align-items: flex-start;
 }
 
 .sidebar-button {
-    width: 100%;
+
 }

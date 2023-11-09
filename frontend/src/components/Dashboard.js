@@ -59,21 +59,10 @@ export default function Dashboard(props) {
                     <div className="dashboardContainer">
                         <Sidebar />
                         <h1 className="dashboardText"> Welcome {user.username} </h1>
-                        {user && user.role === 'ROLE_DELEGATE' ? (
+                        <h1 className="dashboardText"> You are a {user.role.split("_")[1].toLowerCase()} </h1>
+                        {user.role === "ROLE_VOTER" && (
                             <>
-                            <h1 className="dashboardText"> You are a delegate </h1>
-                            </>
-                        ) : (
-                            <>
-                            {user.isVoted.toString() === 'true' ? (
-                                <>
-                                    <h1 className="dashboardText"> You have voted </h1>
-                                </>
-                            ) : (
-                                <>
-                                    <h1 className="dashboardText"> You have not voted </h1>
-                                </>
-                            )}
+                                <h1 className="dashboardText"> You have {user.isVoted.toString() === 'true' ? "voted" : "not voted"} </h1>
                             </>
                         )}
                     </div>

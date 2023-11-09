@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/logger")
+@RequestMapping("/api/logs")
 @PreAuthorize("hasRole('ROLE_LOGGER')")
 public class LoggerController {
     @Autowired

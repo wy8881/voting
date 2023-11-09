@@ -154,4 +154,4 @@ const Ballot = () => {
     );
 }
 
-export default withRoleAccess(Ballot, "ROLE_USER");
+export default withRoleAccess(Ballot, "ROLE_VOTER");

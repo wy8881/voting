@@ -11,6 +11,7 @@ export function isNameValid(input) {
     return regex.test(input);
 }
 
+
 export function checkAccess(role, allowedRole, navigate) {
     if(role !== allowedRole) {
         navigate(`/dashboard`);
