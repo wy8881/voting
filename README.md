@@ -13,7 +13,7 @@
 ## If you haven't used IntelliJ IDEA Community before, follow these steps:
 1. Download and install IntelliJ IDEA Community Edition at https://www.jetbrains.com/idea/download/?section=windows
 2. Download this voting system and open it as a project in IntelliJ IDEA.
-## B. Using System
+## B. Start System
 1. Go to the `voting\src\main\resources` folder, and build a new `.env` document.
 2. Rewrite this `.env` document as `.env.example`.
 3. Add real values with `" "` after every "`=`".
@@ -37,5 +37,8 @@
 6. Open 'Terminal' (tap `Alt+F12`).
 7. Go to the 'frontend' folder (`cd frontend`)
 8. Start the system (`npm start`)
-
+## C. Use System
+1. Start the Terminal and go to the 'voting' folder.
+2. For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create_delegate"`
+3. For creating `logger`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create_logger"`
    
