@@ -38,7 +38,5 @@
 7. Go to the 'frontend' folder (`cd frontend`)
 8. Start the system (`npm start`)
 ## C. Use System
-1. If you want to create a `delegate` and `logger`, start the Terminal and go to the 'voting' folder.
-2. For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create_delegate"`
-3. For creating `logger`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create_logger"`
-   
+1. For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create_delegate"` under the 'voting' folder.
+2. For creating `logger`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create_logger"` under the 'voting' folder.
