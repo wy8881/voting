@@ -93,8 +93,6 @@ export default function Login(props) {
                 </div>
 
             </form>
-            <button onClick={dontClick}>Don't click</button>
-            <button onClick={deleteUser}>DeleteUser</button>
         </div>
 
     );

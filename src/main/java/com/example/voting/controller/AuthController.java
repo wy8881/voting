@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -45,10 +46,11 @@ public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    private void setCookie(Cookie cookie) {
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-    }
+//    private void setCookie(Cookie cookie) {
+//        cookie.setHttpOnly(true);
+//        cookie.setPath("/");
+//        cookie.setMaxAge(60*60);
+//    }
 
     @PostMapping("/test")
     public String test() {
@@ -67,10 +69,16 @@ public class AuthController {
         String role = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList().get(0);
-        Cookie cookie = new Cookie("Bearer", jwt);
-        setCookie(cookie);
-        response.addCookie(cookie);
-
+//        Cookie cookie = new Cookie("Bearer", jwt);
+//        setCookie(cookie);
+//        response.addCookie(cookie);
+        ResponseCookie cookie = ResponseCookie.from("Bearer", jwt)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(60*60)
+                .sameSite("Lax")
+                .build();
+        response.setHeader("Set-Cookie", cookie.toString());
         logService.log(userDetails.getUsername(), Action.LOGIN);
         boolean hasVoted;
         if(role.equals(ERole.ROLE_VOTER.toString())) {
@@ -108,9 +116,13 @@ public class AuthController {
         dbService.createVoter(user.getUsername());
 
         String jwt = jwtUtils.generateJwtToken(signUpRequest.getUsername());
-        Cookie cookie = new Cookie("Bearer", jwt);
-        setCookie(cookie);
-        response.addCookie(cookie);
+        ResponseCookie cookie = ResponseCookie.from("Bearer", jwt)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(60*60)
+                .sameSite("Lax")
+                .build();
+        response.setHeader("Set-Cookie", cookie.toString());
 
         logService.log(user.getUsername(), Action.REGISTER_VOTER);
 
@@ -125,7 +137,8 @@ public class AuthController {
     public ResponseEntity<?> logoutUser(HttpServletResponse response) {
         Cookie cookie = new Cookie("Bearer", null);
         cookie.setMaxAge(0);
-        setCookie(cookie);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
         response.addCookie(cookie);
 
         logService.log(SecurityContextHolder.getContext().getAuthentication().getName(), Action.LOGOUT);
