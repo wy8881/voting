@@ -8,7 +8,7 @@
 6. Download 'Compass'.
 7. Open MongoDB Compass.
 8. Paste the connection string into the 'URI', and replace <password> with the password for the user. 
-9. Click 'Save & Connect'.
+9. Click 'Save & Connect'. (If you have a problem here, visit https://www.mongodb.com/community/forums/t/error-while-connecting-my-database-through-mongodb-compass/243317)
 10. Create a database. -- (Remember the database's name)
 ## If you haven't used IntelliJ IDEA Community before, follow these steps:
 1. Download and install IntelliJ IDEA Community Edition at https://www.jetbrains.com/idea/download/?section=windows
