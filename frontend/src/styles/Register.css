@@ -1,80 +1,112 @@
-.container{
+/* 设置基本字体和背景颜色 */
+body {
     font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+}
+
+/* 设置容器的基本样式 */
+.container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     text-align: center;
 }
 
+/* 定义注册表单容器的样式 */
 .register-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;  /* Center content horizontally */
-    /*justify-content: center; !* Center content vertically *!*/
-    height: 100vh;  /* take the full height of the viewport */
-    font-size: 20px;
-
+    max-width: 400px;
+    margin: 5vh auto;
 }
 
+/* 输入容器样式 */
 .input-container {
-    margin-bottom: 10px; /* Add some spacing between each input group */
-    display: flex; /* Using flexbox to align items in a row */
-    align-items: center; /* Vertically align items in the center */
+    margin-bottom: 20px;
+    width: 100%;
 }
 
+/* 标签样式 */
 .input-label {
-    display: inline-flex;
-    width: 100px; /* Set a fixed width to make sure all labels have the same width */
-    text-align: right;
-    margin-right: 10px; /* Add some spacing between the label and the input */
-    }
-
-
-.input-field {
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    margin-bottom: 5px;
+    display: block;
+    color: #333333;
 }
+
+/* 输入框样式 */
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+/* 按钮样式 */
+.button, .register-button {
+    margin: 0 10px; 
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease;
+    outline: none;
+}
+
+.button:hover, .register-button:hover {
+    background-color: #0056b3;
+}
+
 .button-container {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
-}
-
-.button {
-    margin: 20px auto; /* Top and bottom margin of 20px and auto left-right margin will center the button */
-    padding: 10px 20px;
-    background-color: #007bff; /* example color, adjust as needed */
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    &:hover {
-        background-color: #0056b3;
-    }
-}
-.register-button {
-    display: block;
-    margin: 20px auto; /* Top and bottom margin of 20px and auto left-right margin will center the button */
-    padding: 10px 20px;
-    background-color: #007bff; /* example color, adjust as needed */
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    &:hover {
-        background-color: #0056b3;
-    }
-}
-
-
-
+  }
+  
+  .button-wrapper {
+    display: flex;
+    justify-content: space-around; /* 保证按钮之间有空间 */
+    width: 100%; /* 占据整个容器宽度 */
+    max-width: 300px; /* 限制按钮组的最大宽度 */
+  }
+  
+/* 辅助文本样式 */
 .helper-text {
-    margin-left: 10px; /* Add spacing above password strength text */
-    margin-top: 5px;
-    font-size: 12px;
-    color: grey;
+    font-size: 14px;
+    color: #666666;
 }
+
+/* 密码强度指示样式 */
+.password-strength {
+    text-align: left;
+    display: block;
+    margin-top: 5px;
+}
+
+.password-strength span {
+    display: inline-block;
+    padding: 2px 5px;
+    border-radius: 2px;
+    margin-right: 5px;
+}
+
+/* 设置密码强度指示器颜色 */
+.weak {
+    background-color: #ff4b47;
+}
+
+.moderate {
+    background-color: #ffa500;
+}
+
+.strong {
+    background-color: #28a745;
+}
+

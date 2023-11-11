@@ -1,6 +1,7 @@
 import React, {useContext, useState} from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import api from "../api/axiosConfig";
+import '../styles/Register.css';
 import {UserContext} from "../contexts/UserContext";
 import '../styles/Register.css'
 import {isUsernameValid} from "../utils/Utils";
@@ -111,14 +112,13 @@ export default function Register(props) {
                         <li key={index} style={{ color: 'red' }}>{criteria.message}</li>
                     ))}
                 </ul>
-                <div className="button-container">
-                    <button className="register-button" type="submit">Register</button>
-                    <Link to={"/login"}>
-                        <button className="button" style={{marginRight:'50px'}}> Return to Log in</button>
-                    </Link>
-                </div>
-
-            </form>
-        </div>
-    );
-}
+                    <div className="button-container">
+                        <button className="button register-button" type="submit">Register</button>
+                        <Link to={"/login"}>
+                        <button className="button" type="button">Return to Log in</button>
+                        </Link>
+                    </div>
+                </form>
+            </div>
+        );
+    }
