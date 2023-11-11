@@ -1,10 +1,11 @@
-import React, {useContext, useState} from "react";
-import {Link, useNavigate} from 'react-router-dom';
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
 import api from "../api/axiosConfig";
-import {UserContext} from "../contexts/UserContext";
+import '../styles/Register.css';
+import { UserContext } from "../contexts/UserContext";
 import '../styles/Register.css'
-import {isUsernameValid} from "../utils/Utils";
-import {checkPasswordStrength} from "../utils/passwordStrengthChecker";
+import { isUsernameValid } from "../utils/Utils";
+import { checkPasswordStrength } from "../utils/passwordStrengthChecker";
 import withNoLogged from "./witNotLogged";
 
 const Register = () => {
@@ -13,7 +14,7 @@ const Register = () => {
     const [email, setEmail] = useState("")
     const [strength, setStrength] = useState({});
     const navigate = useNavigate();
-    const {setUser} = useContext(UserContext);
+    const { setUser } = useContext(UserContext);
 
     function handlePasswordChange(e) {
         const newPassword = e.target.value;
@@ -34,7 +35,7 @@ const Register = () => {
             handleError("Username, password and email cannot be empty")
             return;
         }
-        if(!isUsernameValid(username)) {
+        if (!isUsernameValid(username)) {
             handleError("Username can only contain numbers and alphabets")
             return;
         }
@@ -55,7 +56,7 @@ const Register = () => {
             })
         }
         catch (error) {
-            if(error.response.status === 400) {
+            if (error.response.status === 400) {
                 handleError(error.response.data.message)
             }
         }
@@ -113,14 +114,14 @@ const Register = () => {
                     ))}
                 </ul>
                 <div className="button-container">
-                    <button className="register-button" type="submit">Register</button>
+                    <button className="button register-button" type="submit">Register</button>
                     <Link to={"/login"}>
-                        <button className="button" style={{marginRight:'50px'}}> Return to Log in</button>
+                        <button className="button" type="button">Return to Log in</button>
                     </Link>
                 </div>
-
             </form>
         </div>
     );
 }
 export default withNoLogged(Register);
+

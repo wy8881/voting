@@ -4,10 +4,14 @@
     margin: 0 auto;
     padding: 20px;
     text-align: center;
+    background-color: #ffffff; /* 添加白色背景 */
+    border-radius: 8px; /* 圆角 */
+    box-shadow: none; /* 去掉阴影 */
 }
 
 h1, h2, h3, p {
     text-align: center;
+    color: #333333; /* 深色文字更适合扁平化设计 */
 }
 
 .line-container {
@@ -17,21 +21,15 @@ h1, h2, h3, p {
     align-items: center;
 }
 
-.candidate {
-    width: 16%;
-    margin: 5px 0;
+.candidate, .party {
+    flex: 1; /* 统一 .candidate 和 .party 的弹性基础 */
+    margin: 10px; /* 间距统一 */
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-
-.party {
-    flex: 1;
-    margin: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 20px; /* 内边距 */
+    border: 2px solid #007bff; /* 边框颜色统一 */
+    border-radius: 4px; /* 圆角 */
 }
 
 input[type="number"] {
@@ -40,22 +38,24 @@ input[type="number"] {
     font-size: 20px;
     text-align: center;
     margin-bottom: 10px;
+    border: 2px solid #007bff; /* 输入框边框颜色 */
+    border-radius: 4px; /* 输入框圆角 */
 }
 
 .submit-button {
-    display: block;
-    margin: 20px auto; /* Top and bottom margin of 20px and auto left-right margin will center the button */
-    padding: 10px 20px;
-    background-color: #007bff; /* example color, adjust as needed */
-    color: #fff;
+    padding: 10px 15px;
+    background-color: #007bff; /* 按钮背景颜色 */
+    color: #ffffff; /* 文字颜色 */
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    &:hover {
-        background-color: #0056b3;
-    }
+    text-transform: uppercase; /* 文本大写 */
+    font-weight: bold; /* 字体加粗 */
+    letter-spacing: 1px; /* 字母间距 */
+    transition: background-color 0.3s ease; /* 背景颜色过渡效果 */
 }
 
 .submit-button:hover {
-    background-color: #45a049;
+    background-color: #0056b3; /* 鼠标悬停时的背景颜色 */
 }
+

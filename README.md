@@ -40,3 +40,8 @@
 ## C. Use System
 1. For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create_delegate"` under the 'voting' folder.
 2. For creating `logger`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create_logger"` under the 'voting' folder.
+## D. Common Issues
+1. Frontend Application Fails to Start: 
+        Ensure that Node.js is correctly installed. Run `npm install` in the frontend folder to install all necessary frontend dependencies.
+2. Backend Application Fails to Start: 
+        Ensure that the MongoDB database service is running. Verify that the network connection is stable and not blocked by a firewall. Ensure that the database connection information in the `.env` file is accurate and correct.

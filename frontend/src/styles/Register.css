@@ -1,80 +1,112 @@
-.container{
+/* Set basic font and background color */
+body {
     font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+}
+
+/* Set the basic style of the container */
+.container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     text-align: center;
 }
 
+/* Define the style of the registration form container */
 .register-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;  /* Center content horizontally */
-    /*justify-content: center; !* Center content vertically *!*/
-    height: 100vh;  /* take the full height of the viewport */
-    font-size: 20px;
-
+    max-width: 400px;
+    margin: 5vh auto;
 }
 
+/* Input container style */
 .input-container {
-    margin-bottom: 10px; /* Add some spacing between each input group */
-    display: flex; /* Using flexbox to align items in a row */
-    align-items: center; /* Vertically align items in the center */
+    margin-bottom: 20px;
+    width: 100%;
 }
 
+/* Labeling styles */
 .input-label {
-    display: inline-flex;
-    width: 100px; /* Set a fixed width to make sure all labels have the same width */
-    text-align: right;
-    margin-right: 10px; /* Add some spacing between the label and the input */
-    }
-
-
-.input-field {
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    margin-bottom: 5px;
+    display: block;
+    color: #333333;
 }
+
+/* Input box style */
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+/* Button styles */
+.button, .register-button {
+    margin: 0 10px; 
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease;
+    outline: none;
+}
+
+.button:hover, .register-button:hover {
+    background-color: #0056b3;
+}
+
 .button-container {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
-}
-
-.button {
-    margin: 20px auto; /* Top and bottom margin of 20px and auto left-right margin will center the button */
-    padding: 10px 20px;
-    background-color: #007bff; /* example color, adjust as needed */
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    &:hover {
-        background-color: #0056b3;
-    }
-}
-.register-button {
-    display: block;
-    margin: 20px auto; /* Top and bottom margin of 20px and auto left-right margin will center the button */
-    padding: 10px 20px;
-    background-color: #007bff; /* example color, adjust as needed */
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    &:hover {
-        background-color: #0056b3;
-    }
-}
-
-
-
+  }
+  
+  .button-wrapper {
+    display: flex;
+    justify-content: space-around; /* Ensure space between buttons */
+    width: 100%; /* Occupies the entire width of the container */
+    max-width: 300px; /* Limit the maximum width of the button group */
+  }
+  
+/* Auxiliary text style */
 .helper-text {
-    margin-left: 10px; /* Add spacing above password strength text */
-    margin-top: 5px;
-    font-size: 12px;
-    color: grey;
+    font-size: 14px;
+    color: #666666;
 }
+
+/* Password strength indicator style */
+.password-strength {
+    text-align: left;
+    display: block;
+    margin-top: 5px;
+}
+
+.password-strength span {
+    display: inline-block;
+    padding: 2px 5px;
+    border-radius: 2px;
+    margin-right: 5px;
+}
+
+/* Set password strength indicator color */
+.weak {
+    background-color: #ff4b47;
+}
+
+.moderate {
+    background-color: #ffa500;
+}
+
+.strong {
+    background-color: #28a745;
+}
+
