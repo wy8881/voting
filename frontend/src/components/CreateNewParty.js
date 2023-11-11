@@ -1,6 +1,6 @@
 import '../styles/Register.css'
-import {checkAccess, isNameValid} from "../utils/Utils";
-import {useContext, useEffect, useState} from "react";
+import { isNameValid} from "../utils/Utils";
+import {useContext,  useState} from "react";
 import api from "../api/axiosConfig";
 import Sidebar from "./Sidebar";
 import {useNavigate} from "react-router-dom";
@@ -10,10 +10,6 @@ const CreateNewParty = () => {
     const [partyName, setPartyName] = useState("");
     const navigate = useNavigate();
     const {user} = useContext(UserContext);
-
-    useEffect(() => {
-        checkAccess( user.role,'ROLE_DELEGATE', navigate)
-    });
 
     function handleMsg(message) {
         window.alert(message);

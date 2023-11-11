@@ -22,7 +22,7 @@ const  Logs = () => {
     }
 
     async function onSearchByUsername() {
-        if(username !== null && isUsernameValid(username)) {
+        if(username !== "" && isUsernameValid(username)) {
             await api.get('api/logs/username/'+username).then((response) => {
                 setLogs(response.data);
                 setAction("");
@@ -37,7 +37,7 @@ const  Logs = () => {
     }
 
     async function onSearchByAction() {
-        if(action !== null && isActionValid(action)) {
+        if(action !== "" && isActionValid(action)) {
             await api.get('api/logs/action/'+action).then((response) => {
                 setLogs(response.data);
                 setAction("")

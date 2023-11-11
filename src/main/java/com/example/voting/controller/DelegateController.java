@@ -6,12 +6,12 @@ import com.example.voting.payload.request.CreateCandidateRequest;
 import com.example.voting.payload.request.CreatePartyRequest;
 import com.example.voting.payload.response.MessageResponse;
 import com.example.voting.service.DBService;
+import com.example.voting.utils.Validation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +33,10 @@ public class DelegateController {
 
     @PostMapping("/createCandidate")
     public ResponseEntity<?> CreateCandidate(@Valid @RequestBody CreateCandidateRequest createCandidateRequest) {
+        if(!Validation.isNameValid(createCandidateRequest.getName()))
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Candidate name is invalid!"));
         if(DBService.candidateExistsByName(createCandidateRequest.getName()))
             return ResponseEntity
                     .badRequest()
@@ -47,6 +51,10 @@ public class DelegateController {
 
     @PostMapping("/createParty")
     public ResponseEntity<?> CreateParty(@Valid @RequestBody CreatePartyRequest createPartyRequest) {
+        if(!Validation.isNameValid(createPartyRequest.getName()))
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Party name is invalid!"));
         if(DBService.partyExistsByName(createPartyRequest.getName()))
             return ResponseEntity
                     .badRequest()

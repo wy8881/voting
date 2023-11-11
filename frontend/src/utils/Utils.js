@@ -10,11 +10,3 @@ export function isNameValid(input) {
     const regex = /^[a-zA-Z\s]*$/;
     return regex.test(input);
 }
-
-
-export function checkAccess(role, allowedRole, navigate) {
-    if(role !== allowedRole) {
-        navigate(`/dashboard`);
-    }
-
-}

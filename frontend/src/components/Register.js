@@ -5,8 +5,9 @@ import {UserContext} from "../contexts/UserContext";
 import '../styles/Register.css'
 import {isUsernameValid} from "../utils/Utils";
 import {checkPasswordStrength} from "../utils/passwordStrengthChecker";
+import withNoLogged from "./witNotLogged";
 
-export default function Register(props) {
+const Register = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("")
@@ -122,3 +123,4 @@ export default function Register(props) {
         </div>
     );
 }
+export default withNoLogged(Register);

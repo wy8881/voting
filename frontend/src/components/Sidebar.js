@@ -23,6 +23,22 @@ export default function Sidebar() {
             setButton1Text("Candidates");
             setButton2Text("Dashboard");
         }
+        else if(location.pathname === '/dashboard/parties/manage') {
+            setButton1Text("Candidates");
+            setButton2Text("Dashboard");
+        }
+        else if(location.pathname === '/dashboard/candidates/manage') {
+            setButton1Text("Dashboard");
+            setButton2Text("Parties");
+        }
+        else if(location.pathname === '/dashboard/parties/create') {
+            setButton1Text("Candidates");
+            setButton2Text("Dashboard");
+        }
+        else if(location.pathname === '/dashboard/candidates/create') {
+            setButton1Text("Dashboard");
+            setButton2Text("Parties");
+        }
         else if(location.pathname === '/dashboard/logs') {
             setButton1Text("Dashboard");
         }
@@ -45,9 +61,10 @@ export default function Sidebar() {
     async function handleLogout() {
         try {
             console.log('logging out')
-            await api.get('api/auth/logout').then(navigate('/login'));
-            deleteUser();
-
+            await api.get('api/auth/logout').then(() => {
+                navigate('/login');
+                deleteUser();
+            });
         }
         catch (error) {
             console.log(error);
@@ -75,10 +92,18 @@ export default function Sidebar() {
             )}
             {user && user.role === 'ROLE_DELEGATE' && (
                 <>
-                    <Link to={location.pathname === '/dashboard'? '/dashboard/candidates' : '/dashboard'} >
+                    <Link to={location.pathname === '/dashboard'
+                    || location.pathname === '/dashboard/parties'
+                    || location.pathname === '/dashboard/parties/create'
+                    || location.pathname === '/dashboard/parties/manage'
+                        ? '/dashboard/candidates' : '/dashboard'} >
                         <button className="sidebar-button">{button1Text}</button>
                     </Link>
-                    <Link to={location.pathname === '/dashboard' ? '/dashboard/parties' : '/dashboard'}>
+                    <Link to={location.pathname === '/dashboard'
+                    || location.pathname === '/dashboard/candidates'
+                    || location.pathname === '/dashboard/candidates/create'
+                    || location.pathname === '/dashboard/candidates/manage'
+                        ? '/dashboard/parties' : '/dashboard'}>
                         <button className="sidebar-button">{button2Text}</button>
                     </Link>
                 </>

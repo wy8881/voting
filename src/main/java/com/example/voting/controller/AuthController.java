@@ -11,6 +11,7 @@ import com.example.voting.payload.response.VoterResponse;
 import com.example.voting.service.DBService;
 import com.example.voting.service.LogService;
 import com.example.voting.service.MyUserDetails;
+import com.example.voting.utils.Validation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,11 +47,6 @@ public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-//    private void setCookie(Cookie cookie) {
-//        cookie.setHttpOnly(true);
-//        cookie.setPath("/");
-//        cookie.setMaxAge(60*60);
-//    }
 
     @PostMapping("/test")
     public String test() {
@@ -59,6 +55,11 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        if(!Validation.isPasswordValid(loginRequest.getPassword()) || !Validation.isUsernameValid(loginRequest.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Password or Username is not valid!"));
+        }
         Authentication authentication = authenticationProvider.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -69,9 +70,6 @@ public class AuthController {
         String role = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList().get(0);
-//        Cookie cookie = new Cookie("Bearer", jwt);
-//        setCookie(cookie);
-//        response.addCookie(cookie);
         ResponseCookie cookie = ResponseCookie.from("Bearer", jwt)
                 .httpOnly(true)
                 .path("/")
@@ -96,6 +94,13 @@ public class AuthController {
 
     @PostMapping("register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest, HttpServletResponse response) {
+        if(!Validation.isPasswordValid(signUpRequest.getPassword())
+                || !Validation.isUsernameValid(signUpRequest.getUsername())
+                || !Validation.isEmailValid(signUpRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Password, Username or Email is not valid!"));
+        }
         if (dbService.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()

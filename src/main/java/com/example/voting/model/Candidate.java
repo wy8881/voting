@@ -25,7 +25,4 @@ public class Candidate {
         this.party = party;
     }
 
-    public Candidate(String name) {
-        this.name = name;
-    }
 }

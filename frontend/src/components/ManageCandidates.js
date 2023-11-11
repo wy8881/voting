@@ -31,7 +31,7 @@ const ManageCandidates = () => {
     return (
         <div className="delegate-container">
             <Sidebar />
-            <h1>Manage Parties</h1>
+            <h1>Manage Candidates</h1>
             {!received ?(
                 <div>Loading...</div>
             ) : (

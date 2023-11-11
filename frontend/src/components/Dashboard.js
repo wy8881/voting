@@ -4,9 +4,10 @@ import { UserContext } from '../contexts/UserContext';
 import api from '../api/axiosConfig';
 import Sidebar from "./Sidebar";
 import '../styles/Dashboard.css';
+import withRoleAccess from "./withRoleAcess";
 
 
-export default function Dashboard(props) {
+const Dashboard = () => {
     const { user  } = useContext(UserContext);
     const navigate = useNavigate();
 
@@ -73,3 +74,5 @@ export default function Dashboard(props) {
         </div>
     );
 };
+
+export default withRoleAccess(Dashboard, "ROLE_USER");

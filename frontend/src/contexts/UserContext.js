@@ -21,12 +21,11 @@ export const UserProvider = ({ children }) => {
 
 
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        checkCookie().then(r => {
-            reloadUser();
-        });
-    }, []);
+        checkCookie().then(reloadUser);
+    },[]);
 
     useEffect(() => {
         if (user) {
@@ -44,9 +43,8 @@ export const UserProvider = ({ children }) => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
-            return true;
         }
-        return false;
+        setLoading(false)
     }
 
     const deleteUser = () => {
@@ -57,7 +55,7 @@ export const UserProvider = ({ children }) => {
 
 
     return (
-        <UserContext.Provider value={{ user, setUser, deleteUser, reloadUser }}>
+        <UserContext.Provider value={{ user, setUser, deleteUser, loading}}>
             {children}
         </UserContext.Provider>
     );

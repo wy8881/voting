@@ -4,13 +4,13 @@ import api from "../api/axiosConfig";
 import {UserContext} from "../contexts/UserContext";
 import {isUsernameValid} from "../utils/Utils";
 import '../styles/Register.css'
+import withNoLogged from "./witNotLogged";
 
-export default function Login(props) {
+const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const {setUser} = useContext(UserContext);
-    const {deleteUser} = useContext(UserContext);
 
 
     function handleError(message) {
@@ -45,16 +45,12 @@ export default function Login(props) {
         }
         catch (error) {
             if(error.response.status === 401) {
-                handleError("Invalid username or password")
+                handleError("Unmatched username or password")
+            }
+            else if(error.response.status === 400) {
+                handleError(error.response.data.message)
             }
         }
-    }
-
-    async function dontClick(e) {
-        e.preventDefault();
-        await api.get('api/voter').then(resp => {
-            console.log(resp.data)
-        })
     }
 
     return (
@@ -97,3 +93,4 @@ export default function Login(props) {
 
     );
 }
+export default withNoLogged(Login);

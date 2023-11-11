@@ -1,5 +1,6 @@
 package com.example.voting.service;
 
+import com.example.voting.component.EncryptionUtil;
 import com.example.voting.model.Action;
 import com.example.voting.model.Log;
 import com.example.voting.repositories.LogRepository;
@@ -14,20 +15,26 @@ public class LogService {
     @Autowired
     private LogRepository logRepository;
 
-    public void log(String username, Action action, String body) {
-        logRepository.insert(new Log(username, action.getName(), body));
-    }
-
     public void log(String username, Action action) {
-        logRepository.insert(new Log(username, action.getName(), ""));
+        logRepository.insert(new Log(username, action.toString()).encrypt());
     }
 
     public List<Log> findLogByUsername(String name) {
-        return logRepository.findAllByUsername(name);
+        List<Log> result = logRepository.findAllByUsername(EncryptionUtil.encrypt(name));
+        List<Log> decrypted = new ArrayList<>();
+        for (Log log : result) {
+            decrypted.add(log.decrypt());
+        }
+        return decrypted;
     }
 
     public List<Log> findLogByAction(String action) {
-        return logRepository.findAllByAction(action);
+        List<Log> result =logRepository.findAllByAction(EncryptionUtil.encrypt(action.toUpperCase()));
+        List<Log> decrypted = new ArrayList<>();
+        for (Log log : result) {
+            decrypted.add(log.decrypt());
+        }
+        return decrypted;
     }
 
 }

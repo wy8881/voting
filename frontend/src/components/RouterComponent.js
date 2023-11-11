@@ -60,14 +60,6 @@ function PageTitle() {
 export default function RouterComponent() {
     const { user } = useContext(UserContext);
 
-    function LoggedRoute({Component}) {
-        if (user || localStorage.getItem('user')) {
-            return <Component/>;
-        } else {
-            return <Navigate to="/login" replace />;
-        }
-    }
-
     function NotloggedRoute({Component}) {
         if (!((user || localStorage.getItem('user')))) {
             return <Component/>;
@@ -81,9 +73,9 @@ export default function RouterComponent() {
             <PageTitle />
             <Routes>
                 <Route path="/" element={<App/>} />
-                <Route path="/login" element={<NotloggedRoute Component={Login} />}/>
-                <Route path="/signup" element={<NotloggedRoute Component={Register} />}/>
-                <Route path="/dashboard" element={<LoggedRoute Component={Dashboard} />}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/signup" element={<Register />}/>
+                <Route path="/dashboard" element={<Dashboard/>}/>
                 <Route path="/dashboard/ballot" element = {<Ballot/>}/>
                 <Route path="/dashboard/candidates" element={<Candidates/> } />
                 <Route path="/dashboard/parties" element={<Parties /> } />

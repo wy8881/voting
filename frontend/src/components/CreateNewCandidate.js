@@ -3,14 +3,10 @@ import {checkAccess, isNameValid} from "../utils/Utils";
 import {useContext, useEffect, useState} from "react";
 import api from "../api/axiosConfig";
 import Sidebar from "./Sidebar";
-import {UserContext} from "../contexts/UserContext";
-import {useNavigate} from "react-router-dom";
 import withRoleAccess from "./withRoleAcess";
 const CreateNewCandidate = ()  => {
     const [name, setName] = useState("");
     const [party, setParty] = useState("");
-    const {user, reloadUser} = useContext(UserContext);
-    const {navigate} = useNavigate();
     function handleMsg(message) {
         window.alert(message);
         setName("");
@@ -50,7 +46,7 @@ const CreateNewCandidate = ()  => {
         <div className={"container"}>
             <Sidebar/>
             <div className={"register-container"}>
-                <h1> Create New Party </h1>
+                <h1> Create New Candidate </h1>
                 <form onSubmit={handleSubmit}>
                     <div className={"input-container"}>
                         <label className={"input-label"} htmlFor={"partyName"}>Name</label>
@@ -85,4 +81,4 @@ const CreateNewCandidate = ()  => {
     );
 }
 
-export default withRoleAccess(CreateNewCandidate, ['ROLE_DELEGATE']);
+export default withRoleAccess(CreateNewCandidate, 'ROLE_DELEGATE');

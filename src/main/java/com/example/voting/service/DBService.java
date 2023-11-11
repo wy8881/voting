@@ -43,9 +43,10 @@ public class DBService {
     }
 
     public void createUser(User user) {
-        userRepository.save(user);
+
+        userRepository.save(user.encrypt());
     }
-    public void createVoter(String username) {voterRepository.insert(new Voter(username));}
+    public void createVoter(String username) {voterRepository.save(new Voter(username));}
     public boolean hasVote(String username) {
         Voter voter = voterRepository.findByUsername(username);
         return voter.getBallotId() != null;
@@ -81,5 +82,6 @@ public class DBService {
     public List<Party> getAllParties() {
         return partyRepository.findAll();
     }
+
 
 }

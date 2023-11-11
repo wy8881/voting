@@ -1,5 +1,6 @@
 package com.example.voting.model;
 
+import com.example.voting.component.EncryptionUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,11 +17,20 @@ public class Log {
     private ObjectId id;
     private String username;
     private String action;
-    private String body;
 
-    public Log(String username, String action, String body) {
+    public Log(String username, String action) {
         this.username = username;
         this.action = action;
-        this.body = body;
     }
+
+    public Log encrypt() {
+        return new Log(EncryptionUtil.encrypt(this.username), EncryptionUtil.encrypt(this.action));
+    }
+
+    public Log decrypt() {
+        return new Log(this.id, EncryptionUtil.decrypt(this.username), EncryptionUtil.decrypt(this.action));
+    }
+
+
+
 }
