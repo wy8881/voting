@@ -58,9 +58,10 @@ public class DBService {
     }
     @Transactional
     public void createVoter(User user) throws RuntimeException{
-        if (existsByUsername(user.getUsername())) {
+        if (existsByUsername(user.getUsername()) || voterRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Error: Username is already taken!");
         }
+
         userRepository.save(user);
         voterRepository.save(new Voter(user.getUsername()));
     }
