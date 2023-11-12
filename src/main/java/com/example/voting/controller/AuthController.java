@@ -48,9 +48,9 @@ public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 
-    @PostMapping("/test")
+    @GetMapping("/csrf-token")
     public String test() {
-        return "Test Auth";
+        return "fetch successful";
     }
 
     @PostMapping("/authenticate")
@@ -94,31 +94,33 @@ public class AuthController {
 
     @PostMapping("register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest, HttpServletResponse response) {
-        if(!Validation.isPasswordValid(signUpRequest.getPassword())
-                || !Validation.isUsernameValid(signUpRequest.getUsername())
-                || !Validation.isEmailValid(signUpRequest.getEmail())) {
+        if(!Validation.isPasswordValid(signUpRequest.getPassword())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Password, Username or Email is not valid!"));
+                    .body(new MessageResponse("Error: Password is not valid!"));
         }
-        if (dbService.existsByUsername(signUpRequest.getUsername())) {
+        if(!Validation.isUsernameValid(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body(new MessageResponse("Error: Username is not valid!"));
         }
-
-        if (dbService.existsByEmail(signUpRequest.getEmail())) {
+        if(!Validation.isEmailValid(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .body(new MessageResponse("Error: Email is not valid!"));
         }
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
         user.setRole(ERole.ROLE_VOTER);
-        dbService.createUser(user);
-        dbService.createVoter(user.getUsername());
+        try {
+            dbService.createVoter(user.encrypt());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse(e.getMessage()));
+        }
 
         String jwt = jwtUtils.generateJwtToken(signUpRequest.getUsername());
         ResponseCookie cookie = ResponseCookie.from("Bearer", jwt)

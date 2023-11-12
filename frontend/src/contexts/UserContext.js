@@ -31,6 +31,7 @@ export const UserProvider = ({ children }) => {
         if (user) {
             const storedUser = localStorage.getItem('user');
             if(!storedUser || storedUser !== JSON.stringify(user)) {
+                console.log("setUser")
                 localStorage.setItem('user', JSON.stringify(user));
             }
         }

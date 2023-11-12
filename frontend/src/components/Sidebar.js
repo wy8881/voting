@@ -15,6 +15,9 @@ export default function Sidebar() {
         if(location.pathname === '/dashboard/ballot' ) {
             setButton2Text("Dashboard");
         }
+        else if(location.pathname === '/dashboard/result') {
+            setButton1Text("Dashboard");
+        }
         else if(location.pathname === '/dashboard/candidates') {
             setButton1Text("Dashboard");
             setButton2Text("Parties");
@@ -44,7 +47,7 @@ export default function Sidebar() {
         }
         else if(location.pathname === '/dashboard') {
             if(user.role === 'ROLE_VOTER') {
-                setButton1Text("check vote")
+                setButton1Text("Results")
                 setButton2Text("Vote");
             }
             else if(user.role === 'ROLE_DELEGATE') {
@@ -75,9 +78,9 @@ export default function Sidebar() {
         <div className="sidebar-container">
             {user && user.role === 'ROLE_VOTER' && (
                 <>
-                    {user.isVoted === 'true' ? (
+                    {user.isVoted.toString() === 'true' ? (
                         <>
-                            <Link to={location.pathname === '/dashboard' ? '/dashboard/ballot' : '/dashboard'}>
+                            <Link to={location.pathname === '/dashboard' ? '/dashboard/result' : '/dashboard'}>
                                 <button className="sidebar-button">{button1Text}</button>
                             </Link>
                         </>

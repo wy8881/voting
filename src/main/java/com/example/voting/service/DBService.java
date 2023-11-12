@@ -1,14 +1,20 @@
 package com.example.voting.service;
 
 import com.example.voting.model.*;
+import com.example.voting.payload.response.MessageResponse;
 import com.example.voting.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -23,6 +29,10 @@ public class DBService {
     private CandidateRepository candidateRepository;
     @Autowired
     private PartyRepository partyRepository;
+    @Autowired
+    private PreferenceRepository preferenceRepository;
+    @Autowired
+    private VoteRespository voteRespository;
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -46,33 +56,78 @@ public class DBService {
 
         userRepository.save(user.encrypt());
     }
-    public void createVoter(String username) {voterRepository.save(new Voter(username));}
+    @Transactional
+    public void createVoter(User user) throws RuntimeException{
+        if (existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Error: Username is already taken!");
+        }
+        userRepository.save(user);
+        voterRepository.save(new Voter(user.getUsername()));
+    }
     public boolean hasVote(String username) {
         Voter voter = voterRepository.findByUsername(username);
-        return voter.getBallotId() != null;
+        return voter.isVoted();
     }
-    public Ballot vote(List<String> ballotBody, String username) {
-        Ballot ballot = ballotRepository.insert(new Ballot(username, ballotBody));
 
+    public List<String> convert2Candidates(List<String> Parties) throws RuntimeException {
+        List<String> candidates = new ArrayList<>();
+        for (String party : Parties) {
+            for(int i = 2; i > 0; i--) {
+                Optional<Preference> preference = preferenceRepository.findByPartyAndRank(party, i);
+                if(preference.isPresent()) {
+                    candidates.add(preference.get().getCandidateName());
+                }
+                else{
+                    throw new RuntimeException("Vote failed");
+                }
+            }
+        }
+        return candidates;
+    }
+    @Transactional
+    public void vote(List<String> preferences, String username, String type) throws RuntimeException{
+        Ballot ballot = ballotRepository.insert(new Ballot(preferences, type));
+        if(type.equals("party")) {
+            preferences = convert2Candidates(preferences);
+        }
+        if(hasVote(username)) {
+            throw new RuntimeException("You have already voted");
+        }
         mongoTemplate.update(Voter.class)
                 .matching(Criteria.where("username").is(username))
-                .apply(new Update().push("ballotId", ballot))
+                .apply(new Update().set("voted", true))
                 .first();
-
-        return ballot;
+        int size = preferences.size();
+        for(int i = 0; i < size; i++) {
+            Vote vote = new Vote(preferences.get(i), size - i);
+            if(!candidateRepository.existsByName(preferences.get(i))) {
+                throw new RuntimeException("Candidate does not exist");
+            }
+            Vote newVote = voteRespository.insert(vote);
+            mongoTemplate.update(Vote.class)
+                    .matching(Criteria.where("id").is(newVote.getId()))
+                    .apply(new Update().set("ballot", ballot))
+                    .first();
+        }
     }
 
-    public Candidate createCandidate(String name, String partyName) {
+    @Transactional
+    public void createCandidate(String name, String partyName, int rank) throws RuntimeException {
+        if(candidateRepository.existsByName(name)) throw new RuntimeException("Error: The candidate already exist!");
         candidateRepository.insert(new Candidate(name, partyName));
         mongoTemplate.update(Party.class)
                 .matching(Criteria.where("name").is(partyName))
                 .apply(new Update().push("candidates", name))
                 .first();
-        return candidateRepository.findByName(name);
+        if(existsByPartyAndRank(partyName, rank)) throw new RuntimeException("Error: The rank is already taken!");
+        Candidate candidate = candidateRepository.findByName(name);
+        createPreference(candidate.getName(), candidate.getParty(), rank);
+
     }
 
-    public void createParty(String name) {
-        partyRepository.insert(new Party(name));
+    public Party createParty(String name) throws RuntimeException{
+        if(partyExistsByName(name)) throw new RuntimeException("Error: Party name is already taken!");
+        return partyRepository.insert(new Party(name));
     }
 
     public List<Candidate> getAllCandidates() {
@@ -81,6 +136,51 @@ public class DBService {
 
     public List<Party> getAllParties() {
         return partyRepository.findAll();
+    }
+
+    public boolean existsByPartyAndRank(String party, int rank) {
+        Optional<Preference> existingPreference = preferenceRepository.findByPartyAndRank(party, rank);
+        return existingPreference.isPresent();
+    }
+    public void createPreference(String candidateName, String party, int rank) {
+
+        Preference preference = new Preference();
+        preference.setCandidateName(candidateName);
+        preference.setParty(party);
+        preference.setRank(rank);
+        preferenceRepository.save(preference);
+    }
+
+    public List<CandidateTotalVote> candidateTotalVotes() {
+        LookupOperation lookupOperation = LookupOperation.newLookup()
+                .from("votes")
+                .localField("name")
+                .foreignField("candidateName")
+                .as("votesInfo");
+
+        UnwindOperation unwindOperation = Aggregation.unwind("votesInfo", true);
+
+        GroupOperation groupOperation = Aggregation.group("name")
+                .sum("votesInfo.num").as("totalVotes");
+
+        ProjectionOperation projectionOperation = Aggregation.project()
+                .and("_id").as("candidateName")
+                .andInclude("totalVotes");
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                lookupOperation,
+                unwindOperation,
+                groupOperation,
+                projectionOperation
+        );
+
+        AggregationResults<CandidateTotalVote> results = mongoTemplate.aggregate(
+                aggregation,
+                "candidates",
+                CandidateTotalVote.class
+        );
+
+        return results.getMappedResults();
     }
 
 

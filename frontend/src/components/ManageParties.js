@@ -6,7 +6,6 @@ import Sidebar from "./Sidebar";
 import '../styles/DelegatePage.css';
 import {checkAccess} from "../utils/Utils";
 import withRoleAccess from "./withRoleAcess";
-import candidates from "./Candidates";
 
 const ManageParties = () =>{
     const [parties, setParties] = useState([]);

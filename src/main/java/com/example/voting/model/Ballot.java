@@ -19,12 +19,12 @@ public class Ballot {
     @Id
     @JsonIgnore
     private ObjectId id;
-    @DocumentReference
-    private String voter;
-    private List<String> ballotBody;
+    private List<String> preferences;
+    private String type;
 
-    public Ballot(String voter, List<String> ballotBody) {
-        this.voter = voter;
-        this.ballotBody = ballotBody;
+
+    public Ballot(List<String> preferences, String type) {
+        this.preferences = preferences;
+        this.type = type;
     }
 }

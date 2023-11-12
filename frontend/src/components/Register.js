@@ -4,7 +4,7 @@ import api from "../api/axiosConfig";
 import '../styles/Register.css';
 import { UserContext } from "../contexts/UserContext";
 import '../styles/Register.css'
-import { isUsernameValid } from "../utils/Utils";
+import {isPasswordValid, isUsernameValid} from "../utils/Utils";
 import { checkPasswordStrength } from "../utils/passwordStrengthChecker";
 import withNoLogged from "./witNotLogged";
 
@@ -12,6 +12,7 @@ const Register = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("")
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [strength, setStrength] = useState({});
     const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
@@ -24,6 +25,7 @@ const Register = () => {
 
     function handleError(message) {
         window.alert(message);
+        setIsSubmitting(false)
         setUsername("");
         setPassword("");
         setEmail("");
@@ -31,12 +33,17 @@ const Register = () => {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        setIsSubmitting(true)
         if (username === "" || password === "" || email === "") {
             handleError("Username, password and email cannot be empty")
             return;
         }
         if (!isUsernameValid(username)) {
             handleError("Username can only contain numbers and alphabets")
+            return;
+        }
+        if(!isPasswordValid(password)) {
+            handleError("Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character. The special characters are @$!%*?&#")
             return;
         }
         try {
@@ -59,6 +66,9 @@ const Register = () => {
             if (error.response.status === 400) {
                 handleError(error.response.data.message)
             }
+        }
+        finally {
+            setIsSubmitting(false)
         }
     }
 
@@ -114,7 +124,13 @@ const Register = () => {
                     ))}
                 </ul>
                 <div className="button-container">
-                    <button className="button register-button" type="submit">Register</button>
+                    <button
+                        className="button register-button"
+                        type="submit"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Registering...' : 'Register'}
+                    </button>
                     <Link to={"/login"}>
                         <button className="button" type="button">Return to Log in</button>
                     </Link>

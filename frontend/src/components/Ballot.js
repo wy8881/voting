@@ -12,8 +12,9 @@ const Ballot = () => {
     const [candidates, setCandidates] = useState([]);
     const [receiveParties, setReceiveParties] = useState(false);
     const [receiveCandidates, setReceiveCandidates] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
-    const {user} = useContext(UserContext);
+    const {user, setUser} = useContext(UserContext);
 
     useEffect(() => {
         async function fetchCandidates() {
@@ -36,7 +37,6 @@ const Ballot = () => {
         }
         fetchParties().then(() => setReceiveParties(true));
         fetchCandidates().then(() => setReceiveCandidates(true));
-
     }, []);
 
 
@@ -49,13 +49,54 @@ const Ballot = () => {
 
     function handleError(message) {
         window.alert(message);
+        setIsSubmitting(false)
         setVotes({});
     }
 
     function handleSubmit(e) {
         e.preventDefault();
+        setIsSubmitting(true)
         if(checkCorrectMethod() && checkCorrectNumber()) {
-            console.log("submitted");
+            if (Object.keys(votes).some(key => key.includes('above'))) {
+                const partiesPreferenceList = createPartiesPreferenceList(parties, votes);
+
+                api.post('api/voter/vote', {
+                    "voterName": user.username,
+                    "preferences": partiesPreferenceList,
+                    "type": "party"
+                }).then(resp => {
+                    window.alert(resp.data.message);
+                    const newUser = {
+                        username: user.username,
+                        email: user.email,
+                        role: user.role,
+                        isVoted: true
+                    }
+                    setUser(newUser);
+                    navigate('/dashboard');
+                }).catch(error => {
+                    handleError(error.response.data.message)
+                })
+            } else {
+                const candidatesPreferenceList = createCandidatesPreferenceList(candidates, votes);
+                api.post('api/voter/vote', {
+                    "voterName": user.username,
+                    "preferences": candidatesPreferenceList,
+                    "type": "candidate"
+                }).then(resp => {
+                    window.alert(resp.data.message);
+                    const newUser = {
+                        username: user.username,
+                        email: user.email,
+                        role: user.role,
+                        isVoted: true
+                    }
+                    setUser(newUser);
+                    navigate('/dashboard');
+                }).catch(error => {
+                    handleError(error.response.data.message)
+                })
+            }
         }
     }
 
@@ -79,6 +120,10 @@ const Ballot = () => {
     }
 
     function checkCorrectNumber() {
+        if(Object.keys(votes).length === 0) {
+            handleError("You have not voted for anyone");
+            return false;
+        }
         const voteValues = Object.values(votes).map(value => parseInt(value, 10));
         const isAboveLine = Object.keys(votes).some(key => key.includes('above'));
         const isBelowLine = Object.keys(votes).some(key => key.includes('below'));
@@ -95,7 +140,7 @@ const Ballot = () => {
             if(!(isUnique(voteValues) && minVote === 1 && voteValues.length >= 6&& isConsecutive)) {
                 handleError("You have not voted correctly above the line. You need to number at least six boxes from 1 to 6.");
                 return false;
-        }
+            }
 
         }
 
@@ -109,6 +154,32 @@ const Ballot = () => {
         return true;
     }
 
+
+    function createCandidatesPreferenceList(candidates, votes) {
+        // Create an array of [candidateName, preferenceValue] pairs
+        const preferences = candidates.map((candidate, index) => {
+            return { name: candidate.name, preference: votes[`below${index}`] };
+        });
+
+        // Filter out any candidates that were not assigned a preference
+        const filteredPreferences = preferences.filter(p => p.preference);
+
+        // Sort the array based on preference values
+        filteredPreferences.sort((a, b) => a.preference - b.preference);
+
+        // Extract the candidate names in the sorted order
+        return filteredPreferences.map(p => p.name);
+    }
+
+    function createPartiesPreferenceList(Parties, votes) {
+        // Create an array of [candidateName, preferenceValue] pairs
+        const preferences = Parties.map((party, index) => {
+            return { name: party.name, preference: votes[`above${index}`] };
+        });
+        const filteredPreferences = preferences.filter(p => p.preference);
+        filteredPreferences.sort((a, b) => a.preference - b.preference);
+        return filteredPreferences.map(p => p.name);
+    }
 
 
     return (
@@ -127,6 +198,7 @@ const Ballot = () => {
                                 <input
                                     type="number"
                                     value={votes[`above${index}`] || ''}
+                                    min={"1"}
                                     onChange={(e) => handleVoteChange(`above${index}`, e.target.value)}
                                 />
                                 <label>{party.name}</label>
@@ -141,13 +213,21 @@ const Ballot = () => {
                                 <input
                                     type="number"
                                     value={votes[`below${index}`] || ''}
+                                    min={"1"}
                                     onChange={(e) => handleVoteChange(`below${index}`, e.target.value)}
                                 />
                                 <label>{candidate.name}</label>
                             </div>
                         ))}
                     </div>
-                    <button className="submit-button" type="submit" onClick={handleSubmit}>Submit</button>
+                    <button
+                        className="submit-button"
+                        type="submit"
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? "Submitting..." : "Submit"}
+                    </button>
                 </div>
             </>
         )
