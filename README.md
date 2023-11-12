@@ -2,7 +2,7 @@
 ## A. Before you use this system
 1. Create an account at https://cloud.mongodb.com/
 2. Create User.
-3. Click 'Quickstart', scroll down, and check whether any IP address exists. If there is no IP address, click 'Add My Current IP Address'.
+3. Click '*Quickstart*', scroll down, and check whether any IP address exists. If there is no IP address, click 'Add My Current IP Address'.
 4. Click 'CONNECT' in 'Overview' (First of the left sidebar).
 5. Choose 'Compass' as your access data tool, then copy the connection string.
 6. Download 'Compass'.
