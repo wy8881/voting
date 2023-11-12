@@ -2,13 +2,13 @@
 ## A. Before you use this system
 1. Create an account at https://cloud.mongodb.com/
 2. Create User.
-3. Click 'Quickstart', scroll down, and check whether any IP address exists. If there is no IP address, click 'Add My Current IP Address'.
-4. Click 'CONNECT' in 'Overview' (First of the left sidebar).
-5. Choose 'Compass' as your access data tool, then copy the connection string.
-6. Download 'Compass'.
+3. Click '**Quickstart**', scroll down, and check whether any IP address exists. If there is no IP address, click '**Add My Current IP Address**'.
+4. Click '**CONNECT**' in 'Overview' (First of the left sidebar).
+5. Choose '**Compass**' as your access data tool, then copy the connection string.
+6. Download '**Compass**'.
 7. Open MongoDB Compass.
-8. Paste the connection string into the 'URI', and replace <password> with the password for the user. 
-9. Click 'Save & Connect'. (If you have a problem here, visit https://www.mongodb.com/community/forums/t/error-while-connecting-my-database-through-mongodb-compass/243317)
+8. Paste the connection string into the '**URI**', and replace <password> with the password for the user. 
+9. Click '**Save & Connect**'. (If you have a problem here, visit https://www.mongodb.com/community/forums/t/error-while-connecting-my-database-through-mongodb-compass/243317)
 10. Create a database. -- (Remember the database's name)
 ## If you haven't used IntelliJ IDEA Community before, follow these steps:
 1. Download and install IntelliJ IDEA Community Edition at https://www.jetbrains.com/idea/download/?section=windows
