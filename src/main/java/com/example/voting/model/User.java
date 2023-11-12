@@ -23,7 +23,7 @@ public class User {
     @JsonIgnore
     private ObjectId id;
 
-    @Indexed
+    @Indexed(unique = true)
     @NotBlank
     @Size(max = 20)
     private String username;
@@ -35,8 +35,10 @@ public class User {
     @NotBlank
     @Size(max = 50)
     @Email
+    @Indexed(unique = true)
     private String email;
     private ERole role;
+    private Boolean voted;
 
     public User(String username, String email, String encode) {
         this.username = username;

@@ -33,33 +33,46 @@ public class DelegateController {
 
     @PostMapping("/createCandidate")
     public ResponseEntity<?> CreateCandidate(@Valid @RequestBody CreateCandidateRequest createCandidateRequest) {
-        if(!Validation.isNameValid(createCandidateRequest.getName()))
+        try {
+            int rank = Integer.parseInt(createCandidateRequest.getRank());
+
+        if(!Validation.isNameValid(createCandidateRequest.getName())
+                || !Validation.isNameValid(createCandidateRequest.getParty())
+                || !Validation.isRankValid(rank))
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Candidate name is invalid!"));
-        if(DBService.candidateExistsByName(createCandidateRequest.getName()))
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Candidate name is already taken!"));
+                    .body(new MessageResponse("Error: The candidate is invalid!"));
         if(!DBService.partyExistsByName(createCandidateRequest.getParty()))
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Party does not exist!"));
-        Candidate candidate = DBService.createCandidate(createCandidateRequest.getName(), createCandidateRequest.getParty());
+        DBService.createCandidate(createCandidateRequest.getName(), createCandidateRequest.getParty(), rank);
         return ResponseEntity.ok(new MessageResponse("Candidate created successfully!"));
+        }
+        catch (NumberFormatException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Rank is not a number!"));
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse(e.getMessage()));
+        }
     }
 
     @PostMapping("/createParty")
     public ResponseEntity<?> CreateParty(@Valid @RequestBody CreatePartyRequest createPartyRequest) {
-        if(!Validation.isNameValid(createPartyRequest.getName()))
+        try{
+            if(!Validation.isNameValid(createPartyRequest.getName())) throw new RuntimeException("Error: Party name is invalid!");
+            DBService.createParty(createPartyRequest.getName());
+        }
+        catch (Exception e) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Party name is invalid!"));
-        if(DBService.partyExistsByName(createPartyRequest.getName()))
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Party name is already taken!"));
-        DBService.createParty(createPartyRequest.getName());
+                    .body(new MessageResponse(e.getMessage()));
+        }
+
         return ResponseEntity.ok(new MessageResponse("Party created successfully!"));
     }
 

@@ -8,6 +8,7 @@ import {UserContext} from "../contexts/UserContext";
 import withRoleAccess from "./withRoleAcess";
 const CreateNewParty = () => {
     const [partyName, setPartyName] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
     const {user} = useContext(UserContext);
 
@@ -17,6 +18,7 @@ const CreateNewParty = () => {
     }
     async function handleSubmit(e) {
         e.preventDefault();
+        setIsSubmitting(true)
         if(partyName === "") {
             handleMsg("Party Name cannot be empty")
             return;
@@ -35,6 +37,9 @@ const CreateNewParty = () => {
             if(error.response.status === 400) {
                 handleMsg(error.response.data.message)
             }
+        }
+        finally {
+            setIsSubmitting(false)
         }
 
     }
@@ -76,9 +81,13 @@ const CreateNewParty = () => {
                         />
                         <span className={"helper-text"}>Only alphabets and space for party name</span>
                     </div>
-                    <button className={"register-button"} type={"submit"}>Create</button>
-                    <button className={"register-button"} onClick={handleTest}>Test</button>
-                    <button className={"register-button"} onClick={handleTest2}>Test2</button>
+                    <button
+                        className={"register-button"}
+                        type={"submit"}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Creating...' : 'Create'}
+                    </button>
                 </form>
             </div>
         </div>

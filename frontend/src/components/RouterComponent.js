@@ -13,6 +13,7 @@ import ManageParties from "./ManageParties";
 import CreateNewCandidate from "./CreateNewCandidate";
 import ManageCandidates from "./ManageCandidates";
 import Logs from "./Logs";
+import CheckResult from "./CheckResult";
 
 function PageTitle() {
     const location = useLocation();
@@ -84,6 +85,7 @@ export default function RouterComponent() {
                 <Route path="/dashboard/candidates/create" element={<CreateNewCandidate/> } />
                 <Route path="/dashboard/candidates/manage" element={<ManageCandidates/>} />
                 <Route path={"/dashboard/logs"} element={<Logs/>} />
+                <Route path = "/dashboard/result" element={<CheckResult/>} />
             </Routes>
         </Router>
     );

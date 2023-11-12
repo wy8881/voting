@@ -24,6 +24,10 @@ body {
 
 /* Input container style */
 .input-container {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+    justify-content: center; /* Center children vertically if the container has a fixed height */
     margin-bottom: 20px;
     width: 100%;
 }
@@ -37,6 +41,8 @@ body {
 
 /* Input box style */
 .input-field {
+    display: flex;
+    text-align: center;
     width: 100%;
     padding: 10px;
     border: 2px solid #007bff;

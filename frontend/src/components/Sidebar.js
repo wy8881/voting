@@ -13,7 +13,12 @@ export default function Sidebar() {
 
     useEffect(() => {
         if(location.pathname === '/dashboard/ballot' ) {
+            setButton1Text("Results");
             setButton2Text("Dashboard");
+        }
+        else if(location.pathname === '/dashboard/result') {
+            setButton1Text("Dashboard");
+            setButton2Text("Vote")
         }
         else if(location.pathname === '/dashboard/candidates') {
             setButton1Text("Dashboard");
@@ -44,7 +49,7 @@ export default function Sidebar() {
         }
         else if(location.pathname === '/dashboard') {
             if(user.role === 'ROLE_VOTER') {
-                setButton1Text("check vote")
+                setButton1Text("Results")
                 setButton2Text("Vote");
             }
             else if(user.role === 'ROLE_DELEGATE') {
@@ -75,19 +80,16 @@ export default function Sidebar() {
         <div className="sidebar-container">
             {user && user.role === 'ROLE_VOTER' && (
                 <>
-                    {user.isVoted === 'true' ? (
-                        <>
-                            <Link to={location.pathname === '/dashboard' ? '/dashboard/ballot' : '/dashboard'}>
-                                <button className="sidebar-button">{button1Text}</button>
-                            </Link>
-                        </>
-                    ) : (
-                        <>
-                            <Link to={location.pathname === '/dashboard' ? '/dashboard/ballot' : '/dashboard'}>
+                    <Link to={location.pathname === '/dashboard'
+                    || location.pathname ==='/dashboard/ballot' ? '/dashboard/result' : '/dashboard'}>
+                        <button className="sidebar-button">{button1Text}</button>
+                    </Link>
+                    {user.isVoted.toString() === 'false' && (
+                            <Link to={location.pathname === '/dashboard'
+                            || '/dashabord/result' ? '/dashboard/ballot' : '/dashboard'}>
                                 <button className="sidebar-button">{button2Text}</button>
                             </Link>
-                        </>
-                    )}
+                        )}
                 </>
             )}
             {user && user.role === 'ROLE_DELEGATE' && (

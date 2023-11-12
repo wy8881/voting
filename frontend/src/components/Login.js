@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import api from "../api/axiosConfig";
 import {UserContext} from "../contexts/UserContext";
-import {isUsernameValid} from "../utils/Utils";
+import {isPasswordValid, isUsernameValid} from "../utils/Utils";
 import '../styles/Register.css'
 import withNoLogged from "./witNotLogged";
 
@@ -26,6 +26,10 @@ const Login = () => {
         }
         if(!isUsernameValid(username)) {
             handleError("Username can only contain numbers and alphabets")
+            return;
+        }
+        if(!isPasswordValid(password)) {
+            handleError("Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character. The special characters are @$!%*?&#")
             return;
         }
         try {
