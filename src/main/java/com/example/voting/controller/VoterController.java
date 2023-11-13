@@ -50,7 +50,7 @@ public class VoterController {
     }
 
     @GetMapping("/result")
-    public List<CandidateTotalVote> result() {
+    public List<CandidateTotalVote> fetchResult() {
         try {
             return dbService.candidateTotalVotes();
         }
