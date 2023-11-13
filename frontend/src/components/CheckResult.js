@@ -10,7 +10,12 @@ const CheckResult = () => {
         async function fetchResult() {
             try {
                 await api.get('api/voter/result').then(resp => {
-                    setResults(resp.data.sort((a, b) =>b.totalVotes - a.totalVotes  ));
+                    setResults(resp.data.sort((a, b) =>{
+                        if(a.totalVotes === b.totalVotes) {
+                            return a.candidateName.localeCompare(b.candidateName);
+                        }
+                        return b.totalVotes - a.totalVotes
+                    }  ));
                     setReceived(true);
                 })
             } catch (error) {

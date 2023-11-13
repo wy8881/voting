@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -162,40 +163,11 @@ public class DBService {
     public List<CandidateTotalVote> candidateTotalVotes() {
         List<Vote> votes = mongoTemplate.findAll(Vote.class, "votes");
         Collections.shuffle(votes);
-        String tempCollectionName = "shuffledVotes";
-        mongoTemplate.dropCollection(tempCollectionName);
-        mongoTemplate.insert(votes, tempCollectionName);
-
-
-        LookupOperation lookupOperation = LookupOperation.newLookup()
-                .from("shuffledVotes")
-                .localField("name")
-                .foreignField("candidateName")
-                .as("votesInfo");
-
-        UnwindOperation unwindOperation = Aggregation.unwind("votesInfo", true);
-
-        GroupOperation groupOperation = Aggregation.group("name")
-                .sum("votesInfo.num").as("totalVotes");
-
-        ProjectionOperation projectionOperation = Aggregation.project()
-                .and("_id").as("candidateName")
-                .andInclude("totalVotes");
-
-        Aggregation aggregation = Aggregation.newAggregation(
-                lookupOperation,
-                unwindOperation,
-                groupOperation,
-                projectionOperation
-        );
-
-        AggregationResults<CandidateTotalVote> results = mongoTemplate.aggregate(
-                aggregation,
-                "candidates",
-                CandidateTotalVote.class
-        );
-
-        return results.getMappedResults();
+        Map<String, Long> voteCounts = votes.stream()
+                .collect(Collectors.groupingBy(Vote::getCandidateName, Collectors.summingLong(Vote::getNum)));
+        return voteCounts.entrySet().stream()
+                .map(entry -> new CandidateTotalVote(entry.getKey(), entry.getValue()))
+                .toList();
     }
 
 
