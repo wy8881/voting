@@ -1,9 +1,11 @@
 package com.example.voting.controller;
 
+import com.example.voting.model.Action;
 import com.example.voting.model.CandidateTotalVote;
 import com.example.voting.payload.request.VoteRequest;
 import com.example.voting.payload.response.MessageResponse;
 import com.example.voting.service.DBService;
+import com.example.voting.service.LogService;
 import com.example.voting.utils.Validation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ import java.util.List;
 public class VoterController {
     @Autowired
     DBService dbService;
+    @Autowired
+    LogService logService;
     @GetMapping
     public String apiRoot() {
         return "hello";
@@ -41,6 +45,7 @@ public class VoterController {
         catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
+        logService.log(voteRequest.getVoterName(), Action.VOTE);
         return ResponseEntity.ok().body(new MessageResponse("Vote successful"));
     }
 

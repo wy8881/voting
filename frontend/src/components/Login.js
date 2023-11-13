@@ -2,13 +2,14 @@ import React, {useContext, useState} from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import api from "../api/axiosConfig";
 import {UserContext} from "../contexts/UserContext";
-import {isPasswordValid, isUsernameValid} from "../utils/Utils";
+import {isPasswordValid, isUsernameValid, setToken} from "../utils/Utils";
 import '../styles/Register.css'
 import withNoLogged from "./witNotLogged";
 
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [isLogging, setIsLogging] = useState(false);
     const navigate = useNavigate();
     const {setUser} = useContext(UserContext);
 
@@ -20,6 +21,7 @@ const Login = () => {
     }
     async function handleSubmit(e) {
         e.preventDefault();
+        setIsLogging(true)
         if(username === "" || password === "") {
             handleError("Username and password cannot be empty")
             return;
@@ -33,27 +35,33 @@ const Login = () => {
             return;
         }
         try {
-            await api.post('api/auth/authenticate', {
+            const resp = await api.post('api/auth/authenticate', {
                 "username": username,
                 "password": password
-            }).then(resp => {
-                const newUser = {
-                    username: resp.data.username,
-                    email: resp.data.email,
-                    role: resp.data.role,
-                    isVoted: resp.data.isVoted
-                }
-                setUser(newUser);
-                navigate(`/dashboard`);
             })
+            setToken(resp, api, "Login failed")
+            const newUser = {
+                username: resp.data.username,
+                email: resp.data.email,
+                role: resp.data.role,
+                isVoted: resp.data.isVoted
+            }
+            setUser(newUser);
+            navigate(`/dashboard`);
         }
         catch (error) {
-            if(error.response.status === 401) {
+            if(error.response && error.response.status === 401) {
                 handleError("Unmatched username or password")
             }
-            else if(error.response.status === 400) {
+            else if(error.response){
                 handleError(error.response.data.message)
             }
+            else {
+                handleError(error.message)
+            }
+        }
+        finally {
+            setIsLogging(false)
         }
     }
 
@@ -86,7 +94,7 @@ const Login = () => {
                     />
                 </div>
                 <div className="button-container">
-                    <button className='register-button' type={"submit"}>Login</button>
+                    <button className='register-button' type={"submit"}>{isLogging? "logging" : "log in "}</button>
                     <Link to={"/signup"}>
                         <button className="button" > Go to Register </button>
                     </Link>

@@ -2,6 +2,7 @@ package com.example.voting.jwt;
 
 import com.example.voting.service.MyUserDetails;
 import com.example.voting.service.MyUserDetailsService;
+import com.nimbusds.jose.Header;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -48,18 +49,12 @@ public class AuthTokenFilter extends OncePerRequestFilter{
     }
 
 
+
     private String parseJwt(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                String auth = cookie.getName() + "=" + cookie.getValue() + "; ";
-                if (StringUtils.hasText(auth) && auth.startsWith("Bearer=")) {
-                    return auth.substring(7);
-                }
-            }
-            return null;
-        } else {
-            return null;
+        String headerAuth = request.getHeader("Authorization");
+        if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")){
+            return headerAuth.substring(7);
         }
+        else return null;
     }
 }
