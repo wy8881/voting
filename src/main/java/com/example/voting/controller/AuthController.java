@@ -50,11 +50,6 @@ public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 
-    @GetMapping("/csrf-token")
-    public String test() {
-        return "fetch successful";
-    }
-
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         if(!Validation.isPasswordValid(loginRequest.getPassword()) || !Validation.isUsernameValid(loginRequest.getUsername())) {

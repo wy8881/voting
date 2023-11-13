@@ -12,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -61,9 +59,8 @@ public class DBService {
         if (existsByUsername(user.getUsername()) || voterRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Error: Username is already taken!");
         }
-
         userRepository.save(user);
-        voterRepository.save(new Voter(user.getUsername()));
+        voterRepository.save(new Voter(user.getUsername(), UUID.randomUUID().toString()));
     }
     public boolean hasVote(String username) {
         Voter voter = voterRepository.findByUsername(username);
@@ -87,7 +84,17 @@ public class DBService {
     }
     @Transactional
     public void vote(List<String> preferences, String username, String type) throws RuntimeException{
-        Ballot ballot = ballotRepository.insert(new Ballot(preferences, type));
+        Voter voter = voterRepository.findByUsername(username);
+        if(voter == null){
+            throw new RuntimeException("Voter does not exist");
+        }
+        String anonymousId = voter.getAnonymousId();
+        if(anonymousId == null || anonymousId.isEmpty()) {
+            anonymousId = UUID.randomUUID().toString();
+            voter.setAnonymousId(anonymousId);
+            voterRepository.save(voter);
+        }
+        Ballot ballot = ballotRepository.insert(new Ballot(anonymousId,preferences, type));
         if(type.equals("party")) {
             preferences = convert2Candidates(preferences);
         }
@@ -153,8 +160,15 @@ public class DBService {
     }
 
     public List<CandidateTotalVote> candidateTotalVotes() {
+        List<Vote> votes = mongoTemplate.findAll(Vote.class, "votes");
+        Collections.shuffle(votes);
+        String tempCollectionName = "shuffledVotes";
+        mongoTemplate.dropCollection(tempCollectionName);
+        mongoTemplate.insert(votes, tempCollectionName);
+
+
         LookupOperation lookupOperation = LookupOperation.newLookup()
-                .from("votes")
+                .from("shuffledVotes")
                 .localField("name")
                 .foreignField("candidateName")
                 .as("votesInfo");

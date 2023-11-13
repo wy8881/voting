@@ -8,9 +8,9 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.List;
+import java.util.UUID;
 
 @Document(collection = "voters")
 @Data
@@ -22,9 +22,13 @@ public class Voter {
     private ObjectId id;
     @Indexed(unique = true)
     private String username;
+    private String anonymousId;
     private boolean voted;
 
-    public Voter(String username) {
+    public Voter(String username, String anonymousId) {
+
         this.username = username;
+        this.anonymousId = anonymousId;
     }
+
 }
