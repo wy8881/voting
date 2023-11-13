@@ -1,13 +1,15 @@
 import React, {createContext, useEffect, useState} from 'react';
 import api from "../api/axiosConfig";
+import {reloadToken} from "../utils/Utils";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
 
-    async function checkCookie() {
+    async function checkAuth() {
         try {
-            const response = await api.get('api/auth/checkCookie');
+            reloadToken(api)
+            const response = await api.get('api/auth/checkAuth');
             const isAuth = response.data;
             if (isAuth === false ) {
                 console.log("not auth")
@@ -24,7 +26,7 @@ export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        checkCookie().then(reloadUser);
+        checkAuth().then(reloadUser);
     },[]);
 
     useEffect(() => {
