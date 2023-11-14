@@ -20,7 +20,7 @@
 9. Open MongoDB Compass.
 10. Paste the **connection string** into the '**URI**', and replace **<password>** with the password for the user. 
 11. Click '**Save & Connect**'. (If you have a problem here, visit https://www.mongodb.com/community/forums/t/error-while-connecting-my-database-through-mongodb-compass/243317)
-12. Create a database. -- (Remember the database's name)
+12. Create a database. -- (Remember the **database's name**)
 ## If you haven't used IntelliJ IDEA Community before, follow these steps:
 1. Download and install IntelliJ IDEA Community Edition at https://www.jetbrains.com/idea/download/?section=windows
 2. Download this voting system and open it as a project in IntelliJ IDEA.
@@ -29,7 +29,7 @@
 2. Rewrite this `.env` document as `.env.example`.
 3. Add real values with `" "` after every "`=`".
    
-   To fill out the `MONGO_DATABASE`, copy the database's name and paste it here.
+   To fill out the `MONGO_DATABASE`, copy the **database's name** and paste it here.
    
    To fill out the `MONGO_CLUSTER`, copy the string behind `@` in the connection string we copied before.
    
