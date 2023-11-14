@@ -62,8 +62,8 @@ public class LocalAccountCreate implements CommandLineRunner {
         }
         String password = console.readLine("Password: ");
         String email = console.readLine("Email: ");
-        if(dbService.existsByEmail(email)) {
-            System.out.println("Email already exists");
+        if(!Validation.isEmailValid(email)) {
+            System.out.println("Email is not valid!");
             return;
         }
         if(!Validation.isPasswordValid(password) || !Validation.isUsernameValid(username)) {
