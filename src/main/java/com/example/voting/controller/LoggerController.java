@@ -30,4 +30,10 @@ public class LoggerController {
         }
         return logService.findLogByAction(action);
     }
+
+    // get all logs
+    @GetMapping("/all")
+    public List<Log> getAllLogs() {
+        return logService.findAllLogs();
+    }
 }
