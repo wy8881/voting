@@ -11,6 +11,11 @@ export function isNameValid(input) {
     return regex.test(input);
 }
 
+export function isValidEmail(email) {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return regex.test(email);
+}
+
 export function isPasswordValid(password) {
     const regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&#])(?=\S+$).{8,}$/;
     return regex.test(password);
