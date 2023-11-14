@@ -37,4 +37,14 @@ public class LogService {
         return decrypted;
     }
 
+    // find all logs
+    public List<Log> findAllLogs() {
+        List<Log> result = logRepository.findAll();
+        List<Log> decrypted = new ArrayList<>();
+        for (Log log : result) {
+            decrypted.add(log.decrypt());
+        }
+        return decrypted;
+    }
+
 }

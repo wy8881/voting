@@ -51,6 +51,35 @@ const  Logs = () => {
         }
     }
 
+    // download all logs
+    async function onDownloadAllLogs() {
+        await api.get('api/logs/all').then((response) => {
+            // convret recived data to list of strings
+            let log_list = [];
+
+            response.data.forEach((log) => {
+                log_list.push(log.username + " " + log.action + " " + log.id.date);
+            });
+
+            // convert list of strings to string
+            let log_string = "";
+            log_list.forEach((log) => {
+                log_string += log + "\n";
+            });
+
+            const element = document.createElement("a");
+            const file = new Blob([log_string], {type: 'text/plain'});
+            element.href = URL.createObjectURL(file);
+            element.download = "logs.txt";
+            document.body.appendChild(element); // Required in FireFox
+            element.click();
+
+            URL.revokeObjectURL(element.href);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
     return (
         <div className={"logs-container"}>
             <Sidebar/>
@@ -71,6 +100,9 @@ const  Logs = () => {
                         placeholder={"Action"}
                         onChange={(e) => setAction(e.target.value)}/>
                     <button onClick={onSearchByAction}>Search</button>
+                </div>
+                <div>
+                    <button onClick={onDownloadAllLogs}>Download All Logs</button>
                 </div>
             </div>
             {logs.length !==0 && (
