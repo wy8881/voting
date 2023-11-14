@@ -46,8 +46,8 @@
    
         MONGO_CLUSTER="cluster0.edplh85.mongodb.net"
 5. Open '**VotingApplication.java**' in `voting\src\main\java\com\example\voting` folder and run.
-6. Open 'Terminal' (tap `Alt+F12`).
-7. Go to the 'frontend' folder (`cd frontend`)
+6. Open '**Terminal**' (tap `Alt+F12`).
+7. Go to the '**frontend**' folder (`cd frontend`)
 8. Start the system (`npm start`)
 ## C. Use System
 1. For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create_delegate"` under the 'voting' folder.
