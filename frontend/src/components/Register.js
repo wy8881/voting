@@ -4,7 +4,7 @@ import api from "../api/axiosConfig";
 import '../styles/Register.css';
 import { UserContext } from "../contexts/UserContext";
 import '../styles/Register.css'
-import {isPasswordValid, isUsernameValid, setToken} from "../utils/Utils";
+import {isEmailValid, isPasswordValid, isUsernameValid, setToken} from "../utils/Utils";
 import { checkPasswordStrength } from "../utils/passwordStrengthChecker";
 import withNoLogged from "./witNotLogged";
 
@@ -46,6 +46,11 @@ const Register = () => {
             handleError("Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character. The special characters are @$!%*?&#")
             return;
         }
+        if(!isEmailValid(email)) {
+            handleError("Invalid email")
+            return;
+        }
+
         try {
             const resp = await api.post('api/auth/register', {
                 "username": username,
