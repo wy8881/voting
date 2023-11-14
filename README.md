@@ -6,8 +6,11 @@
 
    If there is no IP address, click '**Add My Current IP Address**'.
 
+   Next time, if you see this in '**Overview**':
+
    ![image](https://github.com/wy8881/voting/assets/74237376/ca759087-d4f0-40b9-be5f-67d229075922)
 
+   click '**Add Current IP Address**'
 5. Click '**CONNECT**' in 'Overview' (First of the left sidebar).
 6. Choose '**Compass**' as your access data tool, then copy the connection string.
 7. Download '**Compass**'.
