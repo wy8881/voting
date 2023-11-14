@@ -58,3 +58,4 @@
 2. Backend Application Fails to Start: 
         Ensure that the MongoDB database service is running. Verify that the network connection is stable and not blocked by a firewall. Ensure that the database connection information in the `.env` file is accurate and correct.
 3. This project does not support Spring Framework 6+. If you get the error `class file has wrong version 61.0, should be 55.0` when you run VotingApplication.java, you should downgrade your Spring Framework to 5.3.x and check your Java version. For more information, visit https://stackoverflow.com/questions/74648576/spring-class-file-has-wrong-version-61-0-should-be-55-0.
+4. This uses JDK 21 as Development Environment. So that JDK 21 is strongly recommended.
