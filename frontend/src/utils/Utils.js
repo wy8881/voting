@@ -15,3 +15,21 @@ export function isPasswordValid(password) {
     const regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&#])(?=\S+$).{8,}$/;
     return regex.test(password);
 }
+
+export function setToken(resp, api,msg) {
+
+    if(resp.data.token) {
+        sessionStorage.setItem("Bearer", resp.data.token);
+        api.defaults.headers.common['Authorization'] = sessionStorage.getItem("Bearer");
+    }    else {
+        throw new Error(msg)
+    }
+
+}
+
+export function reloadToken(api){
+    if(sessionStorage.getItem('Bearer')) {
+        console.log(sessionStorage.getItem('Bearer'))
+        api.defaults.headers.common['Authorization'] = sessionStorage.getItem('Bearer');
+    }
+}

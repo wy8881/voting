@@ -6,12 +6,14 @@ import com.example.voting.model.ERole;
 import com.example.voting.model.User;
 import com.example.voting.payload.request.LoginRequest;
 import com.example.voting.payload.request.SignupRequest;
+import com.example.voting.payload.response.JWTResponse;
 import com.example.voting.payload.response.MessageResponse;
 import com.example.voting.payload.response.VoterResponse;
 import com.example.voting.service.DBService;
 import com.example.voting.service.LogService;
 import com.example.voting.service.MyUserDetails;
 import com.example.voting.utils.Validation;
+import com.nimbusds.jwt.JWT;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -48,13 +50,8 @@ public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 
-    @GetMapping("/csrf-token")
-    public String test() {
-        return "fetch successful";
-    }
-
     @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         if(!Validation.isPasswordValid(loginRequest.getPassword()) || !Validation.isUsernameValid(loginRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -70,13 +67,6 @@ public class AuthController {
         String role = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList().get(0);
-        ResponseCookie cookie = ResponseCookie.from("Bearer", jwt)
-                .httpOnly(true)
-                .path("/")
-                .maxAge(60*60)
-                .sameSite("Lax")
-                .build();
-        response.setHeader("Set-Cookie", cookie.toString());
         logService.log(userDetails.getUsername(), Action.LOGIN);
         boolean hasVoted;
         if(role.equals(ERole.ROLE_VOTER.toString())) {
@@ -85,15 +75,17 @@ public class AuthController {
             hasVoted = false;
         }
 
-        return ResponseEntity.ok(new VoterResponse(
+        return ResponseEntity.ok(new JWTResponse(
+                "Bearer " + jwt,
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 role,
-                hasVoted));
+                hasVoted) {
+        });
     }
 
     @PostMapping("register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest, HttpServletResponse response) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if(!Validation.isPasswordValid(signUpRequest.getPassword())) {
             return ResponseEntity
                     .badRequest()
@@ -123,17 +115,10 @@ public class AuthController {
         }
 
         String jwt = jwtUtils.generateJwtToken(signUpRequest.getUsername());
-        ResponseCookie cookie = ResponseCookie.from("Bearer", jwt)
-                .httpOnly(true)
-                .path("/")
-                .maxAge(60*60)
-                .sameSite("Lax")
-                .build();
-        response.setHeader("Set-Cookie", cookie.toString());
-
         logService.log(user.getUsername(), Action.REGISTER_VOTER);
 
-        return ResponseEntity.ok(new VoterResponse(
+        return ResponseEntity.ok(new JWTResponse(
+                "Bearer " + jwt,
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole().toString(),
@@ -162,26 +147,21 @@ public class AuthController {
         return "User Content: " + username + " " + role;
     }
 
-    @GetMapping("/checkCookie")
-    public boolean checkCookie(HttpServletRequest request) {
+
+    @GetMapping("/checkAuth")
+    public boolean checkAut(HttpServletRequest request) {
         String jwt = parseJwt(request);
         return jwt != null && jwtUtils.validateJwtToken(jwt);
     }
 
     private String parseJwt(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                String auth = cookie.getName() + "=" + cookie.getValue() + "; ";
-                if (StringUtils.hasText(auth) && auth.startsWith("Bearer=")) {
-                    return auth.substring(7);
-                }
-            }
-            return null;
-        } else {
-            return null;
+        String headerAuth = request.getHeader("Authorization");
+        if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")){
+            return headerAuth.substring(7);
         }
+        else return null;
     }
+
 
 
 }

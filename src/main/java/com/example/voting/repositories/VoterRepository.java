@@ -10,4 +10,6 @@ public interface VoterRepository extends MongoRepository<Voter, ObjectId> {
 
     Voter findByUsername(String username);
 
+    Boolean existsByUsername(String username);
+
 }

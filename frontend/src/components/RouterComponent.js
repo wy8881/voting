@@ -61,13 +61,6 @@ function PageTitle() {
 export default function RouterComponent() {
     const { user } = useContext(UserContext);
 
-    function NotloggedRoute({Component}) {
-        if (!((user || localStorage.getItem('user')))) {
-            return <Component/>;
-        } else {
-            return <Navigate to="/dashboard" replace />;
-        }
-    }
 
     return (
         <Router>

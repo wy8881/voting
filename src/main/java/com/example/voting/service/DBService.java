@@ -12,9 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -58,11 +57,11 @@ public class DBService {
     }
     @Transactional
     public void createVoter(User user) throws RuntimeException{
-        if (existsByUsername(user.getUsername())) {
+        if (existsByUsername(user.getUsername()) || voterRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Error: Username is already taken!");
         }
         userRepository.save(user);
-        voterRepository.save(new Voter(user.getUsername()));
+        voterRepository.save(new Voter(user.getUsername(), UUID.randomUUID().toString()));
     }
     public boolean hasVote(String username) {
         Voter voter = voterRepository.findByUsername(username);
@@ -86,7 +85,17 @@ public class DBService {
     }
     @Transactional
     public void vote(List<String> preferences, String username, String type) throws RuntimeException{
-        Ballot ballot = ballotRepository.insert(new Ballot(preferences, type));
+        Voter voter = voterRepository.findByUsername(username);
+        if(voter == null){
+            throw new RuntimeException("Voter does not exist");
+        }
+        String anonymousId = voter.getAnonymousId();
+        if(anonymousId == null || anonymousId.isEmpty()) {
+            anonymousId = UUID.randomUUID().toString();
+            voter.setAnonymousId(anonymousId);
+            voterRepository.save(voter);
+        }
+        Ballot ballot = ballotRepository.insert(new Ballot(anonymousId,preferences, type));
         if(type.equals("party")) {
             preferences = convert2Candidates(preferences);
         }
@@ -152,35 +161,13 @@ public class DBService {
     }
 
     public List<CandidateTotalVote> candidateTotalVotes() {
-        LookupOperation lookupOperation = LookupOperation.newLookup()
-                .from("votes")
-                .localField("name")
-                .foreignField("candidateName")
-                .as("votesInfo");
-
-        UnwindOperation unwindOperation = Aggregation.unwind("votesInfo", true);
-
-        GroupOperation groupOperation = Aggregation.group("name")
-                .sum("votesInfo.num").as("totalVotes");
-
-        ProjectionOperation projectionOperation = Aggregation.project()
-                .and("_id").as("candidateName")
-                .andInclude("totalVotes");
-
-        Aggregation aggregation = Aggregation.newAggregation(
-                lookupOperation,
-                unwindOperation,
-                groupOperation,
-                projectionOperation
-        );
-
-        AggregationResults<CandidateTotalVote> results = mongoTemplate.aggregate(
-                aggregation,
-                "candidates",
-                CandidateTotalVote.class
-        );
-
-        return results.getMappedResults();
+        List<Vote> votes = mongoTemplate.findAll(Vote.class, "votes");
+        Collections.shuffle(votes);
+        Map<String, Long> voteCounts = votes.stream()
+                .collect(Collectors.groupingBy(Vote::getCandidateName, Collectors.summingLong(Vote::getNum)));
+        return voteCounts.entrySet().stream()
+                .map(entry -> new CandidateTotalVote(entry.getKey(), entry.getValue()))
+                .toList();
     }
 
 

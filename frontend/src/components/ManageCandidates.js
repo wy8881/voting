@@ -4,7 +4,6 @@ import {UserContext} from "../contexts/UserContext";
 import {useNavigate} from "react-router-dom";
 import Sidebar from "./Sidebar";
 import '../styles/DelegatePage.css';
-import {checkAccess} from "../utils/Utils";
 import withRoleAccess from "./withRoleAcess";
 
 const ManageCandidates = () => {

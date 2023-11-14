@@ -19,11 +19,14 @@ public class Ballot {
     @Id
     @JsonIgnore
     private ObjectId id;
+    @JsonIgnore
+    private String anonymousId;
     private List<String> preferences;
     private String type;
 
 
-    public Ballot(List<String> preferences, String type) {
+    public Ballot(String anonymousId, List<String> preferences, String type) {
+        this.anonymousId = anonymousId;
         this.preferences = preferences;
         this.type = type;
     }

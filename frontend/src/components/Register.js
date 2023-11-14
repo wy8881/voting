@@ -4,7 +4,7 @@ import api from "../api/axiosConfig";
 import '../styles/Register.css';
 import { UserContext } from "../contexts/UserContext";
 import '../styles/Register.css'
-import {isPasswordValid, isUsernameValid} from "../utils/Utils";
+import {isPasswordValid, isUsernameValid, setToken} from "../utils/Utils";
 import { checkPasswordStrength } from "../utils/passwordStrengthChecker";
 import withNoLogged from "./witNotLogged";
 
@@ -47,25 +47,29 @@ const Register = () => {
             return;
         }
         try {
-            await api.post('api/auth/register', {
+            const resp = await api.post('api/auth/register', {
                 "username": username,
                 "password": password,
                 "email": email
-            }).then(resp => {
-                const newUser = {
-                    username: resp.data.username,
-                    email: resp.data.email,
-                    role: resp.data.role,
-                    isVoted: resp.data.isVoted
-                }
-                setUser(newUser);
-                navigate(`/dashboard`);
             })
+            setToken(resp, api, "Register Success! Please log in.")
+            const newUser = {
+                username: resp.data.username,
+                email: resp.data.email,
+                role: resp.data.role,
+                isVoted: resp.data.isVoted
+            }
+            setUser(newUser);
+            navigate(`/dashboard`);
         }
         catch (error) {
-            if (error.response.status === 400) {
+            if(error.response) {
                 handleError(error.response.data.message)
             }
+            else {
+                handleError(error.message)
+            }
+
         }
         finally {
             setIsSubmitting(false)

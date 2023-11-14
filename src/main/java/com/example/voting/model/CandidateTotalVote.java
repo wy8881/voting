@@ -11,5 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CandidateTotalVote {
     private String candidateName;
-    private int totalVotes;
+    private Long totalVotes;
 }

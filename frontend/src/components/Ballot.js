@@ -172,7 +172,6 @@ const Ballot = () => {
     }
 
     function createPartiesPreferenceList(Parties, votes) {
-        // Create an array of [candidateName, preferenceValue] pairs
         const preferences = Parties.map((party, index) => {
             return { name: party.name, preference: votes[`above${index}`] };
         });
@@ -224,9 +223,10 @@ const Ballot = () => {
                         className="submit-button"
                         type="submit"
                         onClick={handleSubmit}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || user.isVoted.toString() === 'true'}
                     >
-                        {isSubmitting ? "Submitting..." : "Submit"}
+                        {user.isVoted.toString() === 'true' ? "You have already voted" :
+                        isSubmitting ? "Submitting..." : "Submit"}
                     </button>
                 </div>
             </>

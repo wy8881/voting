@@ -10,7 +10,12 @@ const CheckResult = () => {
         async function fetchResult() {
             try {
                 await api.get('api/voter/result').then(resp => {
-                    setResults(resp.data);
+                    setResults(resp.data.sort((a, b) =>{
+                        if(a.totalVotes === b.totalVotes) {
+                            return a.candidateName.localeCompare(b.candidateName);
+                        }
+                        return b.totalVotes - a.totalVotes
+                    }  ));
                     setReceived(true);
                 })
             } catch (error) {
@@ -31,7 +36,7 @@ const CheckResult = () => {
                     {results && results.length > 0 && results.map(result => (
                         <div className={'delegate-row'}>
                             <div>Name: {result.candidateName}</div>
-                            <div>Party: {result.totalVotes}</div>
+                            <div>Votes: {result.totalVotes}</div>
                         </div>
                     ))}
                     {results && results.length === 0 && (
