@@ -50,8 +50,8 @@
 7. Go to the '**frontend**' folder (`cd frontend`)
 8. Start the system (`npm start`)
 ## C. Use System
-1. For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create_delegate"` under the 'voting' folder.
-2. For creating `logger`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create_logger"` under the 'voting' folder.
+1. For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-delegate"` under the 'voting' folder.
+2. For creating `logger`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-logger"` under the 'voting' folder.
 ## D. Common Issues
 1. Frontend Application Fails to Start: 
         Ensure that Node.js is correctly installed. Run `npm install` in the frontend folder to install all necessary frontend dependencies.
