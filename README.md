@@ -11,13 +11,16 @@
    ![image](https://github.com/wy8881/voting/assets/74237376/ca759087-d4f0-40b9-be5f-67d229075922)
 
    click '**Add Current IP Address**'
-5. Click '**CONNECT**' in 'Overview' (First of the left sidebar).
-6. Choose '**Compass**' as your access data tool, then copy the connection string.
-7. Download '**Compass**'.
-8. Open MongoDB Compass.
-9. Paste the connection string into the '**URI**', and replace <password> with the password for the user. 
-10. Click '**Save & Connect**'. (If you have a problem here, visit https://www.mongodb.com/community/forums/t/error-while-connecting-my-database-through-mongodb-compass/243317)
-11. Create a database. -- (Remember the database's name)
+5. Click '**CONNECT**' in '**Overview**' (First of the left sidebar):
+
+   ![2](https://github.com/wy8881/voting/assets/74237376/4966521d-f251-455b-8224-e36f0125e4ef)
+
+7. Choose '**Compass**' as your access data tool, then copy the **connection string**.
+8. Download '**Compass**'.
+9. Open MongoDB Compass.
+10. Paste the **connection string** into the '**URI**', and replace **<password>** with the password for the user. 
+11. Click '**Save & Connect**'. (If you have a problem here, visit https://www.mongodb.com/community/forums/t/error-while-connecting-my-database-through-mongodb-compass/243317)
+12. Create a database. -- (Remember the database's name)
 ## If you haven't used IntelliJ IDEA Community before, follow these steps:
 1. Download and install IntelliJ IDEA Community Edition at https://www.jetbrains.com/idea/download/?section=windows
 2. Download this voting system and open it as a project in IntelliJ IDEA.
