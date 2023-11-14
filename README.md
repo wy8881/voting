@@ -52,10 +52,62 @@
 ## C. Use System
 1. For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-delegate"` under the 'voting' folder.
 2. For creating `logger`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-logger"` under the 'voting' folder.
+
+## D. Deploy System
+System Requirements of the Server:
+- JDK 21
+- Node.js 14+
+- MongoDB Compass
+- Nginx
+
+1. For deploying the system, use `mvn clean package` under the 'voting' folder.
+2. For deploying the frontend, use `npm run build` under the 'frontend' folder.
+3. Copy the `voting-0.0.1-SNAPSHOT.jar` file from `voting\target` folder to the server.
+4. Copy the `build` folder from `frontend` folder to the server.
+5. run `npm install -g serve` before you run `serve -s build` under the `build` folder.
+6. run `java -jar voting-0.0.1-SNAPSHOT.jar` under the folder where the `voting-0.0.1-SNAPSHOT.jar` file is located.
+7. Open Nginx configuration file and add the following code:
+    - If you want to use HTTP, you can use the following code:
+   
+           server {
+                listen 80;
+                server_name example.com;
+                location / {
+                    proxy_pass http://localhost:3000;
+                }
+                location /api {
+                        proxy_pass http://localhost:8000;
+                }
+            }
+
+      - If you want to use HTTPS, you need to install a certificate. You can use Let's Encrypt to get a free certificate.
+        use the following code:  
+
+             server {
+                 listen 80;
+                 server_name example.com;
+                 listen 443 ssl;
+                 ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+                 ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+                 ssl_protocols TLSv1.1 TLSv1.2;
+                 ssl_prefer_server_ciphers on;
+                 ssl_session_timeout 5m;
+                 location / {
+                     proxy_pass http://localhost:3000;
+                 }
+                 location /api {
+                         proxy_pass http://localhost:8000;
+                 }
+             }
+
+8. Restart Nginx.
+9. If you want to use HTTP, you can simply visit `http://[server-ip]`. If you want to use HTTPS, you can visit `https://[hostname-assciated-to-ssl-certificate]`.
+
+
 ## D. Common Issues
 1. Frontend Application Fails to Start: 
         Ensure that Node.js is correctly installed. Run `npm install` in the frontend folder to install all necessary frontend dependencies.
 2. Backend Application Fails to Start: 
         Ensure that the MongoDB database service is running. Verify that the network connection is stable and not blocked by a firewall. Ensure that the database connection information in the `.env` file is accurate and correct.
-3. This project does not support Spring Framework 6+. If you get the error `class file has wrong version 61.0, should be 55.0` when you run VotingApplication.java, you should downgrade your Spring Framework to 5.3.x and check your Java version. For more information, visit https://stackoverflow.com/questions/74648576/spring-class-file-has-wrong-version-61-0-should-be-55-0.
+3. Java 1.8 and 11 does not support Spring Framework 6+. If you get the error `class file has wrong version 61.0, should be 55.0` when you run VotingApplication.java, you should downgrade your Spring Framework to 5.3.x and check your Java version. For more information, visit https://stackoverflow.com/questions/74648576/spring-class-file-has-wrong-version-61-0-should-be-55-0.
 4. This uses JDK 21 as Development Environment. So that JDK 21 is strongly recommended.
