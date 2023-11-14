@@ -5,6 +5,7 @@ import com.example.voting.model.ERole;
 import com.example.voting.model.User;
 import com.example.voting.service.DBService;
 import com.example.voting.service.LogService;
+import com.example.voting.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -63,6 +64,10 @@ public class LocalAccountCreate implements CommandLineRunner {
         String email = console.readLine("Email: ");
         if(dbService.existsByEmail(email)) {
             System.out.println("Email already exists");
+            return;
+        }
+        if(!Validation.isPasswordValid(password) || !Validation.isUsernameValid(username)) {
+            System.out.println("Password or Username is not valid!");
             return;
         }
         User user = new User(username, email, encoder.encode(password));
