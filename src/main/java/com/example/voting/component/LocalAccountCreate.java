@@ -45,8 +45,8 @@ public class LocalAccountCreate implements CommandLineRunner {
             }
             else {
                 System.out.println("No command found");
-                exit(0);
             }
+            exit(0);
         }
     }
 
