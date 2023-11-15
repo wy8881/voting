@@ -46,13 +46,15 @@
    
         MONGO_CLUSTER="cluster0.edplh85.mongodb.net"
 4. Open '**VotingApplication.java**' in `voting\src\main\java\com\example\voting` folder and run (`Shift+F10`).
+   
+   Or you can run system by using `mvn spring-boot:run`. (instead of step 4)
 5. Open '**Terminal**' (tap `Alt+F12`).
 6. Go to the '**frontend**' folder (`cd frontend`)
 7. Start the system (`npm start`)
   
-#### Or you can run system by using `mvn spring-boot:run`. (instead of following step 4-7)
+
 ## C. Use System
-Before creating a `delegate`, `logger` and `admin`, stop running '**VotingApplication.java**'
+Before creating a `delegate` and `logger`, stop running '**VotingApplication.java**'
 
 For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-delegate"` under the 'voting' folder.
 
@@ -66,11 +68,10 @@ For example:
 
 ![3](https://github.com/wy8881/voting/assets/74237376/64374e39-7c03-46e6-81fb-69d2c22d01b1)
 
-4. Then type another command to create a `logger` and `admin` as `delegate`'s process.
+4. Then type another command to create a `logger` as `delegate`'s process:
    
-   (1) For creating `logger`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-logger"`
+   `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-logger"`
 
-   (2) For creating `admin`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-admin"`
 ## D. Deploy System
 System Requirements of the Server:
 - JDK 21
