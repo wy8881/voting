@@ -10,6 +10,7 @@ export default function Sidebar() {
     const location =  useLocation();
     const [button1Text, setButton1Text] = useState();
     const [button2Text, setButton2Text] = useState();
+    const [button3Text, setButton3Text] = useState();
 
     useEffect(() => {
         if(location.pathname === '/dashboard/ballot' ) {
@@ -17,32 +18,39 @@ export default function Sidebar() {
             setButton2Text("Dashboard");
         }
         else if(location.pathname === '/dashboard/result') {
-            setButton1Text("Dashboard");
-            setButton2Text("Vote")
+            setButton1Text("Candidates");
+            setButton2Text("Parties");
+            setButton3Text("Dashboard")
         }
         else if(location.pathname === '/dashboard/candidates') {
             setButton1Text("Dashboard");
             setButton2Text("Parties");
+            setButton3Text("Results")
         }
         else if(location.pathname === '/dashboard/parties') {
             setButton1Text("Candidates");
             setButton2Text("Dashboard");
+            setButton3Text("Results")
         }
         else if(location.pathname === '/dashboard/parties/manage') {
             setButton1Text("Candidates");
             setButton2Text("Dashboard");
+            setButton3Text("Results")
         }
         else if(location.pathname === '/dashboard/candidates/manage') {
             setButton1Text("Dashboard");
             setButton2Text("Parties");
+            setButton3Text("Results")
         }
         else if(location.pathname === '/dashboard/parties/create') {
             setButton1Text("Candidates");
             setButton2Text("Dashboard");
+            setButton3Text("Results")
         }
         else if(location.pathname === '/dashboard/candidates/create') {
             setButton1Text("Dashboard");
             setButton2Text("Parties");
+            setButton3Text("Results")
         }
         else if(location.pathname === '/dashboard/logs') {
             setButton1Text("Dashboard");
@@ -55,6 +63,7 @@ export default function Sidebar() {
             else if(user.role === 'ROLE_DELEGATE') {
                 setButton1Text("Candidates");
                 setButton2Text("Parties");
+                setButton3Text("Results")
             }
             else if(user.role === 'ROLE_LOGGER') {
                 setButton1Text("Logs");
@@ -80,10 +89,6 @@ export default function Sidebar() {
         <div className="sidebar-container">
             {user && user.role === 'ROLE_VOTER' && (
                 <>
-                    <Link to={location.pathname === '/dashboard'
-                    || location.pathname ==='/dashboard/ballot' ? '/dashboard/result' : '/dashboard'}>
-                        <button className="sidebar-button">{button1Text}</button>
-                    </Link>
                     {user.isVoted.toString() === 'false' && (
                             <Link to={location.pathname === '/dashboard'
                             || '/dashabord/result' ? '/dashboard/ballot' : '/dashboard'}>
@@ -98,6 +103,7 @@ export default function Sidebar() {
                     || location.pathname === '/dashboard/parties'
                     || location.pathname === '/dashboard/parties/create'
                     || location.pathname === '/dashboard/parties/manage'
+                    || location.pathname === '/dashboard/results'
                         ? '/dashboard/candidates' : '/dashboard'} >
                         <button className="sidebar-button">{button1Text}</button>
                     </Link>
@@ -105,8 +111,19 @@ export default function Sidebar() {
                     || location.pathname === '/dashboard/candidates'
                     || location.pathname === '/dashboard/candidates/create'
                     || location.pathname === '/dashboard/candidates/manage'
+                    || location.pathname === '/dashboard/results'
                         ? '/dashboard/parties' : '/dashboard'}>
                         <button className="sidebar-button">{button2Text}</button>
+                    </Link>
+                    <Link to={location.pathname === '/dashboard'
+                    || location.pathname === '/dashboard/candidates'
+                    || location.pathname === '/dashboard/candidates/create'
+                    || location.pathname === '/dashboard/candidates/manage'
+                    || location.pathname === '/dashboard/parties'
+                    || location.pathname === '/dashboard/parties/create'
+                    || location.pathname === '/dashboard/parties/manage'
+                        ? '/dashboard/result' : '/dashboard'}>
+                        <button className="sidebar-button">{button3Text}</button>
                     </Link>
                 </>
             )}
