@@ -34,7 +34,6 @@ export function setToken(resp, api,msg) {
 
 export function reloadToken(api){
     if(sessionStorage.getItem('Bearer')) {
-        console.log(sessionStorage.getItem('Bearer'))
         api.defaults.headers.common['Authorization'] = sessionStorage.getItem('Bearer');
     }
 }

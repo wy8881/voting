@@ -90,8 +90,7 @@ export default function Sidebar() {
             {user && user.role === 'ROLE_VOTER' && (
                 <>
                     {user.isVoted.toString() === 'false' && (
-                            <Link to={location.pathname === '/dashboard'
-                            || '/dashabord/result' ? '/dashboard/ballot' : '/dashboard'}>
+                            <Link to={location.pathname === '/dashboard' ? '/dashboard/ballot' : '/dashboard'}>
                                 <button className="sidebar-button">{button2Text}</button>
                             </Link>
                         )}

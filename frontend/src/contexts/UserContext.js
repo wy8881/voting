@@ -31,10 +31,10 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => {
         if (user) {
-            const storedUser = localStorage.getItem('user');
+            const storedUser = sessionStorage.getItem('user');
             if(!storedUser || storedUser !== JSON.stringify(user)) {
                 console.log("setUser")
-                localStorage.setItem('user', JSON.stringify(user));
+                sessionStorage.setItem('user', JSON.stringify(user));
             }
         }
         if(user === null) {
@@ -43,7 +43,7 @@ export const UserProvider = ({ children }) => {
     }, [user]);
 
     function reloadUser() {
-        const storedUser = localStorage.getItem('user');
+        const storedUser = sessionStorage.getItem('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
@@ -51,7 +51,7 @@ export const UserProvider = ({ children }) => {
     }
 
     const deleteUser = () => {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
         setUser(null);
     };
 
