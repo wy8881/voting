@@ -11,48 +11,6 @@ const Dashboard = () => {
     const { user  } = useContext(UserContext);
     const navigate = useNavigate();
 
-    async function dontClick(e) {
-        e.preventDefault();
-        await api.get('api/voter').then(resp => {
-            console.log(resp.data)
-        })
-    }
-
-    async function getUserDetails() {
-        try {
-            const response = await api.get('api/auth/user');
-            console.log(response.data);
-        }
-        catch (error) {
-            console.log(error);
-        }
-    }
-
-    function getUser() {
-        console.log(user);
-        console.log(user.isVoted)
-    }
-
-    async function getAuthDetails() {
-        try {
-            const response = await api.get('api/auth/checkCookie');
-            console.log(response.data);
-        }
-        catch (error) {
-            console.log(error);
-        }
-    }
-
-    async function getTestDelegate(){
-        try {
-            const response = await api.get('api/delegate/test');
-            console.log(response.data);
-        }
-        catch (error) {
-            console.log(error);
-        }
-    }
-
     return (
         <div>
             {user && user.username ? (

@@ -49,14 +49,6 @@ public class VoterController {
         return ResponseEntity.ok().body(new MessageResponse("Vote successful"));
     }
 
-    @GetMapping("/result")
-    public List<CandidateTotalVote> fetchResult() {
-        try {
-            return dbService.candidateTotalVotes();
-        }
-        catch (Exception e) {
-            return new ArrayList<>();
-        }
-    }
+
 
 }

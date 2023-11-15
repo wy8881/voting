@@ -1,6 +1,7 @@
 package com.example.voting.controller;
 
 import com.example.voting.model.Candidate;
+import com.example.voting.model.CandidateTotalVote;
 import com.example.voting.model.Party;
 import com.example.voting.payload.request.CreateCandidateRequest;
 import com.example.voting.payload.request.CreatePartyRequest;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,7 +28,7 @@ public class DelegateController {
     DBService DBService;
     private static final Logger logger = LoggerFactory.getLogger(DelegateController.class);
 
-    @GetMapping("/test")
+    @GetMapping("/")
     public String test() {
         return "Test Delegate";
     }
@@ -74,6 +76,15 @@ public class DelegateController {
         }
 
         return ResponseEntity.ok(new MessageResponse("Party created successfully!"));
+    }
+    @GetMapping("/result")
+    public List<CandidateTotalVote> fetchResult() {
+        try {
+            return DBService.candidateTotalVotes();
+        }
+        catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
 }
