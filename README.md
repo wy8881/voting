@@ -50,9 +50,25 @@
 7. Go to the '**frontend**' folder (`cd frontend`)
 8. Start the system (`npm start`)
 ## C. Use System
-1. For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-delegate"` under the 'voting' folder.
-2. For creating `logger`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-logger"` under the 'voting' folder.
+Before creating a `delegate`, `logger` and `admin`, stop running '**VotingApplication.java**'
 
+For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-delegate"` under the 'voting' folder.
+
+1. After CLI stop running, you can set `delegate's name` (won't show `Username` at begin), then `Enter`.
+2. Set `password`, then `Enter`. 
+3. Set `Email`, then `Enter`.
+   
+   (You can use this email and password to log in as a delegate)
+
+For example:
+
+![3](https://github.com/wy8881/voting/assets/74237376/64374e39-7c03-46e6-81fb-69d2c22d01b1)
+
+4. Then type another command to create a `logger` and `admin` as `delegate`'s process.
+   
+   (1) For creating `logger`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-logger"`
+
+   (2) For creating `admin`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-admin"`
 ## D. Deploy System
 System Requirements of the Server:
 - JDK 21
@@ -104,7 +120,7 @@ System Requirements of the Server:
 9. If you want to use HTTP, you can simply visit `http://[server-ip]`. If you want to use HTTPS, you can visit `https://[hostname-assciated-to-ssl-certificate]`.
 
 
-## D. Common Issues
+## E. Common Issues
 1. Frontend Application Fails to Start: 
         Ensure that Node.js is correctly installed. Run `npm install` in the frontend folder to install all necessary frontend dependencies.
 2. Backend Application Fails to Start: 
