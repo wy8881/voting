@@ -45,10 +45,12 @@
         MONGO_PASSWORD="abc"
    
         MONGO_CLUSTER="cluster0.edplh85.mongodb.net"
-5. Open '**VotingApplication.java**' in `voting\src\main\java\com\example\voting` folder and run (`Shift+F10` or `mvn spring-boot:run`).
-6. Open '**Terminal**' (tap `Alt+F12`).
-7. Go to the '**frontend**' folder (`cd frontend`)
-8. Start the system (`npm start`)
+4. Open '**VotingApplication.java**' in `voting\src\main\java\com\example\voting` folder and run (`Shift+F10`).
+5. Open '**Terminal**' (tap `Alt+F12`).
+6. Go to the '**frontend**' folder (`cd frontend`)
+7. Start the system (`npm start`)
+  
+#### Or you can run system by using `mvn spring-boot:run`. (instead of following step 4-7)
 ## C. Use System
 Before creating a `delegate`, `logger` and `admin`, stop running '**VotingApplication.java**'
 
