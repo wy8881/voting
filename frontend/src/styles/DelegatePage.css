@@ -4,6 +4,9 @@
     margin: 0 auto;
     padding: 20px;
     text-align: center;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: none;
 }
 
 .button-container {
