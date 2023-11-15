@@ -35,19 +35,17 @@ public class LocalAccountCreate implements CommandLineRunner {
         List<String> command = Arrays.asList(args);
         if(!command.isEmpty()) {
             Console console = System.console();
-            while (true) {
-                if(command.contains("--create-admin")) {
-                    register(ERole.ROLE_ADMIN);
-                } else if(command.contains("--create-delegate")) {
-                    register(ERole.ROLE_DELEGATE);
-                } else if(command.contains("--create-logger")) {
-                    register(ERole.ROLE_LOGGER);
-                }
-                else {
-                    System.out.println("No command found");
-                    exit(0);
-                }
-                command = Arrays.asList(console.readLine("Enter command: ").split(" "));
+
+            if(command.contains("--create-admin")) {
+                register(ERole.ROLE_ADMIN);
+            } else if(command.contains("--create-delegate")) {
+                register(ERole.ROLE_DELEGATE);
+            } else if(command.contains("--create-logger")) {
+                register(ERole.ROLE_LOGGER);
+            }
+            else {
+                System.out.println("No command found");
+                exit(0);
             }
         }
     }
