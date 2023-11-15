@@ -71,6 +71,12 @@ public class DBService {
     public List<String> convert2Candidates(List<String> Parties) throws RuntimeException {
         List<String> candidates = new ArrayList<>();
         for (String party : Parties) {
+            // check if party exists
+            if(!partyRepository.existsByName(party)) {
+                String message = "Party=" + party + " does not exist";
+                throw new RuntimeException(message);
+            }
+
             for(int i = 2; i > 0; i--) {
                 Optional<Preference> preference = preferenceRepository.findByPartyAndRank(party, i);
                 if(preference.isPresent()) {
