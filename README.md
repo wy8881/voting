@@ -45,7 +45,7 @@
         MONGO_PASSWORD="abc"
    
         MONGO_CLUSTER="cluster0.edplh85.mongodb.net"
-5. Open '**VotingApplication.java**' in `voting\src\main\java\com\example\voting` folder and run.
+5. Open '**VotingApplication.java**' in `voting\src\main\java\com\example\voting` folder and run (`Shift+F10` or `mvn spring-boot:run`).
 6. Open '**Terminal**' (tap `Alt+F12`).
 7. Go to the '**frontend**' folder (`cd frontend`)
 8. Start the system (`npm start`)
