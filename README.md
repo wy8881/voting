@@ -54,7 +54,7 @@ Before creating a `delegate`, `logger` and `admin`, stop running '**VotingApplic
 
 For creating `delegate`, use `mvn spring-boot:run "-Dspring-boot.run.arguments=--create-delegate"` under the 'voting' folder.
 
-1. After CLI stop running, you can set `delegate's name` (won't show `Username` at begin), then `Enter`.
+1. After CLI stop running, you can set `delegate's name` (`Username` hidden before), then `Enter`.
 2. Set `password`, then `Enter`. 
 3. Set `Email`, then `Enter`.
    
