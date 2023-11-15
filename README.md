@@ -76,7 +76,7 @@ System Requirements of the Server:
                     proxy_pass http://localhost:3000;
                 }
                 location /api {
-                        proxy_pass http://localhost:8000;
+                        proxy_pass http://localhost:8080;
                 }
             }
 
@@ -96,7 +96,7 @@ System Requirements of the Server:
                      proxy_pass http://localhost:3000;
                  }
                  location /api {
-                         proxy_pass http://localhost:8000;
+                         proxy_pass http://localhost:8080;
                  }
              }
 
