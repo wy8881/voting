@@ -2,6 +2,7 @@ package com.example.voting.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -15,10 +16,7 @@ public class Role {
     @Id
     private ObjectId id;
 
+    @Getter
     private ERole name;
-
-    public ERole getName() {
-        return name;
-    }
 
 }
