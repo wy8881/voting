@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "vote_system",
   "private": true,
   "scripts": {
     "build": "turbo run build",
