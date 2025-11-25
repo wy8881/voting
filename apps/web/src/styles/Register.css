@@ -1,118 +1,56 @@
-/* Set basic font and background color */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f7f7f7;
-}
-
-/* Set the basic style of the container */
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-}
-
-/* Define the style of the registration form container */
-.register-container {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 400px;
-    margin: 5vh auto;
-}
-
-/* Input container style */
-.input-container {
-    display: flex;
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center children horizontally */
-    justify-content: center; /* Center children vertically if the container has a fixed height */
-    margin-bottom: 20px;
-    width: 100%;
-}
-
-/* Labeling styles */
-.input-label {
-    margin-bottom: 5px;
-    display: block;
-    color: #333333;
-}
-
-/* Input box style */
-.input-field {
-    display: flex;
-    text-align: center;
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #007bff;
-    border-radius: 4px;
-    margin-top: 5px;
-    font-size: 16px;
-}
-
-/* Button styles */
-.button, .register-button {
-    margin: 0 10px; 
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: #ffffff;
-    text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 1px;
-    transition: background-color 0.3s ease;
-    outline: none;
-}
-
-.button:hover, .register-button:hover {
-    background-color: #0056b3;
-}
-
-.button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .button-wrapper {
-    display: flex;
-    justify-content: space-around; /* Ensure space between buttons */
-    width: 100%; /* Occupies the entire width of the container */
-    max-width: 300px; /* Limit the maximum width of the button group */
-  }
-  
-/* Auxiliary text style */
-.helper-text {
-    font-size: 14px;
-    color: #666666;
-}
-
-/* Password strength indicator style */
-.password-strength {
+.register-container form > div:nth-of-type(4) {
+    margin-top: -8px;
+    margin-bottom: 12px;
     text-align: left;
-    display: block;
-    margin-top: 5px;
+    font-size: 0.875rem;
+    font-weight: 500;
 }
 
-.password-strength span {
-    display: inline-block;
-    padding: 2px 5px;
-    border-radius: 2px;
-    margin-right: 5px;
+.register-container form > div:nth-of-type(4) span[style*="color: red"] {
+    color: #dc2626 !important;
 }
 
-/* Set password strength indicator color */
-.weak {
-    background-color: #ff4b47;
+.register-container form > div:nth-of-type(4) span[style*="color: orange"] {
+    color: #f59e0b !important;
 }
 
-.moderate {
-    background-color: #ffa500;
+.register-container form > div:nth-of-type(4) span[style*="color: green"] {
+    color: #10b981 !important;
 }
 
-.strong {
-    background-color: #28a745;
+.register-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+    text-align: left;
 }
 
+.register-container ul li {
+    font-size: 0.875rem;
+    color: #dc2626;
+    margin-bottom: 6px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.register-container ul li::before {
+    content: "×";
+    position: absolute;
+    left: 0;
+    color: #dc2626;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+@media (max-width: 640px) {
+    .register-container {
+        padding: 32px 24px;
+        margin: 2vh auto;
+        max-width: calc(100% - 32px);
+    }
+    
+    .register-container h1 {
+        font-size: 1.75rem;
+        margin-bottom: 24px;
+    }
+}

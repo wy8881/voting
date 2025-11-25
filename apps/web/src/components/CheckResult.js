@@ -2,7 +2,6 @@ import withRoleAccess from "./withRoleAcess";
 import {useEffect, useState} from "react";
 import api from "../api/axiosConfig";
 import '../styles/DelegatePage.css';
-import Sidebar from "./Sidebar";
 const CheckResult = () => {
     const [results, setResults] = useState([]);
     const [received, setReceived] = useState(false);
@@ -31,7 +30,6 @@ const CheckResult = () => {
 
     return (
         <div className="delegate-container">
-            <Sidebar />
             <h1>Check Result</h1>
             {isFirst && (
             <>

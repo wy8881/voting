@@ -3,7 +3,6 @@ import withRoleAccess from "./withRoleAcess";
 import '../styles/Logs.css'
 import api from "../api/axiosConfig";
 import {isUsernameValid} from "../utils/Utils";
-import Sidebar from "./Sidebar";
 
 const  Logs = () => {
     const [logs, setLogs] = useState([]);
@@ -51,17 +50,14 @@ const  Logs = () => {
         }
     }
 
-    // download all logs
     async function onDownloadAllLogs() {
         await api.get('api/logs/all').then((response) => {
-            // convret recived data to list of strings
             let log_list = [];
 
             response.data.forEach((log) => {
                 log_list.push(log.username + " " + log.action + " " + log.id.date);
             });
 
-            // convert list of strings to string
             let log_string = "";
             log_list.forEach((log) => {
                 log_string += log + "\n";
@@ -71,7 +67,7 @@ const  Logs = () => {
             const file = new Blob([log_string], {type: 'text/plain'});
             element.href = URL.createObjectURL(file);
             element.download = "logs.txt";
-            document.body.appendChild(element); // Required in FireFox
+            document.body.appendChild(element);
             element.click();
 
             URL.revokeObjectURL(element.href);
@@ -82,7 +78,6 @@ const  Logs = () => {
 
     return (
         <div className={"logs-container"}>
-            <Sidebar/>
             <h1>Logs</h1>
             <div className={"search-container"}>
                 <div className={"search-bar"}>

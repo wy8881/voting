@@ -1,11 +1,9 @@
 import "../styles/DelegatePage.css"
-import Sidebar from "./Sidebar";
 import {Link} from "react-router-dom";
 import withRoleAccess from "./withRoleAcess";
 const Candidates = () =>{
     return (
         <div className="delegate-container">
-            <Sidebar />
             <h1>Candidates</h1>
             <div className="button-container">
                 <Link to={"/dashboard/candidates/create"}>

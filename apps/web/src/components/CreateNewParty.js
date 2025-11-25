@@ -2,7 +2,6 @@ import '../styles/Register.css'
 import { isNameValid} from "../utils/Utils";
 import {useContext,  useState} from "react";
 import api from "../api/axiosConfig";
-import Sidebar from "./Sidebar";
 import {useNavigate} from "react-router-dom";
 import {UserContext} from "../contexts/UserContext";
 import withRoleAccess from "./withRoleAcess";
@@ -64,7 +63,6 @@ const CreateNewParty = () => {
 
     return (
         <div className={"container"}>
-            <Sidebar/>
             <div className={"register-container"}>
                 <h1> Create New Party </h1>
                 <form onSubmit={handleSubmit}>

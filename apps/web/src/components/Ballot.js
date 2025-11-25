@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import '../styles/Ballot.css';
-import Sidebar from "./Sidebar";
 import {useNavigate} from "react-router-dom";
 import {UserContext} from "../contexts/UserContext";
 import api from "../api/axiosConfig";
@@ -156,18 +155,14 @@ const Ballot = () => {
 
 
     function createCandidatesPreferenceList(candidates, votes) {
-        // Create an array of [candidateName, preferenceValue] pairs
         const preferences = candidates.map((candidate, index) => {
             return { name: candidate.name, preference: votes[`below${index}`] };
         });
 
-        // Filter out any candidates that were not assigned a preference
         const filteredPreferences = preferences.filter(p => p.preference);
 
-        // Sort the array based on preference values
         filteredPreferences.sort((a, b) => a.preference - b.preference);
 
-        // Extract the candidate names in the sorted order
         return filteredPreferences.map(p => p.name);
     }
 
@@ -187,7 +182,6 @@ const Ballot = () => {
         ) : (
             <>
                 <div className="Ballot">
-                    <Sidebar />
                     <h1>Senate Ballot</h1>
                     <p>You may vote in one of two ways</p>
                     <h3>Either</h3>

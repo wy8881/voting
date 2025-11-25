@@ -91,7 +91,6 @@ const Register = () => {
                         className="input-field"
                         id="username"
                         type="username"
-                        placeholder="username"
                         value={username}
                         maxLength={10}
                         onChange={(e) => setUsername(e.target.value)}
@@ -99,24 +98,22 @@ const Register = () => {
                     <span className="helper-text">Only use numbers and alphabets for username</span>
                 </div>
                 <div className="input-container">
-                    <label className="input-label" htmlFor="email">email</label>
+                    <label className="input-label" htmlFor="email">Email</label>
                     <input
                         className="input-field"
                         id="email"
                         type="email"
-                        placeholder="email"
                         value={email}
                         maxLength={20}
                         onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
                 <div className="input-container">
-                    <label className="input-label" htmlFor="password">password</label>
+                    <label className="input-label" htmlFor="password">Password</label>
                     <input
                         className="input-field"
                         id="password"
                         type="password"
-                        placeholder="password"
                         value={password}
                         maxLength={20}
                         onChange={handlePasswordChange}
@@ -140,9 +137,7 @@ const Register = () => {
                     >
                         {isSubmitting ? 'Registering...' : 'Register'}
                     </button>
-                    <Link to={"/login"}>
-                        <button className="button" type="button">Return to Log in</button>
-                    </Link>
+                    <Link to={"/login"} className="button button-link button-secondary">Back to log in</Link>
                 </div>
             </form>
         </div>

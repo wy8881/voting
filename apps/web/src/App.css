@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  background-color: var(--bg-primary);
+  min-height: 100vh;
 }
 
 .button-container {

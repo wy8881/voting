@@ -2,7 +2,6 @@ import '../styles/Register.css'
 import {checkAccess, isNameValid} from "../utils/Utils";
 import {useContext, useEffect, useState} from "react";
 import api from "../api/axiosConfig";
-import Sidebar from "./Sidebar";
 import withRoleAccess from "./withRoleAcess";
 const CreateNewCandidate = ()  => {
     const [name, setName] = useState("");
@@ -53,7 +52,6 @@ const CreateNewCandidate = ()  => {
 
     return (
         <div className={"container"}>
-            <Sidebar/>
             <div className={"register-container"}>
                 <h1> Create New Candidate </h1>
                 <form onSubmit={handleSubmit}>

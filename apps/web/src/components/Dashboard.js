@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import api from '../api/axiosConfig';
-import Sidebar from "./Sidebar";
 import '../styles/Dashboard.css';
 import withRoleAccess from "./withRoleAcess";
 
@@ -12,24 +11,32 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     return (
-        <div>
+        <>
             {user && user.username ? (
-                <>
-                    <div className="dashboardContainer">
-                        <Sidebar />
-                        <h1 className="dashboardText"> Welcome {user.username} </h1>
-                        <h1 className="dashboardText"> You are a {user.role.split("_")[1].toLowerCase()} </h1>
-                        {user.role === "ROLE_VOTER" && (
-                            <>
-                                <h1 className="dashboardText"> You have {user.isVoted.toString() === 'true' ? "voted" : "not voted"} </h1>
-                            </>
-                        )}
+                <div className="dashboardContainer">
+                    <div className="dashboard-card">
+                        <h1 className="dashboardText">Welcome back, {user.username}</h1>
+                        <div className="dashboard-info-section">
+                            <p className="dashboardInfo">Role: {user.role.split("_")[1].toLowerCase()}</p>
+                            {user.role === "ROLE_VOTER" && (
+                                <>
+                                    <p className="dashboardInfo">Status: {user.isVoted.toString() === 'true' ? "Voted" : "Not voted"}</p>
+                                    {user.isVoted.toString() === 'false' ? (
+                                        <Link to="/dashboard/ballot" className="button register-button dashboard-vote-button">
+                                            Go to vote
+                                        </Link>
+                                    ) : (
+                                        <p className="dashboard-thanks">Thanks for your participation</p>
+                                    )}
+                                </>
+                            )}
+                        </div>
                     </div>
-                </>
+                </div>
             ) : (
-                <p>Loading...</p>
+                <p className="loading">Loading...</p>
             )}
-        </div>
+        </>
     );
 };
 

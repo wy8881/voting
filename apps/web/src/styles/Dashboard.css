@@ -1,13 +1,49 @@
-.dashboardContainer{
-    font-family: 'Arial', sans-serif;
-    max-width: 800px;
+.dashboard-card {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    max-width: 600px;
     margin: 0 auto;
-    padding: 20px;
     text-align: center;
 }
 
-.dashboardText{
+.dashboardText {
     font-weight: bold;
     font-size: 2em;
+    margin-top: 0;
+    margin-bottom: 32px;
+    color: var(--text-heading);
+}
 
+.dashboard-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+.dashboardInfo {
+    font-size: 1.1em;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.dashboard-vote-button {
+    margin-top: 16px;
+    width: auto;
+    padding: 10px 24px;
+    font-size: 0.9rem;
+    align-self: center;
+}
+
+.dashboard-thanks {
+    font-size: 1.1em;
+    color: var(--text-primary);
+    margin: 16px 0 0 0;
+    font-style: italic;
+    text-align: center;
 }

@@ -1,19 +1,3 @@
-.Ballot {
-    font-family: 'Arial', sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-    background-color: #ffffff; /* 添加白色背景 */
-    border-radius: 8px; /* 圆角 */
-    box-shadow: none; /* 去掉阴影 */
-}
-
-h1, h2, h3, p {
-    text-align: center;
-    color: #333333; /* 深色文字更适合扁平化设计 */
-}
-
 .line-container {
     display: flex;
     flex-wrap: wrap;
@@ -22,14 +6,14 @@ h1, h2, h3, p {
 }
 
 .candidate, .party {
-    flex: 1; /* 统一 .candidate 和 .party 的弹性基础 */
-    margin: 10px; /* 间距统一 */
+    flex: 1;
+    margin: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px; /* 内边距 */
-    border: 2px solid #007bff; /* 边框颜色统一 */
-    border-radius: 4px; /* 圆角 */
+    padding: 20px;
+    border: 2px solid #007bff;
+    border-radius: 4px;
 }
 
 input[type="number"] {
@@ -38,24 +22,26 @@ input[type="number"] {
     font-size: 20px;
     text-align: center;
     margin-bottom: 10px;
-    border: 2px solid #007bff; /* 输入框边框颜色 */
-    border-radius: 4px; /* 输入框圆角 */
+    border: 2px solid #007bff;
+    border-radius: 4px;
 }
 
 .submit-button {
     padding: 10px 15px;
-    background-color: #007bff; /* 按钮背景颜色 */
-    color: #ffffff; /* 文字颜色 */
+    background-color: #007bff;
+    color: #ffffff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    text-transform: uppercase; /* 文本大写 */
-    font-weight: bold; /* 字体加粗 */
-    letter-spacing: 1px; /* 字母间距 */
-    transition: background-color 0.3s ease; /* 背景颜色过渡效果 */
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
 .submit-button:hover {
-    background-color: #0056b3; /* 鼠标悬停时的背景颜色 */
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3), 0 2px 4px rgba(0, 123, 255, 0.2);
+    transform: translateY(-1px);
 }
-

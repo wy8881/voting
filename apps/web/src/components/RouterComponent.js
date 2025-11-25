@@ -14,6 +14,7 @@ import CreateNewCandidate from "./CreateNewCandidate";
 import ManageCandidates from "./ManageCandidates";
 import Logs from "./Logs";
 import CheckResult from "./CheckResult";
+import Layout from "./Layout";
 
 function PageTitle() {
     const location = useLocation();
@@ -69,16 +70,16 @@ export default function RouterComponent() {
                 <Route path="/" element={<App/>} />
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/signup" element={<Register />}/>
-                <Route path="/dashboard" element={<Dashboard/>}/>
-                <Route path="/dashboard/ballot" element = {<Ballot/>}/>
-                <Route path="/dashboard/candidates" element={<Candidates/> } />
-                <Route path="/dashboard/parties" element={<Parties /> } />
-                <Route path="/dashboard/parties/create" element={<CreateNewParty /> } />
-                <Route path="/dashboard/parties/manage" element={<ManageParties/>} />
-                <Route path="/dashboard/candidates/create" element={<CreateNewCandidate/> } />
-                <Route path="/dashboard/candidates/manage" element={<ManageCandidates/>} />
-                <Route path={"/dashboard/logs"} element={<Logs/>} />
-                <Route path = "/dashboard/result" element={<CheckResult/>} />
+                <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
+                <Route path="/dashboard/ballot" element={<Layout><Ballot/></Layout>}/>
+                <Route path="/dashboard/candidates" element={<Layout><Candidates/></Layout>} />
+                <Route path="/dashboard/parties" element={<Layout><Parties/></Layout>} />
+                <Route path="/dashboard/parties/create" element={<Layout><CreateNewParty/></Layout>} />
+                <Route path="/dashboard/parties/manage" element={<Layout><ManageParties/></Layout>} />
+                <Route path="/dashboard/candidates/create" element={<Layout><CreateNewCandidate/></Layout>} />
+                <Route path="/dashboard/candidates/manage" element={<Layout><ManageCandidates/></Layout>} />
+                <Route path={"/dashboard/logs"} element={<Layout><Logs/></Layout>} />
+                <Route path = "/dashboard/result" element={<Layout><CheckResult/></Layout>} />
             </Routes>
         </Router>
     );

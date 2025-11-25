@@ -75,7 +75,6 @@ const Login = () => {
                         className="input-field"
                         id="username"
                         type="username"
-                        placeholder="username"
                         value={username}
                         maxLength={10}
                         onChange={(e) => setUsername(e.target.value)}
@@ -87,17 +86,14 @@ const Login = () => {
                         className="input-field"
                         id="password"
                         type="password"
-                        placeholder="password"
                         value={password}
                         maxLength={20}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
                 <div className="button-container">
-                    <button className='register-button' type={"submit"}>{isLogging? "logging" : "log in "}</button>
-                    <Link to={"/signup"}>
-                        <button className="button" > Go to Register </button>
-                    </Link>
+                    <button className="button register-button" type={"submit"}>{isLogging? "logging" : "Log In"}</button>
+                    <Link to={"/signup"} className="button button-link button-secondary"> Sign Up </Link>
                 </div>
 
             </form>

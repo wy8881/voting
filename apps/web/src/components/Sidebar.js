@@ -1,12 +1,9 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
 import "../styles/Sidebar.css";
-import api from "../api/axiosConfig";
 import { UserContext } from '../contexts/UserContext';
-import { useNavigate } from 'react-router-dom';
 export default function Sidebar() {
-    const { user, deleteUser } = useContext(UserContext);
-    const navigate = useNavigate();
+    const { user } = useContext(UserContext);
     const location =  useLocation();
     const [button1Text, setButton1Text] = useState();
     const [button2Text, setButton2Text] = useState();
@@ -70,20 +67,6 @@ export default function Sidebar() {
             }
         }
     }, [location, user.role]);
-    
-
-    async function handleLogout() {
-        try {
-            console.log('logging out')
-            await api.get('api/auth/logout').then(() => {
-                navigate('/login');
-                deleteUser();
-            });
-        }
-        catch (error) {
-            console.log(error);
-        }
-    }
 
     return (
         <div className="sidebar-container">
@@ -133,7 +116,6 @@ export default function Sidebar() {
                     </Link>
                 </>
             )}
-            <button className="sidebar-button" onClick={handleLogout}>Log out</button>
         </div>
 
     );
