@@ -1,0 +1,6 @@
+{
+  "scripts": {
+  "dev": "./mvnw spring-boot:run",
+  "build": "./mvnw -DskipTests package"
+  }
+}

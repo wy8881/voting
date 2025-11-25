@@ -1,0 +1,3 @@
+com/example/voting/model/Candidate.class
+com/example/voting/repositories/CandidateRepository.class
+com/example/voting/model/ERole.class

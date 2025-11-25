@@ -1,0 +1,36 @@
+.delegate-container{
+    font-family: 'Arial', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: none;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    margin: 20px auto; /* Top and bottom margin of 20px and auto left-right margin will center the button */
+    padding: 10px 20px;
+    background-color: #007bff; /* example color, adjust as needed */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: #0056b3;
+    }
+}
+
+.delegate-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
