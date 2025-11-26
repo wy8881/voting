@@ -97,4 +97,14 @@ public class DelegateController {
         }
     }
 
+    @DeleteMapping("/parties/{partyName}")
+    public ResponseEntity<?> deleteParty(@PathVariable String partyName) {
+        try {
+            DBService.deleteParty(partyName);
+            return ResponseEntity.ok(new MessageResponse("Party deleted successfully!"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+    }
+
 }

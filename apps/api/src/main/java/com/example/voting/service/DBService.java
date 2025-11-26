@@ -183,6 +183,27 @@ public class DBService {
         candidateRepository.delete(candidate);
     }
 
+    @Transactional
+    public void deleteParty(String partyName) throws RuntimeException {
+        Party party = partyRepository.findByName(partyName);
+        if (party == null) {
+            throw new RuntimeException("Error: Party not found!");
+        }
+
+        if (party.getCandidates() != null) {
+            for (String candidateName : party.getCandidates()) {
+                Candidate candidate = candidateRepository.findByName(candidateName);
+                if (candidate != null) {
+                    candidateRepository.delete(candidate);
+                }
+            }
+        }
+
+        preferenceRepository.deleteByParty(partyName);
+
+        partyRepository.delete(party);
+    }
+
     public List<CandidateTotalVote> candidateTotalVotes() {
         List<Vote> votes = mongoTemplate.findAll(Vote.class, "votes");
         Collections.shuffle(votes);

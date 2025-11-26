@@ -15,5 +15,7 @@ public interface PreferenceRepository extends MongoRepository<Preference, String
     Optional<Preference> findByParty(String party);
     
     void deleteByCandidateName(String candidateName);
+    
+    void deleteByParty(String party);
 }
 

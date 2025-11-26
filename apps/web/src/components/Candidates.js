@@ -61,8 +61,11 @@ const Candidates = () => {
                             {candidates.map(candidate => (
                                 <div key={candidate.name} className="account-item">
                                     <div className="account-info">
-                                        <div className="account-username" style={{ fontWeight: 'bold' }}>{candidate.name}</div>
-                                        <div className="account-email" style={{ fontSize: '0.85rem' }}>{candidate.party}</div>
+                                        <div style={{ 
+    fontWeight: 'bold',
+    padding: 0,
+    margin: 0}}>{candidate.name}</div>
+                                        <div style={{ fontSize: '0.85rem' }}>{candidate.party}</div>
                                     </div>
                                     <button
                                         className="button button-secondary admin-delete-button"
