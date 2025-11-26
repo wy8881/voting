@@ -3,6 +3,8 @@ import '../styles/Ballot.css';
 import {useNavigate} from "react-router-dom";
 import {UserContext} from "../contexts/UserContext";
 import api from "../api/axiosConfig";
+import { FaCat, FaDog } from "react-icons/fa6";
+import { GiEgyptianBird } from "react-icons/gi";
 import withRoleAccess from "./withRoleAcess";
 
 const Ballot = () => {
@@ -12,6 +14,7 @@ const Ballot = () => {
     const [receiveParties, setReceiveParties] = useState(false);
     const [receiveCandidates, setReceiveCandidates] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [clickOrder, setClickOrder] = useState({ above: [], below: [] });
     const navigate = useNavigate();
     const {user, setUser} = useContext(UserContext);
 
@@ -40,16 +43,108 @@ const Ballot = () => {
 
 
     function handleVoteChange (id, value) {
-        setVotes({
-            ...votes,
-            [id]: value
-        });
+        const isAbove = id.startsWith('above');
+        const orderKey = isAbove ? 'above' : 'below';
+        const index = parseInt(id.replace(/^(above|below)/, ''), 10);
+        
+        if (value === '' || value === null || value === undefined) {
+            setVotes(prev => {
+                const newVotes = { ...prev };
+                delete newVotes[id];
+                return newVotes;
+            });
+            
+            setClickOrder(prev => {
+                const newOrder = prev[orderKey].filter(i => i !== index);
+                return {
+                    ...prev,
+                    [orderKey]: newOrder
+                };
+            });
+        } else {
+            const numValue = parseInt(value, 10);
+            
+            setVotes(prev => {
+                const newVotes = { ...prev };
+                
+                if (!isNaN(numValue)) {
+                    Object.keys(prev).forEach(key => {
+                        if (key !== id && key.startsWith(isAbove ? 'above' : 'below')) {
+                            const existingValue = parseInt(prev[key], 10);
+                            if (!isNaN(existingValue) && existingValue === numValue) {
+                                delete newVotes[key];
+                                const existingIndex = parseInt(key.replace(/^(above|below)/, ''), 10);
+                                setClickOrder(prevOrder => ({
+                                    ...prevOrder,
+                                    [orderKey]: prevOrder[orderKey].filter(i => i !== existingIndex)
+                                }));
+                            }
+                        }
+                    });
+                }
+                
+                newVotes[id] = value;
+                return newVotes;
+            });
+            
+            if (!clickOrder[orderKey].includes(index)) {
+                setClickOrder(prev => ({
+                    ...prev,
+                    [orderKey]: [...prev[orderKey], index]
+                }));
+            }
+        }
+    }
+
+    function handleCardClick(id, index) {
+        const isAbove = id.startsWith('above');
+        const orderKey = isAbove ? 'above' : 'below';
+        const currentOrder = clickOrder[orderKey];
+        
+        if (currentOrder.includes(index)) {
+            const newOrder = currentOrder.filter(i => i !== index);
+            setClickOrder(prev => ({
+                ...prev,
+                [orderKey]: newOrder
+            }));
+            
+            setVotes(prev => {
+                const newVotes = { ...prev };
+                delete newVotes[id];
+                
+                newOrder.forEach((idx, pos) => {
+                    const voteId = isAbove ? `above${idx}` : `below${idx}`;
+                    newVotes[voteId] = (pos + 1).toString();
+                });
+                
+                return newVotes;
+            });
+        } else {
+            const newOrder = [...currentOrder, index];
+            setClickOrder(prev => ({
+                ...prev,
+                [orderKey]: newOrder
+            }));
+            
+            const newValue = newOrder.length;
+            setVotes(prev => ({
+                ...prev,
+                [id]: newValue.toString()
+            }));
+        }
     }
 
     function handleError(message) {
         window.alert(message);
         setIsSubmitting(false)
         setVotes({});
+    }
+
+    function handleClearAll() {
+        if (window.confirm('Are you sure you want to clear all votes?')) {
+            setVotes({});
+            setClickOrder({ above: [], below: [] });
+        }
     }
 
     function handleSubmit(e) {
@@ -176,6 +271,9 @@ const Ballot = () => {
     }
 
 
+    const hasAboveVotes = Object.keys(votes).some(key => key.startsWith('above') && votes[key] && votes[key] !== '');
+    const hasBelowVotes = Object.keys(votes).some(key => key.startsWith('below') && votes[key] && votes[key] !== '');
+
     return (
         (receiveCandidates === false || receiveParties === false) ? (
             <h1>Loading...</h1>
@@ -183,45 +281,94 @@ const Ballot = () => {
             <>
                 <div className="Ballot">
                     <h1>Senate Ballot</h1>
-                    <p>You may vote in one of two ways</p>
+                    <p className="ballot-description">You may vote in one of two ways</p>
+                    <p className="ballot-description" style={{marginBottom: '3rem'}}>Choose one Party OR one Candidate</p>
                     <h3>Either</h3>
-                    <div className="line-container">
-                        {parties.map((party, index) => (
-                            <div key={index} className="party">
-                                <input
-                                    type="number"
-                                    value={votes[`above${index}`] || ''}
-                                    min={"1"}
-                                    onChange={(e) => handleVoteChange(`above${index}`, e.target.value)}
-                                />
-                                <label>{party.name}</label>
-                            </div>
-                        ))}
+                    <div className="parties-container">
+                        {parties.map((party, index) => {
+                            const voteId = `above${index}`;
+                            const hasVote = votes[voteId] && votes[voteId] !== '';
+                            const isDisabled = hasBelowVotes;
+                            return (
+                                <div 
+                                    key={index} 
+                                    className={`party-ballot ${hasVote ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}`}
+                                    onClick={() => !isDisabled && handleCardClick(voteId, index)}
+                                    style={{ opacity: isDisabled ? 0.5 : 1, cursor: isDisabled ? 'not-allowed' : 'pointer' }}
+                                >
+                                    <input
+                                        type="number"
+                                        value={votes[voteId] || ''}
+                                        min={"1"}
+                                        onChange={(e) => handleVoteChange(voteId, e.target.value)}
+                                        onClick={(e) => e.stopPropagation()}
+                                        onFocus={(e) => e.stopPropagation()}
+                                        disabled={isDisabled}
+                                    />
+                                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        {party.name === 'Feline Progressive Party' && <FaCat />}
+                                        {party.name === 'Canine Unity Party' && <FaDog />}
+                                        {party.name === 'Avian Freedom Party' && <GiEgyptianBird />}
+                                        {party.name}
+                                    </label>
+                                </div>
+                            );
+                        })}
                     </div>
 
+                    <div className="ballot-divider"></div>
+
                     <h3>Or</h3>
-                    <div className="line-container">
-                        {candidates.map((candidate, index) => (
-                            <div key={index} className="candidate">
-                                <input
-                                    type="number"
-                                    value={votes[`below${index}`] || ''}
-                                    min={"1"}
-                                    onChange={(e) => handleVoteChange(`below${index}`, e.target.value)}
-                                />
-                                <label>{candidate.name}</label>
-                            </div>
-                        ))}
+                    <div className="candidates-container">
+                        {candidates.map((candidate, index) => {
+                            const voteId = `below${index}`;
+                            const hasVote = votes[voteId] && votes[voteId] !== '';
+                            const isDisabled = hasAboveVotes;
+                            return (
+                                <div 
+                                    key={index} 
+                                    className={`candidate-ballot ${hasVote ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}`}
+                                    onClick={() => !isDisabled && handleCardClick(voteId, index)}
+                                    style={{ opacity: isDisabled ? 0.5 : 1, cursor: isDisabled ? 'not-allowed' : 'pointer' }}
+                                >
+                                    <input
+                                        type="number"
+                                        value={votes[voteId] || ''}
+                                        min={"1"}
+                                        onChange={(e) => handleVoteChange(voteId, e.target.value)}
+                                        onClick={(e) => e.stopPropagation()}
+                                        onFocus={(e) => e.stopPropagation()}
+                                        disabled={isDisabled}
+                                    />
+                                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        {candidate.party === 'Feline Progressive Party' && <FaCat />}
+                                        {candidate.party === 'Canine Unity Party' && <FaDog />}
+                                        {candidate.party === 'Avian Freedom Party' && <GiEgyptianBird />}
+                                        {candidate.name}
+                                    </label>
+                                </div>
+                            );
+                        })}
                     </div>
-                    <button
-                        className="submit-button"
-                        type="submit"
-                        onClick={handleSubmit}
-                        disabled={isSubmitting || user.isVoted.toString() === 'true'}
-                    >
-                        {user.isVoted.toString() === 'true' ? "You have already voted" :
-                        isSubmitting ? "Submitting..." : "Submit"}
-                    </button>
+                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem' }}>
+                        <button
+                            className="button ballot-button"
+                            type="submit"
+                            onClick={handleSubmit}
+                            disabled={isSubmitting || user.isVoted.toString() === 'true'}
+                        >
+                            {user.isVoted.toString() === 'true' ? "You have already voted" :
+                            isSubmitting ? "Submitting..." : "Submit"}
+                        </button>
+                        <button
+                            className="button ballot-button ballot-clear-button"
+                            type="button"
+                            onClick={handleClearAll}
+                            disabled={isSubmitting || Object.keys(votes).length === 0}
+                        >
+                            Clear All
+                        </button>
+                    </div>
                 </div>
             </>
         )

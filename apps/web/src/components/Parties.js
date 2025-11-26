@@ -3,6 +3,8 @@ import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import api from '../api/axiosConfig';
 import '../styles/AdminManagement.css';
+import { FaCat, FaDog } from "react-icons/fa6";
+import { GiEgyptianBird } from "react-icons/gi";
 import withRoleAccess from "./withRoleAcess";
 
 const Parties = () => {
@@ -45,7 +47,7 @@ const Parties = () => {
             <div className="admin-management-header">
                 <h1>Parties</h1>
                 <Link to={"/dashboard/parties/create"}>
-                    <button className="button register-button admin-create-button"> Create New Party </button>
+                    <button className="button admin-create-button"> Create New Party </button>
                 </Link>
             </div>
             
@@ -61,7 +63,12 @@ const Parties = () => {
                             {parties.map(party => (
                                 <div key={party.name} className="account-item">
                                     <div className="account-info">
-                                        <div style={{ fontWeight: 'bold' }}>{party.name}</div>
+                                        <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            {party.name === 'Feline Progressive Party' && <FaCat />}
+                                            {party.name === 'Canine Unity Party' && <FaDog />}
+                                            {party.name === 'Avian Freedom Party' && <GiEgyptianBird />}
+                                            {party.name}
+                                        </div>
                                         {party.candidates && party.candidates.length > 0 ? (
                                             <div style={{ fontSize: '0.85rem' }}>{party.candidates.join(', ')}</div>
                                         ) : (

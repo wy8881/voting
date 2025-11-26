@@ -95,7 +95,7 @@ const AdminManagement = () => {
             <div className="admin-management-header">
                 <h1>Manage Accounts</h1>
                 <button 
-                    className="button register-button admin-create-button" 
+                    className="button admin-create-button" 
                     onClick={() => setShowCreateForm(!showCreateForm)}
                 >
                     {showCreateForm ? 'Cancel' : 'Create New Account'}
@@ -155,7 +155,7 @@ const AdminManagement = () => {
                             </select>
                         </div>
                         <button 
-                            className="button register-button admin-create-button" 
+                            className="button admin-create-button" 
                             type="submit"
                             disabled={isSubmitting}
                         >

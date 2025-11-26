@@ -3,6 +3,8 @@ import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import api from '../api/axiosConfig';
 import '../styles/AdminManagement.css';
+import { FaCat, FaDog } from "react-icons/fa6";
+import { GiEgyptianBird } from "react-icons/gi";
 import withRoleAccess from "./withRoleAcess";
 
 const Candidates = () => {
@@ -45,7 +47,7 @@ const Candidates = () => {
             <div className="admin-management-header">
                 <h1>Candidates</h1>
                 <Link to={"/dashboard/candidates/create"}>
-                    <button className="button register-button admin-create-button"> Create New Candidate </button>
+                    <button className="button admin-create-button"> Create New Candidate </button>
                 </Link>
             </div>
             
@@ -61,10 +63,12 @@ const Candidates = () => {
                             {candidates.map(candidate => (
                                 <div key={candidate.name} className="account-item">
                                     <div className="account-info">
-                                        <div style={{ 
-    fontWeight: 'bold',
-    padding: 0,
-    margin: 0}}>{candidate.name}</div>
+                                        <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            {candidate.party === 'Feline Progressive Party' && <FaCat />}
+                                            {candidate.party === 'Canine Unity Party' && <FaDog />}
+                                            {candidate.party === 'Avian Freedom Party' && <GiEgyptianBird />}
+                                            {candidate.name}
+                                        </div>
                                         <div style={{ fontSize: '0.85rem' }}>{candidate.party}</div>
                                     </div>
                                     <button

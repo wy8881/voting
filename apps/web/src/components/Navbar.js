@@ -13,56 +13,23 @@ const Navbar = () => {
     const [button3Text, setButton3Text] = useState();
 
     useEffect(() => {
-        if(location.pathname === '/dashboard/ballot' ) {
+        if(user && user.role === 'ROLE_DELEGATE') {
+            setButton1Text("Candidates");
+            setButton2Text("Parties");
+            setButton3Text("Results");
+        }
+        else if(location.pathname === '/dashboard/ballot' ) {
             setButton1Text("Results");
-            setButton2Text("Dashboard");
         }
         else if(location.pathname === '/dashboard/result') {
-            setButton1Text("Candidates");
-            setButton2Text("Parties");
-            setButton3Text("Dashboard")
-        }
-        else if(location.pathname === '/dashboard/candidates') {
-            setButton1Text("Dashboard");
-            setButton2Text("Parties");
-            setButton3Text("Results")
-        }
-        else if(location.pathname === '/dashboard/parties') {
-            setButton1Text("Candidates");
-            setButton2Text("Dashboard");
-            setButton3Text("Results")
-        }
-        else if(location.pathname === '/dashboard/parties/manage') {
-            setButton1Text("Candidates");
-            setButton2Text("Dashboard");
-            setButton3Text("Results")
-        }
-        else if(location.pathname === '/dashboard/candidates/manage') {
-            setButton1Text("Dashboard");
-            setButton2Text("Parties");
-            setButton3Text("Results")
-        }
-        else if(location.pathname === '/dashboard/parties/create') {
-            setButton1Text("Candidates");
-            setButton2Text("Dashboard");
-            setButton3Text("Results")
-        }
-        else if(location.pathname === '/dashboard/candidates/create') {
-            setButton1Text("Dashboard");
-            setButton2Text("Parties");
-            setButton3Text("Results")
+            setButton1Text("Results");
         }
         else if(location.pathname === '/dashboard/logs') {
-            setButton1Text("Dashboard");
+            setButton1Text("Logs");
         }
         else if(location.pathname === '/dashboard') {
             if(user && user.role === 'ROLE_VOTER') {
                 setButton1Text("Results")
-            }
-            else if(user && user.role === 'ROLE_DELEGATE') {
-                setButton1Text("Candidates");
-                setButton2Text("Parties");
-                setButton3Text("Results")
             }
             else if(user && user.role === 'ROLE_LOGGER') {
                 setButton1Text("Logs");
@@ -87,51 +54,48 @@ const Navbar = () => {
         <nav className="navbar">
             <div className="navbar-content">
                 <div className="navbar-brand">
-                    <h2>E-Voting System</h2>
+                    <Link to="/dashboard" style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <h2>E-Voting System</h2>
+                    </Link>
                 </div>
                 <div className="navbar-navigation">
                     {user && user.role === 'ROLE_VOTER' && (
-                        <Link to="/dashboard/result" className="navbar-nav-link">
-                            {button1Text}
+                        <Link to="/dashboard/ballot" 
+                            className={`navbar-nav-link ${location.pathname.startsWith('/dashboard/ballot') ? 'active' : ''}`}>
+                            Ballot
                         </Link>
                     )}
                     {user && user.role === 'ROLE_DELEGATE' && (
                         <>
-                            <Link to={location.pathname === '/dashboard'
-                            || location.pathname === '/dashboard/parties'
-                            || location.pathname === '/dashboard/parties/create'
-                            || location.pathname === '/dashboard/parties/manage'
-                            || location.pathname === '/dashboard/results'
-                                ? '/dashboard/candidates' : '/dashboard'} className="navbar-nav-link">
-                                {button1Text}
+                            <Link 
+                                to="/dashboard/candidates" 
+                                className={`navbar-nav-link ${location.pathname.startsWith('/dashboard/candidates') ? 'active' : ''}`}
+                            >
+                                Candidates
                             </Link>
-                            <Link to={location.pathname === '/dashboard'
-                            || location.pathname === '/dashboard/candidates'
-                            || location.pathname === '/dashboard/candidates/create'
-                            || location.pathname === '/dashboard/candidates/manage'
-                            || location.pathname === '/dashboard/results'
-                                ? '/dashboard/parties' : '/dashboard'} className="navbar-nav-link">
-                                {button2Text}
+                            <Link 
+                                to="/dashboard/parties" 
+                                className={`navbar-nav-link ${location.pathname.startsWith('/dashboard/parties') ? 'active' : ''}`}
+                            >
+                                Parties
                             </Link>
-                            <Link to={location.pathname === '/dashboard'
-                            || location.pathname === '/dashboard/candidates'
-                            || location.pathname === '/dashboard/candidates/create'
-                            || location.pathname === '/dashboard/candidates/manage'
-                            || location.pathname === '/dashboard/parties'
-                            || location.pathname === '/dashboard/parties/create'
-                            || location.pathname === '/dashboard/parties/manage'
-                                ? '/dashboard/result' : '/dashboard'} className="navbar-nav-link">
-                                {button3Text}
+                            <Link 
+                                to="/dashboard/result" 
+                                className={`navbar-nav-link ${location.pathname === '/dashboard/result' ? 'active' : ''}`}
+                            >
+                                Results
                             </Link>
                         </>
                     )}
                     {user && user.role === 'ROLE_LOGGER' && (
-                        <Link to={location.pathname === '/dashboard' ? '/dashboard/logs' : '/dashboard'} className="navbar-nav-link">
+                        <Link to="/dashboard/logs"
+                             className={`navbar-nav-link ${location.pathname === '/dashboard/logs' ? 'active' : ''}`}>
                             {button1Text}
                         </Link>
                     )}
                     {user && user.role === 'ROLE_ADMIN' && (
-                        <Link to="/dashboard/admin_management" className="navbar-nav-link">
+                        <Link to="/dashboard/admin_management" 
+                            className={`navbar-nav-link ${location.pathname === '/dashboard/admin_management' ? 'active' : ''}`}>
                             Manage Accounts
                         </Link>
                     )}

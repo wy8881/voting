@@ -51,7 +51,7 @@ const CheckResult = () => {
             </>)}
 
             <button
-                className={"register-button"}
+                className={"button admin-create-button"}
                 onClick={handleRecound}
                 disabled={isSubmitting}
             >

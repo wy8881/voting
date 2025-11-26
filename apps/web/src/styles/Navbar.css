@@ -42,6 +42,19 @@
     color: var(--button-primary);
 }
 
+.navbar-nav-link.active {
+    color: var(--button-primary);
+    font-weight: 600;
+    border-bottom: 2px solid var(--button-primary);
+    border-radius: 0;
+    padding-bottom: 0.3rem;
+}
+
+.navbar-nav-link.active:hover {
+    background-color: transparent;
+    color: var(--button-primary);
+}
+
 .navbar-brand h2 {
     margin: 0;
     font-size: 1.5rem;
