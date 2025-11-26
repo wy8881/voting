@@ -64,9 +64,13 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        String role = userDetails.getAuthorities().stream()
+        var authorities = userDetails.getAuthorities();
+        logger.info("AuthController - Username: {}, Authorities: {}", userDetails.getUsername(), authorities);
+        authorities.forEach(auth -> logger.info("AuthController - Role: {}", auth.getAuthority()));
+        String role = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList().get(0);
+        logger.info("AuthController - Selected role: {}", role);
         logService.log(userDetails.getUsername(), Action.LOGIN);
         boolean hasVoted;
         if(role.equals(ERole.ROLE_VOTER.toString())) {

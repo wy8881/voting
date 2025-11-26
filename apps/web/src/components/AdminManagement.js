@@ -16,6 +16,25 @@ const AdminManagement = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
+        // 1. 检查 token 是否存在
+        const token = sessionStorage.getItem('Bearer');
+        console.log('Token exists:', !!token);
+        console.log('Token value:', token);
+
+        // 2. 检查 token 是否过期
+        if (token) {
+            try {
+                const tokenValue = token.startsWith('Bearer ') ? token.substring(7) : token;
+                const payload = JSON.parse(atob(tokenValue.split('.')[1]));
+                console.log('Token payload:', payload);
+                console.log('Token exp:', new Date(payload.exp * 1000));
+                console.log('Current time:', new Date());
+                console.log('Token expired:', payload.exp * 1000 < Date.now());
+            } catch (e) {
+                console.error('Invalid token format:', e);
+            }
+        }
+
         fetchAccounts();
     }, []);
 
@@ -76,7 +95,7 @@ const AdminManagement = () => {
             <div className="admin-management-header">
                 <h1>Manage Accounts</h1>
                 <button 
-                    className="button register-button" 
+                    className="button register-button admin-create-button" 
                     onClick={() => setShowCreateForm(!showCreateForm)}
                 >
                     {showCreateForm ? 'Cancel' : 'Create New Account'}
@@ -136,7 +155,7 @@ const AdminManagement = () => {
                             </select>
                         </div>
                         <button 
-                            className="button register-button" 
+                            className="button register-button admin-create-button" 
                             type="submit"
                             disabled={isSubmitting}
                         >
@@ -163,7 +182,7 @@ const AdminManagement = () => {
                                             <div className="account-email">{account.email}</div>
                                         </div>
                                         <button
-                                            className="button button-secondary"
+                                            className="button button-secondary admin-delete-button"
                                             onClick={() => handleDeleteAccount(account.username)}
                                         >
                                             Delete
@@ -187,7 +206,7 @@ const AdminManagement = () => {
                                             <div className="account-email">{account.email}</div>
                                         </div>
                                         <button
-                                            className="button button-secondary"
+                                            className="button button-secondary admin-delete-button"
                                             onClick={() => handleDeleteAccount(account.username)}
                                         >
                                             Delete

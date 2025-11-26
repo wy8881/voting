@@ -166,6 +166,23 @@ public class DBService {
         preferenceRepository.save(preference);
     }
 
+    @Transactional
+    public void deleteCandidate(String candidateName) throws RuntimeException {
+        Candidate candidate = candidateRepository.findByName(candidateName);
+        if (candidate == null) {
+            throw new RuntimeException("Error: Candidate not found!");
+        }
+
+        mongoTemplate.update(Party.class)
+                .matching(Criteria.where("name").is(candidate.getParty()))
+                .apply(new Update().pull("candidates", candidateName))
+                .first();
+
+        preferenceRepository.deleteByCandidateName(candidateName);
+
+        candidateRepository.delete(candidate);
+    }
+
     public List<CandidateTotalVote> candidateTotalVotes() {
         List<Vote> votes = mongoTemplate.findAll(Vote.class, "votes");
         Collections.shuffle(votes);

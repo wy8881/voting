@@ -13,5 +13,7 @@ public interface PreferenceRepository extends MongoRepository<Preference, String
     List<Preference> findByPartyOrderByRankAsc(String party);
 
     Optional<Preference> findByParty(String party);
+    
+    void deleteByCandidateName(String candidateName);
 }
 

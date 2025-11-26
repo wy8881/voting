@@ -84,3 +84,25 @@
     padding: 1rem;
 }
 
+.admin-create-button {
+    width: auto;
+    min-width: fit-content;
+    padding: 0.75rem 1.5rem;
+    margin: 2rem !important;
+}
+
+.admin-delete-button {
+    width: auto;
+    min-width: fit-content;
+    background-color: #dc2626 !important;
+    color: white !important;
+    border: 1px solid #dc2626 !important;
+    margin-left: 1rem;
+    margin: 1rem 1rem 1rem 0 !important;
+}
+
+.admin-delete-button:hover {
+    background-color: #b91c1c !important;
+    border-color: #b91c1c !important;
+}
+
