@@ -14,6 +14,7 @@ import ManageCandidates from "./ManageCandidates";
 import Logs from "./Logs";
 import CheckResult from "./CheckResult";
 import Layout from "./Layout";
+import AdminManagement from "./AdminManagement";
 
 function PageTitle() {
     const location = useLocation();
@@ -50,6 +51,9 @@ function PageTitle() {
             case '/dashboard/candidates/create':
                 title = "Create New Candidate";
                 break;
+            case '/dashboard/admin_management':
+                title = "Manage Accounts";
+                break;
             default:
                 title = "E-Voting System";
         }
@@ -76,6 +80,7 @@ export default function RouterComponent() {
                 <Route path="/dashboard/candidates/manage" element={<Layout><ManageCandidates/></Layout>} />
                 <Route path={"/dashboard/logs"} element={<Layout><Logs/></Layout>} />
                 <Route path = "/dashboard/result" element={<Layout><CheckResult/></Layout>} />
+                <Route path = "/dashboard/admin_management" element={<Layout><AdminManagement/></Layout>} />
             </Routes>
         </Router>
     );

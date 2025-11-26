@@ -8,14 +8,10 @@ import com.example.voting.service.LogService;
 import com.example.voting.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.Console;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,16 +30,9 @@ public class LocalAccountCreate implements CommandLineRunner {
     public void run(String... args) throws Exception {
         List<String> command = Arrays.asList(args);
         if(!command.isEmpty()) {
-            Console console = System.console();
-
             if(command.contains("--create-admin")) {
                 register(ERole.ROLE_ADMIN);
-            } else if(command.contains("--create-delegate")) {
-                register(ERole.ROLE_DELEGATE);
-            } else if(command.contains("--create-logger")) {
-                register(ERole.ROLE_LOGGER);
-            }
-            else {
+            } else {
                 System.out.println("No command found");
             }
             exit(0);
@@ -52,7 +41,7 @@ public class LocalAccountCreate implements CommandLineRunner {
 
     private void register(ERole role) {
         Console console = System.console();
-        System.out.println("Creating local account...");
+        System.out.println("Creating local admin account...");
         String username = console.readLine("Username: ");
         if(dbService.existsByUsername(username)) {
             System.out.println("User already exists");
@@ -71,17 +60,8 @@ public class LocalAccountCreate implements CommandLineRunner {
         User user = new User(username, email, encoder.encode(password));
         user.setRole(role);
         dbService.createUser(user);
-        switch (role) {
-            case ROLE_ADMIN:
-                logService.log(username,Action.REGISTER_ADMIN);
-                break;
-            case ROLE_DELEGATE:
-                logService.log(username, Action.REGISTER_DELEGATE);
-                break;
-            case ROLE_LOGGER:
-                logService.log(username, Action.REGISTER_LOGGER);
-                break;
-        }
+        logService.log(username, Action.REGISTER_ADMIN);
         System.out.println(role.getName() + " " + username + " created");
     }
 }
+

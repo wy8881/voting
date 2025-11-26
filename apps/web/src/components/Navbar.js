@@ -130,6 +130,11 @@ const Navbar = () => {
                             {button1Text}
                         </Link>
                     )}
+                    {user && user.role === 'ROLE_ADMIN' && (
+                        <Link to="/dashboard/admin_management" className="navbar-nav-link">
+                            Manage Accounts
+                        </Link>
+                    )}
                 </div>
                 <div className="navbar-user">
                     {user && user.username && (

@@ -176,5 +176,26 @@ public class DBService {
                 .toList();
     }
 
+    public List<User> getDelegatesAndLoggers() {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getRole() == ERole.ROLE_DELEGATE || user.getRole() == ERole.ROLE_LOGGER)
+                .map(User::decrypt)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteUser(String username) throws RuntimeException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+        if (user.getRole() == ERole.ROLE_VOTER) {
+            throw new RuntimeException("Cannot delete voter accounts");
+        }
+        if (user.getRole() == ERole.ROLE_ADMIN) {
+            throw new RuntimeException("Cannot delete admin accounts");
+        }
+        userRepository.delete(user);
+    }
 
 }

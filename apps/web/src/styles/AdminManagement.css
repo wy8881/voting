@@ -1,0 +1,86 @@
+.admin-management-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-management-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.admin-management-header h1 {
+    color: var(--text-heading);
+    margin: 0;
+}
+
+.admin-create-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 2rem;
+}
+
+.admin-create-form h2 {
+    color: var(--text-heading);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.accounts-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 2rem;
+}
+
+.accounts-section h2 {
+    color: var(--text-heading);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.accounts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.account-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+.account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.account-username {
+    font-weight: 600;
+    color: var(--text-heading);
+}
+
+.account-email {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.no-accounts {
+    color: var(--text-primary);
+    font-style: italic;
+    padding: 1rem;
+}
+
