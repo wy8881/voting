@@ -73,12 +73,11 @@ const Navbar = () => {
     async function handleLogout() {
         try {
             await api.get('api/auth/logout');
-            sessionStorage.removeItem('Bearer');
-            deleteUser();
-            navigate('/login');
         } catch (error) {
             console.log(error);
+        } finally {
             sessionStorage.removeItem('Bearer');
+            delete api.defaults.headers.common['Authorization'];
             deleteUser();
             navigate('/login');
         }

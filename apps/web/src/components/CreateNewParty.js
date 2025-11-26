@@ -1,15 +1,11 @@
 import '../styles/Register.css'
 import { isNameValid} from "../utils/Utils";
-import {useContext,  useState} from "react";
+import {useState} from "react";
 import api from "../api/axiosConfig";
-import {useNavigate} from "react-router-dom";
-import {UserContext} from "../contexts/UserContext";
 import withRoleAccess from "./withRoleAcess";
 const CreateNewParty = () => {
     const [partyName, setPartyName] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const navigate = useNavigate();
-    const {user} = useContext(UserContext);
 
     function handleMsg(message) {
         window.alert(message);
@@ -41,24 +37,6 @@ const CreateNewParty = () => {
             setIsSubmitting(false)
         }
 
-    }
-
-    async function handleTest(e) {
-        e.preventDefault();
-        try {
-            await api.get('api/delegate/test')
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    async function handleTest2(e) {
-        e.preventDefault();
-        try {
-            await api.post('api/auth/test')
-        } catch (error) {
-            console.log(error)
-        }
     }
 
     return (

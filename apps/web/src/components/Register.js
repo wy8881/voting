@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from "../api/axiosConfig";
 import '../styles/Register.css';
 import { UserContext } from "../contexts/UserContext";
-import '../styles/Register.css'
 import {isEmailValid, isPasswordValid, isUsernameValid, setToken} from "../utils/Utils";
 import { checkPasswordStrength } from "../utils/passwordStrengthChecker";
 import withNoLogged from "./witNotLogged";

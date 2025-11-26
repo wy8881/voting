@@ -1,6 +1,6 @@
 import '../styles/Register.css'
-import {checkAccess, isNameValid} from "../utils/Utils";
-import {useContext, useEffect, useState} from "react";
+import {isNameValid} from "../utils/Utils";
+import {useState} from "react";
 import api from "../api/axiosConfig";
 import withRoleAccess from "./withRoleAcess";
 const CreateNewCandidate = ()  => {

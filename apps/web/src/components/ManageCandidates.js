@@ -1,15 +1,11 @@
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import api from '../api/axiosConfig';
-import {UserContext} from "../contexts/UserContext";
-import {useNavigate} from "react-router-dom";
 import '../styles/DelegatePage.css';
 import withRoleAccess from "./withRoleAcess";
 
 const ManageCandidates = () => {
     const [candidates, setCandidates] = useState([]);
     const [received, setReceived] = useState(false);
-    const navigate = useNavigate();
-    const {user} = useContext(UserContext);
 
     useEffect(() => {
         async function fetchCandidates() {

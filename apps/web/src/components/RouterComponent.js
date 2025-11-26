@@ -1,6 +1,5 @@
-import React, {useContext, useEffect} from 'react';
-import {BrowserRouter as Router, Route, Routes, Navigate, useLocation} from 'react-router-dom';
-import { UserContext } from '../contexts/UserContext';
+import React, {useEffect} from 'react';
+import {BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import Register from './Register';
@@ -60,9 +59,6 @@ function PageTitle() {
     return null;
 }
 export default function RouterComponent() {
-    const { user } = useContext(UserContext);
-
-
     return (
         <Router>
             <PageTitle />

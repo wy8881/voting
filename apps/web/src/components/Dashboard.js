@@ -1,14 +1,12 @@
 import React, { useContext } from 'react';
-import {useNavigate, Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
-import api from '../api/axiosConfig';
 import '../styles/Dashboard.css';
 import withRoleAccess from "./withRoleAcess";
 
 
 const Dashboard = () => {
     const { user  } = useContext(UserContext);
-    const navigate = useNavigate();
 
     return (
         <>
