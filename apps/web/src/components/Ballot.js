@@ -275,16 +275,35 @@ const Ballot = () => {
 
     const hasAboveVotes = Object.keys(votes).some(key => key.startsWith('above') && votes[key] && votes[key] !== '');
     const hasBelowVotes = Object.keys(votes).some(key => key.startsWith('below') && votes[key] && votes[key] !== '');
+    const hasVoted = user && (user.isVoted === true || user.isVoted === 'true');
 
     return (
         (receiveCandidates === false || receiveParties === false) ? (
             <h1>Loading...</h1>
+        ) : hasVoted ? (
+            <div className="Ballot">
+                <div className="ballot-thanks-message">
+                    <h1>Thank You!</h1>
+                    <p className="ballot-description">You have successfully submitted your vote.</p>
+                    <p className="ballot-description">Your participation is greatly appreciated.</p>
+                    <p className="ballot-description">After the election is over, you can check the result <a href="/dashboard/result">here</a>.</p>
+                    <p className="ballot-description">You can now close this page now.</p>
+                </div>
+            </div>
         ) : (
             <>
                 <div className="Ballot">
                     <h1>Senate Ballot</h1>
-                    <p className="ballot-description">You may vote in one of two ways</p>
-                    <p className="ballot-description" style={{marginBottom: '3rem'}}>Choose one Party OR one Candidate</p>
+                    <div className="ballot-instructions">
+                        <h3>How to Vote</h3>
+                        <p className="ballot-description">You may vote in one of two ways:</p>
+                        <ul className="ballot-instruction-list">
+                            <li><strong>Above the line:</strong> Number all parties from 1 to {parties.length} in order of preference</li>
+                            <li><strong>Below the line:</strong> Number all candidates from 1 to {candidates.length} in order of preference</li>
+                        </ul>
+                        <p className="ballot-description"><strong>Important:</strong> You can only vote above OR below the line, not both.</p>
+                        <p className="ballot-description">You can vote by clicking the cards in order, or by typing numbers directly in the input fields.</p>
+                    </div>
                     <h3>Either</h3>
                     <div className="parties-container">
                         {parties.map((party, index) => {

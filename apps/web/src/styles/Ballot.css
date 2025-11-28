@@ -111,6 +111,39 @@
     transform: none;
 }
 
+.ballot-instructions {
+    background: var(--bg-primary);
+    padding: clamp(16px, 3vw, 24px);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: clamp(24px, 4vw, 3rem);
+    text-align: left;
+}
+
+.ballot-instructions h3 {
+    color: var(--text-heading);
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    margin: 0 0 clamp(12px, 2vw, 16px) 0;
+    font-weight: 600;
+}
+
+.ballot-instruction-list {
+    margin: clamp(12px, 2vw, 16px) 0;
+    padding-left: clamp(20px, 3vw, 24px);
+    color: var(--text-primary);
+}
+
+.ballot-instruction-list li {
+    margin-bottom: clamp(8px, 1.5vw, 12px);
+    line-height: 1.6;
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+}
+
+.ballot-instruction-list li strong {
+    color: var(--text-heading);
+    font-weight: 600;
+}
+
 .ballot-description {
     font-size: 0.9rem;
     color: var(--text-secondary);
@@ -161,4 +194,27 @@
 .ballot-clear-button:hover:not(:disabled) {
     background-color: #b91c1c !important;
     border-color: #b91c1c !important;
+}
+
+.ballot-thanks-message {
+    text-align: center;
+    padding: clamp(3rem, 8vw, 5rem) clamp(1.5rem, 4vw, 3rem);
+    background: var(--bg-primary);
+    border-radius: 16px;
+    border: 2px solid var(--button-primary);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+.ballot-thanks-message h1 {
+    color: var(--button-primary);
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: clamp(1rem, 3vw, 1.5rem);
+    font-weight: 700;
+}
+
+.ballot-thanks-message .ballot-description {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: var(--text-primary);
+    margin-bottom: clamp(0.75rem, 2vw, 1rem);
+    line-height: 1.6;
 }
