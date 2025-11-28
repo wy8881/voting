@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import api from "../api/axiosConfig";
 import { FaCat, FaDog } from "react-icons/fa6";
 import { GiEgyptianBird } from "react-icons/gi";
+import { ClipLoader } from 'react-spinners';
 import '../styles/DelegatePage.css';
 const CheckResult = () => {
     const [results, setResults] = useState([]);
@@ -10,6 +11,7 @@ const CheckResult = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isFirst, setIsFirst] = useState(false);
     const [candidates, setCandidates] = useState([]);
+    const [lastCalculatedAt, setLastCalculatedAt] = useState(null);
 
     useEffect(() => {
         async function fetchCandidates() {
@@ -44,18 +46,24 @@ const CheckResult = () => {
         setIsSubmitting(true)
         try {
             await api.get('api/delegate/result').then(resp => {
-                setResults(resp.data.sort((a, b) => {
+                console.log(resp.data);
+                const responseData = resp.data;
+                const candidateTotalVotes = responseData.candidateTotalVotes || [];
+                const sortedResults = candidateTotalVotes.sort((a, b) => {
                     if (a.totalVotes === b.totalVotes) {
                         return a.candidateName.localeCompare(b.candidateName);
                     }
-                    return b.totalVotes - a.totalVotes
-                }));
-                setIsFirst(true)
+                    return b.totalVotes - a.totalVotes;
+                });
+                setResults(sortedResults);
+                setLastCalculatedAt(responseData.lastCalculatedAt);
+                setIsFirst(true);
                 setReceived(true);
-                setIsSubmitting(false)
+                setIsSubmitting(false);
             })
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            setIsSubmitting(false);
         }
     }
 
@@ -65,9 +73,16 @@ const CheckResult = () => {
             {isFirst && (
             <>
                 {!received ? (
-                    <div>Loading...</div>
+                    <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+                        <ClipLoader color="#2563EB" size={40} />
+                    </div>
                 ) : (
                     <div className="results-card">
+                        {lastCalculatedAt && (
+                            <div style={{ marginBottom: '1rem', fontSize: '0.9rem', color: '#64748B' }}>
+                                Last calculated: {new Date(lastCalculatedAt).toLocaleString()}
+                            </div>
+                        )}
                         {results && results.length > 0 ? (
                             <div className="results-list">
                                 {results.map((result, index) => {

@@ -1,4 +1,4 @@
-package com.example.voting.model;
+package com.example.voting.dto.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,3 +13,4 @@ public class CandidateTotalVote {
     private String candidateName;
     private Long totalVotes;
 }
+

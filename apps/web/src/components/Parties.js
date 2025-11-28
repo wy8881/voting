@@ -5,6 +5,7 @@ import api from '../api/axiosConfig';
 import '../styles/AdminManagement.css';
 import { FaCat, FaDog } from "react-icons/fa6";
 import { GiEgyptianBird } from "react-icons/gi";
+import { ClipLoader } from 'react-spinners';
 import withRoleAccess from "./withRoleAcess";
 
 const Parties = () => {
@@ -52,7 +53,9 @@ const Parties = () => {
             </div>
             
             {loading ? (
-                <div className="loading">Loading parties...</div>
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+                    <ClipLoader color="#2563EB" size={40} />
+                </div>
             ) : (
                 <div className="accounts-section">
                     <h2>All Parties ({parties.length})</h2>

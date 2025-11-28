@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/axiosConfig';
+import { ClipLoader } from 'react-spinners';
 import '../styles/AdminManagement.css';
 import withRoleAccess from './withRoleAcess';
 
@@ -166,7 +167,9 @@ const AdminManagement = () => {
             )}
 
             {loading ? (
-                <div className="loading">Loading accounts...</div>
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+                    <ClipLoader color="#2563EB" size={40} />
+                </div>
             ) : (
                 <>
                     <div className="accounts-section">

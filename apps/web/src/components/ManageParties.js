@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import api from '../api/axiosConfig';
+import { ClipLoader } from 'react-spinners';
 import '../styles/DelegatePage.css';
 import withRoleAccess from "./withRoleAcess";
 
@@ -28,7 +29,9 @@ const ManageParties = () =>{
         <div className="delegate-container">
             <h1>Manage Parties</h1>
             {!received ?(
-                <div>Loading...</div>
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+                    <ClipLoader color="#2563EB" size={40} />
+                </div>
             ) : (
                 <>
                     {parties && parties.length > 0 && parties.map(party => (

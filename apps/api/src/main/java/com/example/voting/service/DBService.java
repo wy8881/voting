@@ -1,6 +1,8 @@
 package com.example.voting.service;
 
 import com.example.voting.model.*;
+import com.example.voting.dto.common.CandidateTotalVote;
+import com.example.voting.dto.response.ElectionResultResponse;
 import com.example.voting.dto.response.MessageResponse;
 import com.example.voting.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,8 @@ public class DBService {
     private VoteRespository voteRespository;
     @Autowired
     private ElectionStatusRepository electionStatusRepository;
+    @Autowired
+    private ElectionResultRepository electionResultRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -217,14 +221,28 @@ public class DBService {
         partyRepository.delete(party);
     }
 
-    public List<CandidateTotalVote> candidateTotalVotes() {
+    public ElectionResultResponse candidateTotalVotes() {
         List<Vote> votes = mongoTemplate.findAll(Vote.class, "votes");
         Collections.shuffle(votes);
         Map<String, Long> voteCounts = votes.stream()
                 .collect(Collectors.groupingBy(Vote::getCandidateName, Collectors.summingLong(Vote::getNum)));
-        return voteCounts.entrySet().stream()
+        List<CandidateTotalVote> candidateTotalVotes = voteCounts.entrySet().stream()
                 .map(entry -> new CandidateTotalVote(entry.getKey(), entry.getValue()))
                 .toList();
+        
+        LocalDateTime now = LocalDateTime.now();
+        
+        ElectionResult electionResult = ElectionResult.builder()
+                .candidateTotalVotes(candidateTotalVotes)
+                .lastCalculatedAt(now)
+                .build();
+        
+        electionResultRepository.save(electionResult);
+        
+        return ElectionResultResponse.builder()
+                .candidateTotalVotes(candidateTotalVotes)
+                .lastCalculatedAt(now)
+                .build();
     }
 
     public List<User> getDelegatesAndLoggers() {
@@ -274,6 +292,21 @@ public class DBService {
         electionStatus.setElectionStarted(false);
         electionStatus.setStatusUpatedTime(LocalDateTime.now());
         saveElectionStatus(electionStatus);
+    }
+
+    public ElectionResultResponse getLatestElectionResult() throws RuntimeException {
+        if (isElectionStarted()) {
+            throw new RuntimeException("Election has not ended yet. Results are not available.");
+        }
+        Optional<ElectionResult> latestResult = electionResultRepository.findFirstByOrderByLastCalculatedAtDesc();
+        if (latestResult.isEmpty()) {
+            throw new RuntimeException("No election results available.");
+        }
+        ElectionResult result = latestResult.get();
+        return ElectionResultResponse.builder()
+                .candidateTotalVotes(result.getCandidateTotalVotes())
+                .lastCalculatedAt(result.getLastCalculatedAt())
+                .build();
     }
 
 }

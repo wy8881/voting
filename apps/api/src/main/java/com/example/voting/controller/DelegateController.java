@@ -1,10 +1,11 @@
 package com.example.voting.controller;
 
 import com.example.voting.model.Candidate;
-import com.example.voting.model.CandidateTotalVote;
 import com.example.voting.model.Party;
+import com.example.voting.dto.common.CandidateTotalVote;
 import com.example.voting.dto.request.CreateCandidateRequest;
 import com.example.voting.dto.request.CreatePartyRequest;
+import com.example.voting.dto.response.ElectionResultResponse;
 import com.example.voting.dto.response.MessageResponse;
 import com.example.voting.service.DBService;
 import com.example.voting.utils.Validation;
@@ -77,12 +78,12 @@ public class DelegateController {
         return ResponseEntity.ok(new MessageResponse("Party created successfully!"));
     }
     @GetMapping("/result")
-    public List<CandidateTotalVote> fetchResult() {
+    public ResponseEntity<?> fetchResult() {
         try {
-            return DBService.candidateTotalVotes();
+            return ResponseEntity.ok(DBService.candidateTotalVotes());
         }
         catch (Exception e) {
-            return new ArrayList<>();
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 

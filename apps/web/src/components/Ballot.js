@@ -5,6 +5,7 @@ import {UserContext} from "../contexts/UserContext";
 import api from "../api/axiosConfig";
 import { FaCat, FaDog } from "react-icons/fa6";
 import { GiEgyptianBird } from "react-icons/gi";
+import { ClipLoader } from 'react-spinners';
 import withRoleAccess from "./withRoleAcess";
 
 const Ballot = () => {
@@ -279,14 +280,16 @@ const Ballot = () => {
 
     return (
         (receiveCandidates === false || receiveParties === false) ? (
-            <h1>Loading...</h1>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+                <ClipLoader color="#2563EB" size={50} />
+            </div>
         ) : hasVoted ? (
             <div className="Ballot">
                 <div className="ballot-thanks-message">
                     <h1>Thank You!</h1>
                     <p className="ballot-description">You have successfully submitted your vote.</p>
                     <p className="ballot-description">Your participation is greatly appreciated.</p>
-                    <p className="ballot-description">After the election is over, you can check the result <a href="/dashboard/result">here</a>.</p>
+                    <p className="ballot-description">After the election is over, you can check the result <a href="/dashboard/voter_result">here</a>.</p>
                     <p className="ballot-description">You can now close this page now.</p>
                 </div>
             </div>

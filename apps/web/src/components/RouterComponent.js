@@ -12,6 +12,7 @@ import CreateNewCandidate from "./CreateNewCandidate";
 import ManageCandidates from "./ManageCandidates";
 import Logs from "./Logs";
 import CheckResult from "./CheckResult";
+import VoterResult from "./VoterResult";
 import Layout from "./Layout";
 import AdminManagement from "./AdminManagement";
 
@@ -79,6 +80,7 @@ export default function RouterComponent() {
                 <Route path="/dashboard/candidates/manage" element={<Layout><ManageCandidates/></Layout>} />
                 <Route path={"/dashboard/logs"} element={<Layout><Logs/></Layout>} />
                 <Route path = "/dashboard/result" element={<Layout><CheckResult/></Layout>} />
+                <Route path = "/dashboard/voter_result" element={<Layout><VoterResult/></Layout>} />
                 <Route path = "/dashboard/admin_management" element={<Layout><AdminManagement/></Layout>} />
             </Routes>
         </Router>

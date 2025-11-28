@@ -60,10 +60,17 @@ const Navbar = () => {
                 </div>
                 <div className="navbar-navigation">
                     {user && user.role === 'ROLE_VOTER' && (
-                        <Link to="/dashboard/ballot" 
-                            className={`navbar-nav-link ${location.pathname.startsWith('/dashboard/ballot') ? 'active' : ''}`}>
-                            Ballot
-                        </Link>
+                        <>
+                            <Link to="/dashboard/ballot" 
+                                className={`navbar-nav-link ${location.pathname.startsWith('/dashboard/ballot') ? 'active' : ''}`}>
+                                Ballot
+                            </Link>
+                            <Link 
+                                to="/dashboard/voter_result" 
+                                className={`navbar-nav-link ${location.pathname === '/dashboard/voter_result' ? 'active' : ''}`}>
+                                Results
+                            </Link>
+                        </>
                     )}
                     {user && user.role === 'ROLE_DELEGATE' && (
                         <>

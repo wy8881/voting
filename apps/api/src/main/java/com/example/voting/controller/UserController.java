@@ -1,5 +1,6 @@
 package com.example.voting.controller;
 
+import com.example.voting.dto.response.MessageResponse;
 import com.example.voting.model.Candidate;
 import com.example.voting.model.Party;
 import com.example.voting.service.DBService;
@@ -33,5 +34,14 @@ public class UserController {
     @GetMapping("/electionStatus")
     public ResponseEntity<?> getElectionStatus() {
         return ResponseEntity.ok(DBService.getLatestElectionStatus());
+    }
+
+    @GetMapping("/electionResult")
+    public ResponseEntity<?> getElectionResult() {
+        try {
+            return ResponseEntity.ok(DBService.getLatestElectionResult());
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
     }
 }

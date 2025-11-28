@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import api from '../api/axiosConfig';
+import { ClipLoader } from 'react-spinners';
 import '../styles/DelegatePage.css';
 import withRoleAccess from "./withRoleAcess";
 
@@ -26,7 +27,9 @@ const ManageCandidates = () => {
         <div className="delegate-container">
             <h1>Manage Candidates</h1>
             {!received ?(
-                <div>Loading...</div>
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+                    <ClipLoader color="#2563EB" size={40} />
+                </div>
             ) : (
                 <>
                     {candidates && candidates.length > 0 && candidates.map(candidate => (

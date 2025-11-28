@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useRoleCheck } from '../hooks/useRoleCheck';
 import api from '../api/axiosConfig';
+import { ClipLoader } from 'react-spinners';
 import '../styles/Dashboard.css';
 import withRoleAccess from "./withRoleAcess";
 
@@ -100,7 +101,9 @@ const Dashboard = () => {
                             <div className="election-status-section">
                                 <h3 className="election-status-title">Current Election Status</h3>
                                 {isLoadingStatus ? (
-                                    <p className="dashboardInfo">Loading...</p>
+                                    <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem' }}>
+                                        <ClipLoader color="#2563EB" size={30} />
+                                    </div>
                                 ) : (
                                     <div className="election-status-pill-container">
                                         <span className={`status-pill ${electionStatus?.electionStarted ? 'status-active' : 'status-inactive'}`}>
@@ -157,7 +160,9 @@ const Dashboard = () => {
                     </div>
                 </div>
             ) : (
-                <p className="loading">Loading...</p>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+                    <ClipLoader color="#2563EB" size={50} />
+                </div>
             )}
         </>
     );
