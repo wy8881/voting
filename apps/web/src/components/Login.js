@@ -24,14 +24,17 @@ const Login = () => {
         setIsLogging(true)
         if(username === "" || password === "") {
             handleError("Username and password cannot be empty")
+            setIsLogging(false)
             return;
         }
         if(!isUsernameValid(username)) {
             handleError("Username can only contain numbers and alphabets")
+            setIsLogging(false)
             return;
         }
         if(!isPasswordValid(password)) {
             handleError("Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character. The special characters are @$!%*?&#")
+            setIsLogging(false)
             return;
         }
         try {
@@ -92,8 +95,8 @@ const Login = () => {
                     />
                 </div>
                 <div className="button-container">
-                    <button className="button register-button" type={"submit"}>{isLogging? "logging" : "Log In"}</button>
-                    <Link to={"/signup"} className="button button-link button-secondary"> Sign Up </Link>
+                    <button className="button primary-loginbutton" type={"submit"}>{isLogging? "Log in..." : "Log In"}</button>
+                    <Link to={"/signup"} className="button button-link secondary-loginbutton"> Sign Up </Link>
                 </div>
 
             </form>

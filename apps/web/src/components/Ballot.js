@@ -231,8 +231,9 @@ const Ballot = () => {
         const isConsecutive = maxVote - minVote === voteValues.length - 1;
 
         if (isAboveLine){
-            if(!(isUnique(voteValues) && minVote === 1 && voteValues.length >= 6&& isConsecutive)) {
-                handleError("You have not voted correctly above the line. You need to number at least six boxes from 1 to 6.");
+            const partiesCount = parties.length;
+            if(!(isUnique(voteValues) && minVote === 1 && voteValues.length === partiesCount && isConsecutive)) {
+                handleError(`You have not voted correctly above the line. You need to number ${partiesCount} boxes from 1 to ${partiesCount}.`);
                 return false;
             }
 
@@ -240,8 +241,9 @@ const Ballot = () => {
 
 
         if (isBelowLine) {
-            if(!(isUnique(voteValues) && minVote === 1 && voteValues.length >= 12 && isConsecutive)) {
-                handleError("You have not voted correctly below the line. You need to number at least twelve boxes from 1 to 12.");
+            const candidatesCount = candidates.length;
+            if(!(isUnique(voteValues) && minVote === 1 && voteValues.length === candidatesCount && isConsecutive)) {
+                handleError(`You have not voted correctly below the line. You need to number ${candidatesCount} boxes from 1 to ${candidatesCount}.`);
                 return false;
             }
         }

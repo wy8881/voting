@@ -42,6 +42,38 @@
     font-size: 1rem;
 }
 
+.button-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.primary-loginbutton {
+    background-color: #2563EB !important;
+    color: #ffffff !important;
+    width: fit-content !important;
+    padding: 12px 24px;
+}
+
+.primary-loginbutton:hover {
+    background-color: #0056b3 !important;
+}
+
+.secondary-loginbutton {
+    background-color: #ffffff !important;
+    color: #2563EB !important;
+    border: 2px solid #2563EB !important;
+    width: fit-content !important;
+    padding: 12px 24px;
+}
+
+.secondary-loginbutton:hover {
+    background-color: rgba(37, 99, 235, 0.05) !important;
+    color: #0056b3 !important;
+    border-color: #0056b3 !important;
+}
+
 @media (max-width: 640px) {
     .register-container {
         padding: 32px 24px;

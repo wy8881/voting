@@ -6,7 +6,6 @@ import Register from './Register';
 import Ballot from './Ballot';
 import Candidates from "./Candidates";
 import Parties from "./Parties";
-import App from "../App";
 import CreateNewParty from "./CreateNewParty";
 import ManageParties from "./ManageParties";
 import CreateNewCandidate from "./CreateNewCandidate";
@@ -67,7 +66,7 @@ export default function RouterComponent() {
         <Router>
             <PageTitle />
             <Routes>
-                <Route path="/" element={<App/>} />
+                <Route path="/" element={<Login/>} />
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/signup" element={<Register />}/>
                 <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>

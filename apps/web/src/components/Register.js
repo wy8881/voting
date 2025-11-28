@@ -35,18 +35,22 @@ const Register = () => {
         setIsSubmitting(true)
         if (username === "" || password === "" || email === "") {
             handleError("Username, password and email cannot be empty")
+            setIsSubmitting(false)
             return;
         }
         if (!isUsernameValid(username)) {
             handleError("Username can only contain numbers and alphabets")
+            setIsSubmitting(false)
             return;
         }
         if(!isPasswordValid(password)) {
             handleError("Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character. The special characters are @$!%*?&#")
+            setIsSubmitting(false)
             return;
         }
         if(!isEmailValid(email)) {
             handleError("Invalid email")
+            setIsSubmitting(false)
             return;
         }
 
@@ -130,13 +134,13 @@ const Register = () => {
                 </ul>
                 <div className="button-container">
                     <button
-                        className="button register-button"
+                        className="button primary-loginbutton"
                         type="submit"
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? 'Registering...' : 'Register'}
                     </button>
-                    <Link to={"/login"} className="button button-link button-secondary">Back to log in</Link>
+                    <Link to={"/login"} className="button button-link secondary-loginbutton">Back to log in</Link>
                 </div>
             </form>
         </div>

@@ -13,6 +13,7 @@
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/controller/VoterController.java
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/payload/request/CreateCandidateRequest.java
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/repositories/RoleRepository.java
+/Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/controller/AdminController.java
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/model/CandidateTotalVote.java
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/component/EncryptionUtil.java
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/jwt/AuthEntryPointJwt.java
@@ -46,6 +47,7 @@
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/repositories/UserRepository.java
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/service/DBService.java
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/utils/Validation.java
+/Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/payload/request/CreateAccountRequest.java
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/jwt/AuthTokenFilter.java
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/controller/LoggerController.java
 /Users/yi/Documents/code/vote_system/apps/api/src/main/java/com/example/voting/model/Action.java

@@ -153,6 +153,14 @@ public class DBService {
         return partyRepository.findAll();
     }
 
+    public int getPartiesCount() {
+        return (int) partyRepository.count();
+    }
+
+    public int getCandidatesCount() {
+        return (int) candidateRepository.count();
+    }
+
     public boolean existsByPartyAndRank(String party, int rank) {
         Optional<Preference> existingPreference = preferenceRepository.findByPartyAndRank(party, rank);
         return existingPreference.isPresent();

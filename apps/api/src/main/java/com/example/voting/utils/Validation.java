@@ -23,15 +23,9 @@ public class Validation {
         return (rank == 1 || rank == 2);
     }
 
-    public static boolean isVoteValid(String type, List<String> preferences, String voterName) {
-        if (type.equals("party")) {
-            if (preferences.size() == 6 && isUsernameValid(voterName)) {
-                return true;
-            }
-        } else if (type.equals("candidate")) {
-            if (preferences.size() == 12 && isUsernameValid(voterName)) {
-                return true;
-            }
+    public static boolean isVoteValid(String type, List<String> preferences, String voterName, int expectedCount) {
+        if (isUsernameValid(voterName) && preferences.size() == expectedCount) {
+            return true;
         }
         return false;
     }
