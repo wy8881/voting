@@ -1,10 +1,8 @@
-package com.example.voting.payload.response;
+package com.example.voting.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,3 +14,4 @@ public class VoterResponse {
 	private Boolean isVoted;
 
 }
+

@@ -1,7 +1,7 @@
 package com.example.voting.service;
 
 import com.example.voting.model.*;
-import com.example.voting.payload.response.MessageResponse;
+import com.example.voting.dto.response.MessageResponse;
 import com.example.voting.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;

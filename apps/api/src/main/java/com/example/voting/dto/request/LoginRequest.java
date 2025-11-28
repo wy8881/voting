@@ -1,4 +1,4 @@
-package com.example.voting.payload.request;
+package com.example.voting.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -14,3 +14,4 @@ public class LoginRequest {
 	private String password;
 
 }
+

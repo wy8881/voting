@@ -1,8 +1,8 @@
 package com.example.voting.controller;
 
 import com.example.voting.model.Action;
-import com.example.voting.payload.request.VoteRequest;
-import com.example.voting.payload.response.MessageResponse;
+import com.example.voting.dto.request.VoteRequest;
+import com.example.voting.dto.response.MessageResponse;
 import com.example.voting.service.DBService;
 import com.example.voting.service.LogService;
 import com.example.voting.utils.Validation;

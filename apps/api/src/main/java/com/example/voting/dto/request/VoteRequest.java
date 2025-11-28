@@ -1,4 +1,4 @@
-package com.example.voting.payload.request;
+package com.example.voting.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,3 +12,4 @@ public class VoteRequest {
     private  List<String> preferences;
     private String type;
 }
+

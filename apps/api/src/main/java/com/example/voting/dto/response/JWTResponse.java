@@ -1,4 +1,4 @@
-package com.example.voting.payload.response;
+package com.example.voting.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,3 +14,4 @@ public class JWTResponse {
     private String role;
     private Boolean isVoted;
 }
+

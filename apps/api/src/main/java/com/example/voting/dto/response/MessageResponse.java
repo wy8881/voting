@@ -1,4 +1,4 @@
-package com.example.voting.payload.response;
+package com.example.voting.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,3 +10,4 @@ import lombok.Setter;
 public class MessageResponse {
 	private String message;
 }
+

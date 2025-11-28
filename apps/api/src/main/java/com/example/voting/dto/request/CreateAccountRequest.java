@@ -1,4 +1,4 @@
-package com.example.voting.payload.request;
+package com.example.voting.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
