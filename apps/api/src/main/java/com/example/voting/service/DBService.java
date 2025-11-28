@@ -9,10 +9,13 @@ import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -32,6 +35,8 @@ public class DBService {
     private PreferenceRepository preferenceRepository;
     @Autowired
     private VoteRespository voteRespository;
+    @Autowired
+    private ElectionStatusRepository electionStatusRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -242,6 +247,33 @@ public class DBService {
             throw new RuntimeException("Cannot delete admin accounts");
         }
         userRepository.delete(user);
+    }
+
+    public Optional<ElectionStatus> getLatestElectionStatus() {
+        return electionStatusRepository.findFirstByOrderByStatusUpatedTimeDesc();
+    }
+
+    public ElectionStatus saveElectionStatus(@NonNull ElectionStatus electionStatus) {
+        ElectionStatus saved = electionStatusRepository.save(electionStatus);
+        return Objects.requireNonNull(saved, "Failed to save election status");
+    }
+
+    public boolean isElectionStarted() {
+        Optional<ElectionStatus> latestStatus = getLatestElectionStatus();
+        return latestStatus.map(ElectionStatus::isElectionStarted).orElse(false);
+    }
+    public void startElection() {
+        ElectionStatus electionStatus = new ElectionStatus();
+        electionStatus.setElectionStarted(true);
+        electionStatus.setStatusUpatedTime(LocalDateTime.now());
+        saveElectionStatus(electionStatus);
+    }
+
+    public void stopElection() {
+        ElectionStatus electionStatus = new ElectionStatus();
+        electionStatus.setElectionStarted(false);
+        electionStatus.setStatusUpatedTime(LocalDateTime.now());
+        saveElectionStatus(electionStatus);
     }
 
 }

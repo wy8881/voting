@@ -21,7 +21,7 @@ function PageTitle() {
         let title;
         switch (location.pathname) {
             case '/':
-                title = "E-Voting System";
+                title = "2025 Animal Senate Election";
                 break;
             case '/login':
                 title = "Login";
@@ -54,7 +54,7 @@ function PageTitle() {
                 title = "Manage Accounts";
                 break;
             default:
-                title = "E-Voting System";
+                title = "2025 Animal Senate Election";
         }
         document.title = title;
 

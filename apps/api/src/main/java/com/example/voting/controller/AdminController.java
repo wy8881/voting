@@ -99,5 +99,22 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/startElection")
+    public ResponseEntity<?> startElection() {
+        if (dbService.isElectionStarted()) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Election already started!"));
+        }
+        dbService.startElection();
+        return ResponseEntity.ok(new MessageResponse("Election started successfully!"));
+    }
+
+    @PostMapping("/stopElection")
+    public ResponseEntity<?> stopElection() {
+        if (!dbService.isElectionStarted()) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Election not started!"));
+        }
+        dbService.stopElection();
+        return ResponseEntity.ok(new MessageResponse("Election stopped successfully!"));
+    }
 }
 

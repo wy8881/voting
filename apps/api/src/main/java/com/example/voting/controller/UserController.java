@@ -15,11 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
-@PreAuthorize("hasRole('ROLE_VOTER') || hasRole('ROLE_DELEGATE')")
+@PreAuthorize("hasRole('ROLE_VOTER') || hasRole('ROLE_DELEGATE') || hasRole('ROLE_ADMIN') || hasRole('ROLE_LOGGER')")
 public class UserController {
 
     @Autowired
-    com.example.voting.service.DBService DBService;
+    DBService DBService;
     @GetMapping("/allCandidates")
     public ResponseEntity<List<Candidate>> getAllCandidates() {
         return new ResponseEntity<List<Candidate>>(DBService.getAllCandidates(), HttpStatus.OK);
@@ -28,5 +28,10 @@ public class UserController {
     @GetMapping("/allParties")
     public ResponseEntity<List<Party>> getAllParties() {
         return new ResponseEntity<List<Party>>(DBService.getAllParties(), HttpStatus.OK);
+    }
+
+    @GetMapping("/electionStatus")
+    public ResponseEntity<?> getElectionStatus() {
+        return ResponseEntity.ok(DBService.getLatestElectionStatus());
     }
 }

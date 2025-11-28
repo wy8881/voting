@@ -8,7 +8,6 @@ import com.example.voting.payload.request.LoginRequest;
 import com.example.voting.payload.request.SignupRequest;
 import com.example.voting.payload.response.JWTResponse;
 import com.example.voting.payload.response.MessageResponse;
-import com.example.voting.payload.response.VoterResponse;
 import com.example.voting.service.DBService;
 import com.example.voting.service.LogService;
 import com.example.voting.service.MyUserDetails;

@@ -55,7 +55,7 @@ const Navbar = () => {
             <div className="navbar-content">
                 <div className="navbar-brand">
                     <Link to="/dashboard" style={{ textDecoration: 'none', color: 'inherit' }}>
-                        <h2>E-Voting System</h2>
+                        <h2>2025 Animal Senate Election</h2>
                     </Link>
                 </div>
                 <div className="navbar-navigation">

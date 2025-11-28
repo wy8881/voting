@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useState} from 'react';
+import React, {createContext, useEffect, useState, useRef} from 'react';
 import api from "../api/axiosConfig";
 import {reloadToken} from "../utils/Utils";
 
@@ -24,21 +24,34 @@ export const UserProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const isInitialized = useRef(false);
 
     useEffect(() => {
-        checkAuth().then(reloadUser);
-    },[]);
+        if(isInitialized.current) return;
+        async function initialize() {
+            try{
+                const cachedUser = sessionStorage.getItem('user');
+                if (cachedUser) {
+                    setUser(JSON.parse(cachedUser));
+                }
 
-    useEffect(() => {
-        if (user) {
-            const storedUser = sessionStorage.getItem('user');
-            if(!storedUser || storedUser !== JSON.stringify(user)) {
-                console.log("setUser")
-                sessionStorage.setItem('user', JSON.stringify(user));
+                await checkAuth();
+            } catch (error) {
+                console.error('Error initializing user context:', error);
+            } finally {
+                setLoading(false);
+                isInitialized.current = true;
             }
         }
-        if(user === null) {
-            reloadUser();
+        initialize();
+    }, []);
+
+    useEffect(() => {
+        if (isInitialized.current && user) {
+            const storedUser = sessionStorage.getItem('user');
+            if(!storedUser || storedUser !== JSON.stringify(user)) {
+                sessionStorage.setItem('user', JSON.stringify(user));
+            }
         }
     }, [user]);
 
@@ -47,7 +60,7 @@ export const UserProvider = ({ children }) => {
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
-        setLoading(false)
+        setLoading(false);
     }
 
     const deleteUser = () => {

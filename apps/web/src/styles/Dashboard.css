@@ -1,7 +1,7 @@
 .dashboard-card {
     background-color: var(--white);
-    padding: 40px;
-    border-radius: 16px;
+    padding: clamp(24px, 5vw, 40px);
+    border-radius: clamp(12px, 2vw, 16px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     border: 1px solid var(--border-color);
     max-width: 600px;
@@ -11,39 +11,122 @@
 
 .dashboardText {
     font-weight: bold;
-    font-size: 2em;
+    font-size: clamp(1.5rem, 4vw, 2rem);
     margin-top: 0;
-    margin-bottom: 32px;
+    margin-bottom: clamp(20px, 3vw, 32px);
     color: var(--text-heading);
 }
 
 .dashboard-info-section {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: clamp(8px, 1.5vw, 12px);
     text-align: left;
-    padding-top: 24px;
+    padding-top: clamp(16px, 3vw, 24px);
     border-top: 1px solid var(--border-color);
 }
 
 .dashboardInfo {
-    font-size: 1.1em;
+    font-size: clamp(1rem, 2vw, 1.1rem);
     color: var(--text-primary);
     margin: 0;
 }
 
 .dashboard-vote-button {
-    margin-top: 16px;
+    margin-top: clamp(12px, 2vw, 16px);
     width: auto;
-    padding: 10px 24px;
-    font-size: 0.9rem;
+    padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 24px);
+    font-size: clamp(0.85rem, 1.5vw, 0.9rem);
     align-self: center;
 }
 
 .dashboard-thanks {
-    font-size: 1.1em;
+    font-size: clamp(1rem, 2vw, 1.1rem);
     color: var(--text-primary);
-    margin: 16px 0 0 0;
+    margin: clamp(12px, 2vw, 16px) 0 0 0;
     font-style: italic;
     text-align: center;
+}
+
+
+.election-status-title {
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    font-weight: 600;
+    color: var(--text-heading);
+    margin: 0 0 clamp(12px, 2vw, 16px) 0;
+}
+
+.election-status-pill-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: clamp(12px, 2vw, 16px);
+}
+
+.status-pill {
+    display: inline-block;
+    padding: clamp(6px, 1vw, 8px) clamp(12px, 2vw, 16px);
+    border-radius: clamp(16px, 3vw, 20px);
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pill.status-active {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+}
+
+.status-pill.status-inactive {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #dc2626;
+}
+
+.election-buttons {
+    display: flex;
+    gap: clamp(8px, 1.5vw, 12px);
+    justify-content: center;
+    align-items: center;
+    margin-top: clamp(16px, 2.5vw, 20px);
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.election-buttons .election-button {
+    flex: 1 1 0;
+    min-width: clamp(140px, 22vw, 180px);
+    max-width: clamp(180px, 30vw, 220px);
+    min-height: clamp(40px, 5vw, 48px);
+    height: 100%;
+    padding: clamp(10px, 1.5vw, 12px) clamp(16px, 3vw, 24px);
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    box-sizing: border-box;
+}
+
+.election-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.voter-status-section {
+    border-top: 1px solid var(--border-color);
+}
+
+.dashboard-thanks-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: clamp(12px, 2vw, 24px);
+}
+
+.admin-election-control-section {
+    margin-top: clamp(16px, 3vw, 24px);
+    padding-top: clamp(16px, 3vw, 24px);
+    border-top: 1px solid var(--border-color);
+}
+
+.admin-election-control-section .election-buttons {
+    margin-top: clamp(12px, 2vw, 16px);
 }

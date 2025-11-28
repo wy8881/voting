@@ -1,12 +1,92 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
+import { useRoleCheck } from '../hooks/useRoleCheck';
+import api from '../api/axiosConfig';
 import '../styles/Dashboard.css';
 import withRoleAccess from "./withRoleAcess";
 
 
 const Dashboard = () => {
-    const { user  } = useContext(UserContext);
+    const { user } = useContext(UserContext);
+    const { isAdmin } = useRoleCheck();
+    const navigate = useNavigate();
+    const [electionStatus, setElectionStatus] = useState(null);
+    const [isLoadingStatus, setIsLoadingStatus] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            fetchElectionStatus();
+        }
+    }, [user]);
+
+    async function fetchElectionStatus() {
+        setIsLoadingStatus(true);
+        try {
+            const response = await api.get('api/user/electionStatus');
+            if (response.data && response.data.electionStarted !== undefined) {
+                setElectionStatus(response.data);
+            } else {
+                setElectionStatus({ electionStarted: false });
+            }
+        } catch (error) {
+            console.error('Failed to fetch election status:', error);
+            if (error.response?.status === 403) {
+                window.alert('You do not have permission to view election status.');
+            } else if (error.response?.status === 401) {
+                navigate('/login');
+            } else {
+                setElectionStatus({ electionStarted: false });
+            }
+        } finally {
+            setIsLoadingStatus(false);
+        }
+    }
+
+    async function handleStartElection() {
+        if (!window.confirm('Are you sure you want to start the election?')) {
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            const response = await api.post('api/admin/startElection');
+            window.alert(response.data.message);
+            await fetchElectionStatus();
+        } catch (error) {
+            if (error.response?.status === 403) {
+                window.alert('You do not have permission to start the election.');
+            } else if (error.response?.status === 401) {
+                navigate('/login');
+            } else {
+                window.alert(error.response?.data?.message || 'Failed to start election');
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
+    async function handleStopElection() {
+        if (!window.confirm('Are you sure you want to stop the election?')) {
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            const response = await api.post('api/admin/stopElection');
+            window.alert(response.data.message);
+            await fetchElectionStatus();
+        } catch (error) {
+            if (error.response?.status === 403) {
+                window.alert('You do not have permission to stop the election.');
+            } else if (error.response?.status === 401) {
+                navigate('/login');
+            } else {
+                window.alert(error.response?.data?.message || 'Failed to stop election');
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
 
     return (
         <>
@@ -15,17 +95,62 @@ const Dashboard = () => {
                     <div className="dashboard-card">
                         <h1 className="dashboardText">Welcome back, {user.username}</h1>
                         <div className="dashboard-info-section">
-                            <p className="dashboardInfo">Role: {user.role.split("_")[1].toLowerCase()}</p>
+                            {/* <p className="dashboardInfo">Role: {user.role.split("_")[1].toLowerCase()}</p> */}
+                            
+                            <div className="election-status-section">
+                                <h3 className="election-status-title">Current Election Status</h3>
+                                {isLoadingStatus ? (
+                                    <p className="dashboardInfo">Loading...</p>
+                                ) : (
+                                    <div className="election-status-pill-container">
+                                        <span className={`status-pill ${electionStatus?.electionStarted ? 'status-active' : 'status-inactive'}`}>
+                                            {electionStatus?.electionStarted ? 'Active' : 'Inactive'}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {isAdmin() && (
+                                <div className="admin-election-control-section">
+                                    <h3 className="election-status-title">Election Controls</h3>
+                                    <p className="dashboardInfo" style={{ marginBottom: '16px', color: 'var(--text-secondary)' }}>
+                                        Manage the election status. Start the election to allow voting, or stop it to close voting.
+                                    </p>
+                                    <div className="election-buttons">
+                                        <button
+                                            className="button admin-create-button election-button"
+                                            onClick={handleStartElection}
+                                            disabled={isSubmitting || isLoadingStatus || electionStatus?.electionStarted}
+                                        >
+                                            {isSubmitting ? 'Processing...' : 'Start Election'}
+                                        </button>
+                                        <button
+                                            className="button admin-delete-button election-button"
+                                            onClick={handleStopElection}
+                                            disabled={isSubmitting || isLoadingStatus || !electionStatus?.electionStarted}
+                                        >
+                                            {isSubmitting ? 'Processing...' : 'Stop Election'}
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
                             {user.role === "ROLE_VOTER" && (
                                 <>
-                                    <p className="dashboardInfo">Status: {user.isVoted.toString() === 'true' ? "Voted" : "Not voted"}</p>
-                                    {user.isVoted.toString() === 'false' ? (
-                                        <Link to="/dashboard/ballot" className="button register-button dashboard-vote-button">
-                                            Go to vote
-                                        </Link>
-                                    ) : (
-                                        <p className="dashboard-thanks">Thanks for your participation</p>
-                                    )}
+                                    <div className="voter-status-section">
+                                        <h3 className="election-status-title">Your Vote:</h3>
+                                        <p className="dashboardInfo">Voting Status: {user.isVoted.toString() === 'true' ? "Voted" : "Not voted"}</p>
+                                        {user.isVoted.toString() === 'false' ? (
+                                            <Link to="/dashboard/ballot" className="button register-button dashboard-vote-button">
+                                                Go to vote
+                                            </Link>
+                                        ) : (
+                                            <div className="dashboard-thanks-wrapper">
+                                                <p className="dashboard-thanks">Thanks for your participation!</p>
+                                                <p className="dashboard-thanks">You can review the results once the election closes.</p>
+                                            </div>
+                                        )}
+                                    </div>
                                 </>
                             )}
                         </div>
