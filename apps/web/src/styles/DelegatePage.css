@@ -1,5 +1,38 @@
 .delegate-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    align-items: center;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 0.75rem;
+}
+
+.results-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 2rem;
+}
+
+.results-card h2 {
+    color: var(--text-heading);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.no-results {
+    color: var(--text-primary);
+    font-style: italic;
+    padding: 1rem;
+    text-align: center;
 }

@@ -1,13 +1,44 @@
 import withRoleAccess from "./withRoleAcess";
 import {useEffect, useState} from "react";
 import api from "../api/axiosConfig";
+import { FaCat, FaDog } from "react-icons/fa6";
+import { GiEgyptianBird } from "react-icons/gi";
 import '../styles/DelegatePage.css';
 const CheckResult = () => {
     const [results, setResults] = useState([]);
     const [received, setReceived] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isFirst, setIsFirst] = useState(false);
-    
+    const [candidates, setCandidates] = useState([]);
+
+    useEffect(() => {
+        async function fetchCandidates() {
+            try {
+                await api.get('api/user/allCandidates').then(resp => {
+                    setCandidates(resp.data);
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchCandidates();
+    }, []);
+
+    function getCandidateParty(candidateName) {
+        const candidate = candidates.find(c => c.name === candidateName);
+        return candidate ? candidate.party : null;
+    }
+
+    function renderIcon(party) {
+        if (party === 'Feline Progressive Party') {
+            return <FaCat />;
+        } else if (party === 'Canine Unity Party') {
+            return <FaDog />;
+        } else if (party === 'Avian Freedom Party') {
+            return <GiEgyptianBird />;
+        }
+        return null;
+    }
 
     async function handleRecound() {
         setIsSubmitting(true)
@@ -30,23 +61,32 @@ const CheckResult = () => {
 
     return (
         <div className="delegate-container">
-            <h1>Check Result</h1>
+            <h1>Election Results</h1>
             {isFirst && (
             <>
                 {!received ? (
                     <div>Loading...</div>
                 ) : (
-                    <>
-                        {results && results.length > 0 && results.map(result => (
-                            <div className={'delegate-row'}>
-                                <div>Name: {result.candidateName}</div>
-                                <div>Votes: {result.totalVotes}</div>
+                    <div className="results-card">
+                        {results && results.length > 0 ? (
+                            <div className="results-list">
+                                {results.map((result, index) => {
+                                    const party = getCandidateParty(result.candidateName);
+                                    return (
+                                        <div key={index} className={'delegate-row'}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                {renderIcon(party)}
+                                                {result.candidateName}
+                                            </div>
+                                            <div>Votes: {result.totalVotes}</div>
+                                        </div>
+                                    );
+                                })}
                             </div>
-                        ))}
-                        {results && results.length === 0 && (
-                            <div>No result</div>
+                        ) : (
+                            <div className="no-results">No results available</div>
                         )}
-                    </>
+                    </div>
                 )}
             </>)}
 

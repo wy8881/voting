@@ -8,7 +8,6 @@ import com.example.voting.payload.request.CreatePartyRequest;
 import com.example.voting.payload.response.MessageResponse;
 import com.example.voting.service.DBService;
 import com.example.voting.utils.Validation;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
