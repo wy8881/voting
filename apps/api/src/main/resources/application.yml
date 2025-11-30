@@ -5,22 +5,33 @@ spring:
     active: ${SPRING_PROFILES_ACTIVE:dev}
   data:
     mongodb:  
-      uri: ${MONGODB_URI:mongodb://localhost:27017/voting_db}  # 默认值
+      uri: ${MONGODB_URI:mongodb://localhost:27017/voting_db}  
 
 server:
   port: ${PORT:8080}
 
 app:
   jwt:
-    secret: ${JWTSECRET}         # 没有默认值，需要提供
-    expire-ms: 3600000           # 有默认值
+    secret: ${JWTSECRET}         
+    expire-ms: 3600000           
   cors:
     allowed-origins:
-      - http://localhost:3000    # 基础配置
+      - http://localhost:3000    
     allowed-methods:
       - GET
       - POST
 
+
+management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info
+        base-path: /actuator
+    endpoint:
+      health:
+        show-details: when-authorized
+
 logging:
   level:
-    root: INFO                   # 基础日志级别
+    root: INFO                   

@@ -17,17 +17,17 @@ app:
     allowed-origins:
       - https://voting.wyprojects.com
       - https://wyprojects.com
-    allowed-methods:              # ← 添加这个
+    allowed-methods:              
       - GET
       - POST
       - PUT
       - DELETE
       - OPTIONS
       - PATCH
-    allowed-headers:              # ← 添加这个
+    allowed-headers:              
       - "*"
-    allow-credentials: true       # ← 添加这个
-    max-age: 3600                 # ← 添加这个
+    allow-credentials: true       
+    max-age: 3600                 
 
 logging:
   level:
