@@ -57,10 +57,14 @@ const Login = () => {
                 handleError("Unmatched username or password")
             }
             else if(error.response){
-                handleError(error.response.data.message)
+                handleError(error.response.data.message || "An error occurred")
+            }
+            else if(error.request) {
+                // Network error - server not reachable
+                handleError("Network error: Unable to connect to server. Please check if the server is running.")
             }
             else {
-                handleError(error.message)
+                handleError(error.message || "An unexpected error occurred")
             }
         }
         finally {

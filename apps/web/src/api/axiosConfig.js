@@ -1,11 +1,16 @@
 import axios from 'axios';
 
+// Fallback to localhost if environment variable is not set
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+
+// Log API URL in development for debugging
+if (process.env.NODE_ENV === 'development') {
+    console.log('API Base URL:', API_URL);
+}
+
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    withCredentials: true,
-    headers: {
-        'Access-Control-Allow-Origin': process.env.REACT_APP_FRONTEND_URL
-    }
+    baseURL: API_URL,
+    withCredentials: true
 });
 
 const token = sessionStorage.getItem('Bearer');

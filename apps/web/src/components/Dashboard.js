@@ -139,22 +139,20 @@ const Dashboard = () => {
                             )}
 
                             {user.role === "ROLE_VOTER" && (
-                                <>
-                                    <div className="voter-status-section">
-                                        <h3 className="election-status-title">Your Vote:</h3>
-                                        <p className="dashboardInfo">Voting Status: {user.isVoted.toString() === 'true' ? "Voted" : "Not voted"}</p>
-                                        {user.isVoted.toString() === 'false' ? (
-                                            <Link to="/dashboard/ballot" className="button register-button dashboard-vote-button">
-                                                Go to vote
-                                            </Link>
-                                        ) : (
-                                            <div className="dashboard-thanks-wrapper">
-                                                <p className="dashboard-thanks">Thanks for your participation!</p>
-                                                <p className="dashboard-thanks">You can review the results once the election closes.</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </>
+                                <div className="voter-status-section">
+                                    <h3 className="election-status-title">Your Vote:</h3>
+                                    <p className="dashboardInfo">Voting Status: {user.isVoted.toString() === 'true' ? "Voted" : "Not voted"}</p>
+                                    {user.isVoted.toString() === 'false' ? (
+                                        <Link to="/dashboard/ballot" className="button register-button dashboard-vote-button">
+                                            Go to vote
+                                        </Link>
+                                    ) : (
+                                        <div className="dashboard-thanks-wrapper">
+                                            <p className="dashboard-thanks">Thanks for your participation!</p>
+                                            <p className="dashboard-thanks">You can review the results once the election closes.</p>
+                                        </div>
+                                    )}
+                                </div>
                             )}
                         </div>
                     </div>

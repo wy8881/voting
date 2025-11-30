@@ -33,11 +33,12 @@
 }
 
 .dashboard-vote-button {
-    margin-top: clamp(12px, 2vw, 16px);
+    margin-top: clamp(8px, 1.5vw, 12px);
     width: auto;
     padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 24px);
     font-size: clamp(0.85rem, 1.5vw, 0.9rem);
-    align-self: center;
+    align-self: flex-start;
+    display: inline-block;
 }
 
 .dashboard-thanks {
@@ -111,7 +112,12 @@
 }
 
 .voter-status-section {
+    margin-top: clamp(16px, 3vw, 24px);
+    padding-top: clamp(16px, 3vw, 24px);
     border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 2vw, 16px);
 }
 
 .dashboard-thanks-wrapper {

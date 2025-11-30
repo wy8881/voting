@@ -1,0 +1,35 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_CLUSTER}/${MONGO_DATABASE}
+
+server:
+  port: ${PORT:8080}
+
+app:
+  encryption:
+    key: ${ENCRYPTION_KEY}
+    init-vector: ${ENCRYPTION_INIT_VECTOR}
+  jwt:
+    secret: ${JWTSECRET}
+    expire-ms: 3600000
+  cors:
+    allowed-origins:
+      - https://voting.wyprojects.com
+      - https://wyprojects.com
+    allowed-methods:              # ← 添加这个
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      - PATCH
+    allowed-headers:              # ← 添加这个
+      - "*"
+    allow-credentials: true       # ← 添加这个
+    max-age: 3600                 # ← 添加这个
+
+logging:
+  level:
+    root: INFO
+    com.example.voting: INFO
