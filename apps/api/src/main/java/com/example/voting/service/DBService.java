@@ -232,17 +232,16 @@ public class DBService {
         
         LocalDateTime now = LocalDateTime.now();
         
-        ElectionResult electionResult = ElectionResult.builder()
-                .candidateTotalVotes(candidateTotalVotes)
-                .lastCalculatedAt(now)
-                .build();
+        ElectionResult electionResult = new ElectionResult();
+        electionResult.setCandidateTotalVotes(candidateTotalVotes);
+        electionResult.setLastCalculatedAt(now);
         
         electionResultRepository.save(electionResult);
         
-        return ElectionResultResponse.builder()
-                .candidateTotalVotes(candidateTotalVotes)
-                .lastCalculatedAt(now)
-                .build();
+        ElectionResultResponse response = new ElectionResultResponse();
+        response.setCandidateTotalVotes(candidateTotalVotes);
+        response.setLastCalculatedAt(now);
+        return response;
     }
 
     public List<User> getDelegatesAndLoggers() {
@@ -303,10 +302,10 @@ public class DBService {
             throw new RuntimeException("No election results available.");
         }
         ElectionResult result = latestResult.get();
-        return ElectionResultResponse.builder()
-                .candidateTotalVotes(result.getCandidateTotalVotes())
-                .lastCalculatedAt(result.getLastCalculatedAt())
-                .build();
+        ElectionResultResponse response = new ElectionResultResponse();
+        response.setCandidateTotalVotes(result.getCandidateTotalVotes());
+        response.setLastCalculatedAt(result.getLastCalculatedAt());
+        return response;
     }
 
 }

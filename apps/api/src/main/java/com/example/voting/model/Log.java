@@ -1,16 +1,10 @@
 package com.example.voting.model;
 
 import com.example.voting.component.EncryptionUtil;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Document(collection="logs")
 public class Log {
     @Id
@@ -18,8 +12,41 @@ public class Log {
     private String username;
     private String action;
 
+    public Log() {
+    }
+
+    public Log(ObjectId id, String username, String action) {
+        this.id = id;
+        this.username = username;
+        this.action = action;
+    }
+
     public Log(String username, String action) {
         this.username = username;
+        this.action = action;
+    }
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
         this.action = action;
     }
 
@@ -30,7 +57,4 @@ public class Log {
     public Log decrypt() {
         return new Log(this.id, EncryptionUtil.decrypt(this.username), EncryptionUtil.decrypt(this.action));
     }
-
-
-
 }
