@@ -1,135 +1,217 @@
-# Turborepo starter
+# 🗳️ Animal E-Voting System
 
-This Turborepo starter is maintained by the Turborepo core team.
+[![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react&logoColor=white)]()
+[![Spring Boot](https://img.shields.io/badge/Backend-Spring%20Boot-6DB33F?logo=springboot&logoColor=white)]()
+[![Spring Security](https://img.shields.io/badge/Security-Spring%20Security-6DB33F?logo=springsecurity&logoColor=white)]()
+[![JWT](https://img.shields.io/badge/Auth-JWT-orange?logo=jsonwebtokens&logoColor=white)]()
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?logo=mongodb&logoColor=white)]()
+[![Java](https://img.shields.io/badge/Language-Java-007396?logo=openjdk&logoColor=white)]()
+[![JavaScript](https://img.shields.io/badge/Language-JavaScript-F7DF1E?logo=javascript&logoColor=black)]()
+[![Vercel](https://img.shields.io/badge/Hosting-Frontend%20on%20Vercel-black?logo=vercel&logoColor=white)]()
+[![Railway](https://img.shields.io/badge/Hosting-Backend%20on%20Railway-0B0D0E?logo=railway&logoColor=white)]()
+[![Cloudflare](https://img.shields.io/badge/Security-Cloudflare-F38020?logo=cloudflare&logoColor=white)]()
 
-## Using this example
+A full-stack electronic voting platform inspired by real-world election workflows (AEC-style).  
+The system implements **secure anonymous voting**, **role-based access control**, **audit logging**, **recount workflow**, and a fully deployed public environment.
 
-Run the following command:
+🔗 [**Live Frontend**](https://voting.wyprojects.com/  )
+🔗 [**Backend API** ](https://api-vote.wyprojects.com  )
+🔗 [**Health Check for Backend**  ](https://api-vote.wyprojects.com/actuator/health)
 
-```sh
-npx create-turbo@latest
+
+---
+
+## 🚀 Tech Stack
+
+### **Frontend**
+- React (Create React App)
+- React Router
+- Axios
+- Hosted on **Vercel**
+- Custom domain: `https://voting.wyprojects.com/`
+
+### **Backend**
+- Spring Boot  
+- Spring Security (JWT Authentication)
+- Role-Based Access Control (RBAC)
+- AES-256 Vote Anonymisation
+- REST API
+- Hosted on **Railway**
+
+### **Database**
+- MongoDB Atlas
+- Daily automatic reset (clean demo environment)
+
+### **Security**
+- Cloudflare (DDoS Protection + CDN)
+- JWT Authorization
+- IP-limited API
+- Strict CORS validation
+
+---
+
+## 🎨 Frontend Overview
+
+The frontend is a fully responsive React application deployed on **Vercel** with a custom domain.
+
+🔗 **Live Frontend:** https://voting.wyprojects.com/
+
+### 🧩 Key Responsibilities
+- Provides UI for all user roles  
+- Handles routing (Dashboard, Ballot, Results, Login/Register)  
+- Communicates with the backend using JWT-secured REST API  
+- Dynamically displays election status (Upcoming → Active → Closed)  
+- Role-based navigation rendering  
+- Ballot display, candidate listing, results panel  
+- Protected routes (UI-level RBAC)
+- API health check (`/actuator/health`)
+
+### 🖼️ UI/UX Highlights
+- Pill-style election status labels  
+- Card-based ballot layout with hover states  
+- Clean spacing & typography  
+- Mobile-responsive  
+- Role-specific dashboards  
+- Error/empty states  
+- Election timeline panel (start time, end time, status, voter status)
+
+### 💡 Frontend Tech Details
+- React (CRA)
+- React Router
+- Axios
+- JWT handling in memory
+- Reusable UI components (Status Pills, Tags, Cards)
+- Conditional rendering for roles
+- Fetches backend health on load
+
+### 🖥️ Frontend Deployment
+- Hosted on **Vercel**
+- Automatic build from `apps/web`
+- CORS allowed for this domain only
+- SSL enabled by default
+
+---
+
+## 🛠️ Backend Overview
+
+The backend is built with **Spring Boot** and provides a fully secure, production-style REST API.  
+It supports:
+
+- JWT authentication  
+- Role-based access control (Admin, Delegate, Logger, Voter)  
+- AES-256 encrypted & anonymised vote storage  
+- BCrypt hashing for credentials  
+- Encrypted audit logs  
+- Election workflow control  
+- Recount logic for Delegates  
+- Daily database reset (cron + mongosh)
+
+**API Base URL:**  
+https://api-vote.wyprojects.com
+
+
+---
+
+## 🌐 Deployment & Infrastructure
+
+The system is deployed using a modern, production-style cloud setup:
+
+### **Frontend (Vercel)**
+- Global CDN  
+- Automatic HTTPS  
+- Zero-config deployment  
+- Custom domain  
+- Path: `/apps/web`
+
+### **Backend (Railway)**
+- Spring Boot service  
+- Environment variables securely stored  
+- Auto-redeploy on changes  
+- Custom API domain: `api-vote.wyprojects.com`
+
+### **Security Layer (Cloudflare)**
+- DDoS Protection  
+- WAF Firewall  
+- SSL Proxy  
+- Bot Mitigation  
+- DNS Routing
+
+### **Database (MongoDB Atlas)**
+- Cloud NoSQL database  
+- Network access rules  
+- Daily automated reset with `cron + mongosh`
+
+---
+
+## 🏛️ System Architecture
+
+```
+                   +-----------------------------+
+                   |         Vercel (UI)         |
+                   |     React Frontend App      |
+                   +--------------+--------------+
+                                  |
+                                  | HTTPS (CORS allowed)
+                                  v
+                      +-----------+------------+
+                      |     Cloudflare Proxy   |
+                      | (DDoS, CDN, Firewall)  |
+                      +-----------+------------+
+                                  |
+                                  v
+                      +-----------+------------+
+                      |      Railway Backend   |
+                      |     Spring Boot API    |
+                      +-----------+------------+
+                                  |
+                                  v
+                      +-----------+------------+
+                      |     MongoDB Atlas      |
+                      |  Encrypted Vote Store  |
+                      +-----------+------------+
 ```
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
+## ✨ Features
 
-### Apps and Packages
+### 🔐 Secure Voting
+- Anonymous ballots  
+- One-vote-per-user  
+- AES-256 encrypted vote documents  
+- Admin & delegate cannot see voter details  
+- Results shown only after election closes  
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### 🧩 Role-Based Access Control
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+| Role | Capabilities |
+|------|--------------|
+| **Voter** | Cast vote, view election status & results |
+| **Delegate** | Manage parties/candidates, trigger recount |
+| **Logger** | View/export audit logs |
+| **Admin** | Election configuration + creating privileged accounts |
 
-### Utilities
+---
 
-This Turborepo has some additional tools already setup for you:
+## 📌 Why This Architecture Matters
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+This project demonstrates:
 
-### Build
+- Real-world **full-stack engineering**  
+- End-to-end **cloud deployment**  
+- Understanding of **security, JWT, RBAC, encryption**  
+- Practical **DevOps practices**  
+- Full **CI-ready architecture**  
+- Production-level design with Cloudflare protection  
 
-To build all apps and packages, run the following command:
+This is not a toy project—it behaves like a **small-scale professional voting platform**.
 
-```
-cd my-turborepo
+---
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+## 👩‍💻 Author
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+**Yi Wang**  
+Full-Stack Developer  
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+🌐 Portfolio  
+🔗 [LinkedIn](www.linkedin.com/in/yi-wang-meow99)
