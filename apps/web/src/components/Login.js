@@ -1,8 +1,10 @@
 import React, {useContext, useState} from "react";
 import {Link, useNavigate} from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import api from "../api/axiosConfig";
 import {UserContext} from "../contexts/UserContext";
-import {isPasswordValid, isUsernameValid, setToken} from "../utils/Utils";
+import {isUsernameValid, setToken} from "../utils/Utils";
 import '../styles/Register.css'
 import withNoLogged from "./witNotLogged";
 
@@ -13,34 +15,49 @@ const Login = () => {
     const navigate = useNavigate();
     const {setUser} = useContext(UserContext);
 
+    const sanitizeUsername = (value) => {
+        let sanitized = value.trim();
+        sanitized = sanitized.replace(/[^a-zA-Z0-9]/g, '');
+        return sanitized;
+    };
 
-    function handleError(message) {
-        window.alert(message);
-        setUsername("");
-        setPassword("");
-    }
+    const sanitizePassword = (value) => {
+        return value.trim();
+    };
+
+    const handleUsernameChange = (e) => {
+        const value = e.target.value;
+        const sanitized = value.replace(/[<>\"'&]/g, '');
+        setUsername(sanitized);
+    };
+
+    const handlePasswordChange = (e) => {
+        const value = e.target.value;
+        setPassword(value);
+    };
     async function handleSubmit(e) {
         e.preventDefault();
-        setIsLogging(true)
-        if(username === "" || password === "") {
-            handleError("Username and password cannot be empty")
-            setIsLogging(false)
+        setIsLogging(true);
+        
+        const sanitizedUsername = sanitizeUsername(username);
+        const sanitizedPassword = sanitizePassword(password);
+        
+        if (!sanitizedUsername || !sanitizedPassword) {
+            toast.error("Username and password cannot be empty");
+            setIsLogging(false);
             return;
         }
-        if(!isUsernameValid(username)) {
-            handleError("Username can only contain numbers and alphabets")
-            setIsLogging(false)
+
+        if (!isUsernameValid(sanitizedUsername)) {
+            toast.error("Invalid username format");
+            setIsLogging(false);
             return;
         }
-        if(!isPasswordValid(password)) {
-            handleError("Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character. The special characters are @$!%*?&#")
-            setIsLogging(false)
-            return;
-        }
+
         try {
             const resp = await api.post('api/auth/authenticate', {
-                "username": username,
-                "password": password
+                "username": sanitizedUsername,
+                "password": sanitizedPassword
             })
             setToken(resp, api, "Login failed")
             const newUser = {
@@ -54,17 +71,16 @@ const Login = () => {
         }
         catch (error) {
             if(error.response && error.response.status === 401) {
-                handleError("Unmatched username or password")
+                toast.error("Unmatched username or password");
             }
             else if(error.response){
-                handleError(error.response.data.message || "An error occurred")
+                toast.error(error.response.data.message || "An error occurred");
             }
             else if(error.request) {
-                // Network error - server not reachable
-                handleError("Network error: Unable to connect to server. Please check if the server is running.")
+                toast.error("Network error: Unable to connect to server. Please check if the server is running.");
             }
             else {
-                handleError(error.message || "An unexpected error occurred")
+                toast.error(error.message || "An unexpected error occurred");
             }
         }
         finally {
@@ -74,6 +90,7 @@ const Login = () => {
 
     return (
         <div className="register-container">
+            <Toaster position="top-center" />
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
                 <div className="input-container">
@@ -81,10 +98,10 @@ const Login = () => {
                     <input
                         className="input-field"
                         id="username"
-                        type="username"
+                        type="text"
                         value={username}
                         maxLength={10}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={handleUsernameChange}
                     />
                 </div>
                 <div className="input-container">
@@ -95,7 +112,7 @@ const Login = () => {
                         type="password"
                         value={password}
                         maxLength={20}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={handlePasswordChange}
                     />
                 </div>
                 <div className="button-container">
