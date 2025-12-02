@@ -2,15 +2,11 @@ package com.example.voting.configuration;
 
 import com.example.voting.jwt.AuthEntryPointJwt;
 import com.example.voting.jwt.AuthTokenFilter;
-import com.example.voting.service.MyUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,13 +17,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import com.example.voting.configuration.CorsConfig;
-import java.util.Arrays;
+import com.example.voting.component.MyAuthenticationProvider;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -37,27 +32,18 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableTransactionManagement
 public class SecurityConfiguration {
 
-    @Autowired
-    MyUserDetailsService userDetailsService;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    private final CorsConfig corsConfig;
 
-    @Autowired
-    private CorsConfig corsConfig;
+    public SecurityConfiguration(AuthEntryPointJwt unauthorizedHandler, CorsConfig corsConfig) {
+        this.unauthorizedHandler = unauthorizedHandler;
+        this.corsConfig = corsConfig;
+    }
 
     @Bean
     public AuthTokenFilter authenticationTokenFilter() throws Exception {
         return new AuthTokenFilter();
-    }
-
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
     }
 
     @Bean
@@ -67,7 +53,7 @@ public class SecurityConfiguration {
     CookieClearingLogoutHandler cookies = new CookieClearingLogoutHandler("Bearer");
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -90,7 +76,7 @@ public class SecurityConfiguration {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, MyAuthenticationProvider authenticationProvider) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(unauthorizedHandler))
@@ -104,7 +90,7 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated()
                 );
 
-        http.authenticationProvider(authenticationProvider());
+        http.authenticationProvider(authenticationProvider);
         http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

@@ -8,22 +8,18 @@ import com.example.voting.dto.request.LoginRequest;
 import com.example.voting.dto.request.SignupRequest;
 import com.example.voting.dto.response.JWTResponse;
 import com.example.voting.dto.response.MessageResponse;
-import com.example.voting.service.DBService;
+import com.example.voting.service.UserService;
+import com.example.voting.service.VoteService;
 import com.example.voting.service.LogService;
-import com.example.voting.service.MyUserDetails;
 import com.example.voting.utils.Validation;
-import com.nimbusds.jwt.JWT;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import com.example.voting.component.MyAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,14 +31,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
-    DaoAuthenticationProvider authenticationProvider;
-
+    MyAuthenticationProvider authenticationProvider;
     @Autowired
     JwtUtils jwtUtils;
     @Autowired
     PasswordEncoder encoder;
     @Autowired
-    DBService dbService;
+    UserService userService;
+    @Autowired
+    VoteService voteService;
     @Autowired
     LogService logService;
 
@@ -51,6 +48,7 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        logger.info("AuthController - Authenticating user: {}", loginRequest.getUsername());
         if(!Validation.isPasswordValid(loginRequest.getPassword()) || !Validation.isUsernameValid(loginRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -60,31 +58,35 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
-        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        var authorities = userDetails.getAuthorities();
-        logger.info("AuthController - Username: {}, Authorities: {}", userDetails.getUsername(), authorities);
+        String username = authentication.getName();
+        
+        var authorities = authentication.getAuthorities();
+        logger.info("AuthController - Username: {}, Authorities: {}", username, authorities);
         authorities.forEach(auth -> logger.info("AuthController - Role: {}", auth.getAuthority()));
         String role = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList().get(0);
         logger.info("AuthController - Selected role: {}", role);
-        logService.log(userDetails.getUsername(), Action.LOGIN);
+        
+        String jwt = jwtUtils.generateJwtToken(username, role);
+        logService.log(username, Action.LOGIN);
         boolean hasVoted;
         if(role.equals(ERole.ROLE_VOTER.toString())) {
-            hasVoted = dbService.hasVote(userDetails.getUsername());
+            hasVoted = voteService.hasVote(username);
         } else {
             hasVoted = false;
         }
 
+        User user = userService.getUserByUsername(username);
+        Boolean isDemoAccount = user != null ? user.getIsDemoAccount() : false;
+
         return ResponseEntity.ok(new JWTResponse(
                 "Bearer " + jwt,
-                userDetails.getUsername(),
-                userDetails.getEmail(),
+                username,
+                user != null ? user.getEmail() : "",
                 role,
-                hasVoted) {
-        });
+                hasVoted,
+                isDemoAccount));
     }
 
     @PostMapping("register")
@@ -104,28 +106,31 @@ public class AuthController {
                     .badRequest()
                     .body(new MessageResponse("Error: Email is not valid!"));
         }
-        // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                signUpRequest.getPassword());
         user.setRole(ERole.ROLE_VOTER);
         try {
-            dbService.createVoter(user.encrypt());
+            userService.createUser(user);
         } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse(e.getMessage()));
         }
 
-        String jwt = jwtUtils.generateJwtToken(signUpRequest.getUsername());
+        String jwt = jwtUtils.generateJwtToken(signUpRequest.getUsername(), user.getRole().toString());
         logService.log(user.getUsername(), Action.REGISTER_VOTER);
+
+        User createdUser = userService.getUserByUsername(user.getUsername());
+        Boolean isDemoAccount = createdUser != null ? createdUser.getIsDemoAccount() : false;
 
         return ResponseEntity.ok(new JWTResponse(
                 "Bearer " + jwt,
-                user.getUsername(),
-                user.getEmail(),
+                createdUser != null ? createdUser.getUsername() : user.getUsername(),
+                createdUser != null ? createdUser.getEmail() : user.getEmail(),
                 user.getRole().toString(),
-                false));
+                false,
+                isDemoAccount));
     }
 
     @GetMapping("/logout")

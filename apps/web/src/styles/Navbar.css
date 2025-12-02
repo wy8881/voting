@@ -2,7 +2,6 @@
     display: none;
 }
 
-/* Show overlay on mobile devices */
 @media (max-width: 768px) {
     .navbar-overlay {
         display: block;
@@ -165,8 +164,6 @@
     font-weight: 300;
 }
 
-/* Responsive styles using container queries with media query fallback */
-/* Container query - modern browsers */
 @container navbar (max-width: 768px) {
     .navbar-burger {
         display: flex;
@@ -286,7 +283,6 @@
     }
 }
 
-/* Fallback: Media query for browsers that don't support container queries */
 @supports not (container-type: inline-size) {
     @media (max-width: 768px) {
         .navbar-burger {

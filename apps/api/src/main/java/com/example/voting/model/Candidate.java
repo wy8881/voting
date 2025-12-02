@@ -14,6 +14,8 @@ public class Candidate {
     @Indexed(unique = true)
     private String name;
     private String party;
+    private Boolean isSystemPreset;
+    private String createdBy;
 
     public Candidate() {
     }
@@ -27,6 +29,15 @@ public class Candidate {
     public Candidate(String name, String party) {
         this.name = name;
         this.party = party;
+        this.isSystemPreset = false;
+        this.createdBy = null;
+    }
+
+    public Candidate(String name, String party, Boolean isSystemPreset, String createdBy) {
+        this.name = name;
+        this.party = party;
+        this.isSystemPreset = isSystemPreset != null ? isSystemPreset : false;
+        this.createdBy = createdBy;
     }
 
     public ObjectId getId() {
@@ -51,5 +62,21 @@ public class Candidate {
 
     public void setParty(String party) {
         this.party = party;
+    }
+
+    public Boolean getIsSystemPreset() {
+        return isSystemPreset;
+    }
+
+    public void setIsSystemPreset(Boolean isSystemPreset) {
+        this.isSystemPreset = isSystemPreset;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 }

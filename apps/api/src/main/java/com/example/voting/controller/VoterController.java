@@ -3,7 +3,8 @@ package com.example.voting.controller;
 import com.example.voting.model.Action;
 import com.example.voting.dto.request.VoteRequest;
 import com.example.voting.dto.response.MessageResponse;
-import com.example.voting.service.DBService;
+import com.example.voting.service.VoteService;
+import com.example.voting.service.PartyService;
 import com.example.voting.service.LogService;
 import com.example.voting.utils.Validation;
 import jakarta.validation.Valid;
@@ -18,7 +19,9 @@ import java.util.List;
 @PreAuthorize("hasRole('ROLE_VOTER')")
 public class VoterController {
     @Autowired
-    DBService dbService;
+    VoteService voteService;
+    @Autowired
+    PartyService partyService;
     @Autowired
     LogService logService;
     @GetMapping
@@ -37,7 +40,7 @@ public class VoterController {
             if(!Validation.isVoteValid(type, preferences, voterName, expectedCount)) {
                 throw new RuntimeException("Invalid vote");
             }
-            dbService.vote(preferences, voterName, type);
+            voteService.vote(preferences, voterName, type);
 
         }
         catch (Exception e) {
@@ -49,9 +52,9 @@ public class VoterController {
 
     private int getExpectedCount(String type) {
         if (type.equals("party")) {
-            return dbService.getPartiesCount();
+            return partyService.getPartiesCount();
         } else if (type.equals("candidate")) {
-            return dbService.getCandidatesCount();
+            return partyService.getCandidatesCount();
         } else {
             throw new RuntimeException("Invalid vote type");
         }

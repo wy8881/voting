@@ -20,10 +20,9 @@ const PasswordHelp = ({ password, isFocused, mode = 'register' }) => {
     const getProgressColor = () => {
         if (progress === 100) return '#10b981'; // green
         if (progress >= 60) return '#f59e0b'; // orange
-        return '#dc2626'; // red
+        return '#dc2626';
     };
 
-    // Login mode: show simplified version
     if (mode === 'login') {
         return (
             <div className="password-help password-help-login">
@@ -46,7 +45,6 @@ const PasswordHelp = ({ password, isFocused, mode = 'register' }) => {
         );
     }
 
-    // Register mode: show full requirements
     return (
         <div className="password-help">
             <div className="password-help-header">

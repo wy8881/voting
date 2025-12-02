@@ -2,14 +2,19 @@ import '../styles/Register.css'
 import {isNameValid} from "../utils/Utils";
 import {useState} from "react";
 import api from "../api/axiosConfig";
+import toast from 'react-hot-toast';
 import withRoleAccess from "./withRoleAcess";
 const CreateNewCandidate = ()  => {
     const [name, setName] = useState("");
     const [party, setParty] = useState("");
     const [rank, setRank] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    function handleMsg(message) {
-        window.alert(message);
+    function handleMsg(message, isError = false) {
+        if (isError) {
+            toast.error(message);
+        } else {
+            toast.success(message);
+        }
         setName("");
         setParty("")
         setRank("")
@@ -18,15 +23,18 @@ const CreateNewCandidate = ()  => {
         e.preventDefault();
         setIsSubmitting(true)
         if(name === "") {
-            handleMsg("Candidate name cannot be empty")
+            handleMsg("Candidate name cannot be empty", true)
+            setIsSubmitting(false);
             return;
         }
         if(party === "") {
-            handleMsg("The candidate must be associated with a party")
+            handleMsg("The candidate must be associated with a party", true)
+            setIsSubmitting(false);
             return;
         }
         if (!isNameValid(name)) {
-            handleMsg("Candidate name can only contain alphabets and space")
+            handleMsg("Candidate name can only contain alphabets and space", true)
+            setIsSubmitting(false);
             return;
         }
         try {
@@ -35,12 +43,14 @@ const CreateNewCandidate = ()  => {
                 "party": party,
                 "rank": rank
             }).then(resp => {
-                handleMsg(resp.data.message)
+                handleMsg(resp.data.message, false)
             })
         } catch (error) {
             console.log(error)
-            if(error.response.status === 400) {
-                handleMsg(error.response.data.message)
+            if(error.response && error.response.status === 400) {
+                handleMsg(error.response.data.message, true)
+            } else {
+                handleMsg("Failed to create candidate", true)
             }
         }
         finally {

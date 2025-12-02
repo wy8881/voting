@@ -6,6 +6,8 @@ import api from "../api/axiosConfig";
 import { FaCat, FaDog } from "react-icons/fa6";
 import { GiEgyptianBird } from "react-icons/gi";
 import { ClipLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
+import { confirm } from '../utils/confirmDialog';
 import withRoleAccess from "./withRoleAcess";
 
 const Ballot = () => {
@@ -136,16 +138,23 @@ const Ballot = () => {
     }
 
     function handleError(message) {
-        window.alert(message);
+        toast.error(message);
         setIsSubmitting(false)
         setVotes({});
     }
 
-    function handleClearAll() {
-        if (window.confirm('Are you sure you want to clear all votes?')) {
-            setVotes({});
-            setClickOrder({ above: [], below: [] });
-        }
+    async function handleClearAll() {
+        const confirmed = await confirm({
+            title: 'Clear All Votes',
+            message: 'Are you sure you want to clear all votes?',
+            confirmText: 'Clear All',
+            variant: 'default'
+        });
+        
+        if (!confirmed) return;
+        
+        setVotes({});
+        setClickOrder({ above: [], below: [] });
     }
 
     function handleSubmit(e) {
@@ -160,7 +169,7 @@ const Ballot = () => {
                     "preferences": partiesPreferenceList,
                     "type": "party"
                 }).then(resp => {
-                    window.alert(resp.data.message);
+                    toast.success(resp.data.message);
                     const newUser = {
                         username: user.username,
                         email: user.email,
@@ -179,7 +188,7 @@ const Ballot = () => {
                     "preferences": candidatesPreferenceList,
                     "type": "candidate"
                 }).then(resp => {
-                    window.alert(resp.data.message);
+                    toast.success(resp.data.message);
                     const newUser = {
                         username: user.username,
                         email: user.email,
@@ -279,7 +288,8 @@ const Ballot = () => {
     const hasVoted = user && (user.isVoted === true || user.isVoted === 'true');
 
     return (
-        (receiveCandidates === false || receiveParties === false) ? (
+        <>
+            {(receiveCandidates === false || receiveParties === false) ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
                 <ClipLoader color="#2563EB" size={50} />
             </div>
@@ -395,7 +405,8 @@ const Ballot = () => {
                     </div>
                 </div>
             </>
-        )
+        )}
+        </>
     );
 }
 

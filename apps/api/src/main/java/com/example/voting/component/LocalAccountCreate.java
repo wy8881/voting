@@ -3,7 +3,7 @@ package com.example.voting.component;
 import com.example.voting.model.Action;
 import com.example.voting.model.ERole;
 import com.example.voting.model.User;
-import com.example.voting.service.DBService;
+import com.example.voting.service.UserService;
 import com.example.voting.service.LogService;
 import com.example.voting.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import static java.lang.System.exit;
 @Component
 public class LocalAccountCreate implements CommandLineRunner {
     @Autowired
-    private DBService dbService;
+    private UserService userService;
     @Autowired
     PasswordEncoder encoder;
     @Autowired
@@ -43,7 +43,7 @@ public class LocalAccountCreate implements CommandLineRunner {
         Console console = System.console();
         System.out.println("Creating local admin account...");
         String username = console.readLine("Username: ");
-        if(dbService.existsByUsername(username)) {
+        if(userService.existsByUsername(username)) {
             System.out.println("User already exists");
             return;
         }
@@ -57,9 +57,9 @@ public class LocalAccountCreate implements CommandLineRunner {
             System.out.println("Password or Username is not valid!");
             return;
         }
-        User user = new User(username, email, encoder.encode(password));
+        User user = new User(username, email, password);
         user.setRole(role);
-        dbService.createUser(user);
+        userService.createUser(user);
         logService.log(username, Action.REGISTER_ADMIN);
         System.out.println(role.getName() + " " + username + " created");
     }

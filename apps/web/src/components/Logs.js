@@ -3,6 +3,7 @@ import withRoleAccess from "./withRoleAcess";
 import '../styles/Logs.css'
 import api from "../api/axiosConfig";
 import {isUsernameValid} from "../utils/Utils";
+import toast from 'react-hot-toast';
 
 const  Logs = () => {
     const [logs, setLogs] = useState([]);
@@ -10,7 +11,7 @@ const  Logs = () => {
     const [action, setAction] = useState("");
 
     function handleError(error) {
-        window.alert(error);
+        toast.error(error);
         setUsername("");
         setAction("");
     }

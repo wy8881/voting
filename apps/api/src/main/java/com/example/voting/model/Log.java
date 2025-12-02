@@ -49,12 +49,4 @@ public class Log {
     public void setAction(String action) {
         this.action = action;
     }
-
-    public Log encrypt() {
-        return new Log(EncryptionUtil.encrypt(this.username), EncryptionUtil.encrypt(this.action));
-    }
-
-    public Log decrypt() {
-        return new Log(this.id, EncryptionUtil.decrypt(this.username), EncryptionUtil.decrypt(this.action));
-    }
 }

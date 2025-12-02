@@ -4,7 +4,8 @@ import { Toaster } from 'react-hot-toast';
 import toast from 'react-hot-toast';
 import api from "../api/axiosConfig";
 import {UserContext} from "../contexts/UserContext";
-import {isUsernameValid, setToken} from "../utils/Utils";
+import {isUsernameValid, setToken, decodeJwtToken} from "../utils/Utils";
+import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 import '../styles/Register.css'
 import withNoLogged from "./witNotLogged";
 
@@ -12,8 +13,11 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isLogging, setIsLogging] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const {setUser} = useContext(UserContext);
+
+    const DEMO_PASSWORD = "2qmbWuNHy!HI";
 
     const sanitizeUsername = (value) => {
         let sanitized = value.trim();
@@ -60,11 +64,13 @@ const Login = () => {
                 "password": sanitizedPassword
             })
             setToken(resp, api, "Login failed")
+            const tokenData = decodeJwtToken(resp.data.token);
             const newUser = {
                 username: resp.data.username,
                 email: resp.data.email,
-                role: resp.data.role,
-                isVoted: resp.data.isVoted
+                role: tokenData ? tokenData.role : resp.data.role,
+                isVoted: resp.data.isVoted,
+                isDemoAccount: resp.data.isDemoAccount
             }
             setUser(newUser);
             navigate(`/dashboard`);
@@ -100,27 +106,55 @@ const Login = () => {
                         id="username"
                         type="text"
                         value={username}
-                        maxLength={10}
                         onChange={handleUsernameChange}
                     />
                 </div>
                 <div className="input-container">
                     <label className = 'input-label' htmlFor='password'>Password</label>
-                    <input
-                        className="input-field"
-                        id="password"
-                        type="password"
-                        value={password}
-                        maxLength={20}
-                        onChange={handlePasswordChange}
-                    />
+                    <div className="password-input-wrapper">
+                        <input
+                            className="input-field"
+                            id="password"
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={handlePasswordChange}
+                        />
+                        <button
+                            type="button"
+                            className="password-toggle-button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </button>
+                    </div>
                 </div>
                 <div className="button-container">
                     <button className="button primary-loginbutton" type={"submit"}>{isLogging? "Log in..." : "Log In"}</button>
                     <Link to={"/signup"} className="button button-link secondary-loginbutton"> Sign Up </Link>
                 </div>
-
             </form>
+            
+            <div className="demo-accounts-info">
+                <h3>Demo Accounts</h3>
+                <div className="demo-account-list">
+                    <div className="demo-account-item">
+                        <strong>Voter:</strong>
+                        <div className="demo-account-credential">Username: <code>voterdemo</code></div>
+                        <div className="demo-account-credential">Password: <code>{DEMO_PASSWORD}</code></div>
+                    </div>
+                    <div className="demo-account-item">
+                        <strong>Delegate:</strong>
+                        <div className="demo-account-credential">Username: <code>delegatedemo</code></div>
+                        <div className="demo-account-credential">Password: <code>{DEMO_PASSWORD}</code></div>
+                    </div>
+                    <div className="demo-account-item">
+                        <strong>Admin:</strong>
+                        <div className="demo-account-credential">Username: <code>admindemo</code></div>
+                        <div className="demo-account-credential">Password: <code>{DEMO_PASSWORD}</code></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     );

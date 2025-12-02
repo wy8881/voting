@@ -6,16 +6,18 @@ import org.springframework.stereotype.Component;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Base64;
 
 @Component
 public class EncryptionUtil {
     private static String algorithm = "AES/CBC/PKCS5PADDING";
-    private static String key = "NaAEiNWQEGBgN113pWEQ8g==";
-    private static String initVector = "9R1xZYTro4BRguEQo/I8XA==";
-    public static String encrypt(String value) {
+    @Value("${app.encryption.key}")
+    private String key ;
+
+    @Value("${app.encryption.init-vector}")
+    private  String initVector;
+
+    public  String encrypt(String value) {
         try{
             IvParameterSpec iv = new IvParameterSpec(decode1Base64(initVector));
             SecretKeySpec skeySpec = new SecretKeySpec(decode1Base64(key), "AES");
@@ -30,7 +32,7 @@ public class EncryptionUtil {
         return null;
     }
 
-    public static String decrypt(String encrypted) {
+    public  String decrypt(String encrypted) {
         try{
             IvParameterSpec iv = new IvParameterSpec(decode1Base64(initVector));
             SecretKeySpec skeySpec = new SecretKeySpec(decode1Base64(key), "AES");

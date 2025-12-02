@@ -4,6 +4,8 @@ import { UserContext } from '../contexts/UserContext';
 import { useRoleCheck } from '../hooks/useRoleCheck';
 import api from '../api/axiosConfig';
 import { ClipLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
+import { confirm } from '../utils/confirmDialog';
 import '../styles/Dashboard.css';
 import withRoleAccess from "./withRoleAcess";
 
@@ -34,7 +36,7 @@ const Dashboard = () => {
         } catch (error) {
             console.error('Failed to fetch election status:', error);
             if (error.response?.status === 403) {
-                window.alert('You do not have permission to view election status.');
+                toast.error('You do not have permission to view election status.');
             } else if (error.response?.status === 401) {
                 navigate('/login');
             } else {
@@ -46,21 +48,27 @@ const Dashboard = () => {
     }
 
     async function handleStartElection() {
-        if (!window.confirm('Are you sure you want to start the election?')) {
-            return;
-        }
+        const confirmed = await confirm({
+            title: 'Start Election',
+            message: 'Are you sure you want to start the election?',
+            confirmText: 'Start Election',
+            variant: 'default'
+        });
+        
+        if (!confirmed) return;
+        
         setIsSubmitting(true);
         try {
             const response = await api.post('api/admin/startElection');
-            window.alert(response.data.message);
+            toast.success(response.data.message);
             await fetchElectionStatus();
         } catch (error) {
             if (error.response?.status === 403) {
-                window.alert('You do not have permission to start the election.');
+                toast.error('You do not have permission to start the election.');
             } else if (error.response?.status === 401) {
                 navigate('/login');
             } else {
-                window.alert(error.response?.data?.message || 'Failed to start election');
+                toast.error(error.response?.data?.message || 'Failed to start election');
             }
         } finally {
             setIsSubmitting(false);
@@ -68,21 +76,27 @@ const Dashboard = () => {
     }
 
     async function handleStopElection() {
-        if (!window.confirm('Are you sure you want to stop the election?')) {
-            return;
-        }
+        const confirmed = await confirm({
+            title: 'Stop Election',
+            message: 'Are you sure you want to stop the election?',
+            confirmText: 'Stop Election',
+            variant: 'danger'
+        });
+        
+        if (!confirmed) return;
+        
         setIsSubmitting(true);
         try {
             const response = await api.post('api/admin/stopElection');
-            window.alert(response.data.message);
+            toast.success(response.data.message);
             await fetchElectionStatus();
         } catch (error) {
             if (error.response?.status === 403) {
-                window.alert('You do not have permission to stop the election.');
+                toast.error('You do not have permission to stop the election.');
             } else if (error.response?.status === 401) {
                 navigate('/login');
             } else {
-                window.alert(error.response?.data?.message || 'Failed to stop election');
+                toast.error(error.response?.data?.message || 'Failed to stop election');
             }
         } finally {
             setIsSubmitting(false);
@@ -96,8 +110,6 @@ const Dashboard = () => {
                     <div className="dashboard-card">
                         <h1 className="dashboardText">Welcome back, {user.username}</h1>
                         <div className="dashboard-info-section">
-                            {/* <p className="dashboardInfo">Role: {user.role.split("_")[1].toLowerCase()}</p> */}
-                            
                             <div className="election-status-section">
                                 <h3 className="election-status-title">Current Election Status</h3>
                                 {isLoadingStatus ? (

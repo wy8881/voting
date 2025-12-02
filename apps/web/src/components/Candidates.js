@@ -6,6 +6,8 @@ import '../styles/AdminManagement.css';
 import { FaCat, FaDog } from "react-icons/fa6";
 import { GiEgyptianBird } from "react-icons/gi";
 import { ClipLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
+import { confirm } from '../utils/confirmDialog';
 import withRoleAccess from "./withRoleAcess";
 
 const Candidates = () => {
@@ -19,7 +21,7 @@ const Candidates = () => {
             setCandidates(resp.data || []);
         } catch (error) {
             console.error('Error fetching candidates:', error);
-            window.alert('Failed to load candidates');
+            toast.error('Failed to load candidates');
         } finally {
             setLoading(false);
         }
@@ -30,16 +32,22 @@ const Candidates = () => {
     }, []);
 
     const handleDeleteCandidate = async (candidateName) => {
-        if (!window.confirm(`Are you sure you want to delete candidate "${candidateName}"?`)) {
-            return;
-        }
+        const confirmed = await confirm({
+            title: 'Delete Candidate',
+            message: `Are you sure you want to delete candidate "${candidateName}"?`,
+            confirmText: 'Delete',
+            variant: 'danger'
+        });
+        
+        if (!confirmed) return;
+        
         try {
             await api.delete(`api/delegate/candidates/${candidateName}`);
-            window.alert('Candidate deleted successfully!');
+            toast.success('Candidate deleted successfully!');
             fetchCandidates();
         } catch (error) {
             const message = error.response?.data?.message || 'Failed to delete candidate';
-            window.alert(message);
+            toast.error(message);
         }
     };
 

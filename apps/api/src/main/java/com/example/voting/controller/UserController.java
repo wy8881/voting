@@ -3,7 +3,8 @@ package com.example.voting.controller;
 import com.example.voting.dto.response.MessageResponse;
 import com.example.voting.model.Candidate;
 import com.example.voting.model.Party;
-import com.example.voting.service.DBService;
+import com.example.voting.service.PartyService;
+import com.example.voting.service.ElectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,26 +21,29 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    DBService DBService;
+    PartyService partyService;
+    @Autowired
+    ElectionService electionService;
+    
     @GetMapping("/allCandidates")
     public ResponseEntity<List<Candidate>> getAllCandidates() {
-        return new ResponseEntity<List<Candidate>>(DBService.getAllCandidates(), HttpStatus.OK);
+        return new ResponseEntity<List<Candidate>>(partyService.getAllCandidates(), HttpStatus.OK);
     }
 
     @GetMapping("/allParties")
     public ResponseEntity<List<Party>> getAllParties() {
-        return new ResponseEntity<List<Party>>(DBService.getAllParties(), HttpStatus.OK);
+        return new ResponseEntity<List<Party>>(partyService.getAllParties(), HttpStatus.OK);
     }
 
     @GetMapping("/electionStatus")
     public ResponseEntity<?> getElectionStatus() {
-        return ResponseEntity.ok(DBService.getLatestElectionStatus());
+        return ResponseEntity.ok(electionService.getLatestElectionStatus());
     }
 
     @GetMapping("/electionResult")
     public ResponseEntity<?> getElectionResult() {
         try {
-            return ResponseEntity.ok(DBService.getLatestElectionResult());
+            return ResponseEntity.ok(electionService.getLatestElectionResult());
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }

@@ -91,7 +91,9 @@
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
-    margin-top: 2rem;
+    margin: 2rem auto 0;
+    display: block;
+    width: fit-content;
 }
 
 .submit-button:hover:not(:disabled) {

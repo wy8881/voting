@@ -2,35 +2,44 @@ import '../styles/Register.css'
 import { isNameValid} from "../utils/Utils";
 import {useState} from "react";
 import api from "../api/axiosConfig";
+import toast from 'react-hot-toast';
 import withRoleAccess from "./withRoleAcess";
 const CreateNewParty = () => {
     const [partyName, setPartyName] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    function handleMsg(message) {
-        window.alert(message);
+    function handleMsg(message, isError = false) {
+        if (isError) {
+            toast.error(message);
+        } else {
+            toast.success(message);
+        }
         setPartyName("");
     }
     async function handleSubmit(e) {
         e.preventDefault();
         setIsSubmitting(true)
         if(partyName === "") {
-            handleMsg("Party Name cannot be empty")
+            handleMsg("Party Name cannot be empty", true)
+            setIsSubmitting(false);
             return;
         }
         if (!isNameValid(partyName)) {
-            handleMsg("Party Name can only contain alphabets")
+            handleMsg("Party Name can only contain alphabets", true)
+            setIsSubmitting(false);
             return;
         }
         try {
             await api.post('api/delegate/createParty', {
                 "name": partyName
             }).then(resp => {
-                handleMsg(resp.data.message)
+                handleMsg(resp.data.message, false)
             })
         } catch (error) {
-            if(error.response.status === 400) {
-                handleMsg(error.response.data.message)
+            if(error.response && error.response.status === 400) {
+                handleMsg(error.response.data.message, true)
+            } else {
+                handleMsg("Failed to create party", true)
             }
         }
         finally {

@@ -1,46 +1,51 @@
 package com.example.voting.jwt;
 
-import com.example.voting.service.MyUserDetails;
 import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-//    @Value("${JWTSECRET}")
-    private String jwtSecret="============================================================================";
+   @Value("${app.jwt.secret}")
+    private String jwtSecret;
 
-//    @Value("${JWTEXPIREMS}")
-    private int jwtExpirationMs=60*60*1000;
+   @Value("${app.jwt.expire-ms}")
+    private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
-
-        MyUserDetails userPrincipal = (MyUserDetails) authentication.getPrincipal();
-
-        return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key(), SignatureAlgorithm.HS256)
-                .compact();
+        String username = authentication.getName();
+        String role = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse(null);
+        return generateJwtToken(username, role);
     }
 
-    public String generateJwtToken(String username) {
-        return Jwts.builder()
+    public String generateJwtToken(String username, String role) {
+        Date issuedAt = new Date();
+        Date expiration = new Date(issuedAt.getTime() + jwtExpirationMs);
+        
+        var builder = Jwts.builder()
                 .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key(), SignatureAlgorithm.HS256)
+                .setIssuedAt(issuedAt)
+                .setExpiration(expiration);
+        
+        if (role != null) {
+            builder.claim("role", role);
+        }
+        
+        return builder.signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -51,6 +56,17 @@ public class JwtUtils {
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key()).build()
                 .parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String getRoleFromJwtToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder().setSigningKey(key()).build()
+                    .parseClaimsJws(token).getBody();
+            return claims.get("role", String.class);
+        } catch (Exception e) {
+            logger.error("Error extracting role from JWT token: {}", e.getMessage());
+            return null;
+        }
     }
 
     public boolean validateJwtToken(String authToken) {

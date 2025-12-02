@@ -30,15 +30,112 @@
     border-color: #0056b3 !important;
 }
 
+.demo-accounts-info {
+    margin-top: 32px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.demo-accounts-info h3 {
+    margin: 0 0 16px 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.demo-account-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.demo-account-item {
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #555;
+    border: 1px solid #e0e0e0;
+}
+
+.demo-account-item strong {
+    color: #2563EB;
+    margin-right: 8px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.demo-account-credential {
+    margin-top: 6px;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+.demo-account-item code {
+    background-color: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #d63384;
+    font-weight: 600;
+}
+
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-input-wrapper .input-field {
+    padding-right: 48px;
+}
+
+.password-toggle-button {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+    z-index: 1;
+}
+
+.password-toggle-button:hover {
+    color: var(--text-heading);
+}
+
+.password-toggle-button:focus {
+    outline: none;
+    color: var(--button-primary);
+}
+
 @media (max-width: 640px) {
     .register-container {
         padding: 32px 24px;
         margin: 2vh auto;
-        max-width: calc(100% - 32px);
+        width: clamp(300px, calc(100% - 32px), 100%);
     }
     
     .register-container h1 {
         font-size: 1.75rem;
         margin-bottom: 24px;
+    }
+    
+    .demo-accounts-info {
+        margin-top: 24px;
+        padding: 16px;
+    }
+    
+    .demo-account-item {
+        font-size: 0.85rem;
+        padding: 8px;
     }
 }

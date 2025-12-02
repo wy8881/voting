@@ -12,7 +12,7 @@ app:
     init-vector: ${ENCRYPTION_INIT_VECTOR}
   jwt:
     secret: ${JWTSECRET}
-    expire-ms: 3600000
+    expire-ms: ${JWT_EXPIRE_MS}
   cors:
     allowed-origins:
       - https://voting.wyprojects.com

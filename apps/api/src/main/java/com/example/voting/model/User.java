@@ -1,6 +1,5 @@
 package com.example.voting.model;
 
-import com.example.voting.component.EncryptionUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Size;
 import org.bson.types.ObjectId;
@@ -32,6 +31,7 @@ public class User {
     private String email;
     private ERole role;
     private Boolean voted;
+    private Boolean isDemoAccount;
 
     public User() {
     }
@@ -49,6 +49,7 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = encode;
+        this.isDemoAccount = false;
     }
 
     public ObjectId getId() {
@@ -98,14 +99,11 @@ public class User {
     public void setVoted(Boolean voted) {
         this.voted = voted;
     }
-
-    public User encrypt() {
-        this.email = EncryptionUtil.encrypt(this.email);
-        return this;
+    public Boolean getIsDemoAccount() {
+        return isDemoAccount;
     }
 
-    public User decrypt() {
-        this.email = EncryptionUtil.decrypt(this.email);
-        return this;
+    public void setIsDemoAccount(Boolean isDemoAccount) {
+        this.isDemoAccount = isDemoAccount;
     }
 }

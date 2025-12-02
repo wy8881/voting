@@ -1,6 +1,6 @@
 import React, {createContext, useEffect, useState, useRef} from 'react';
 import api from "../api/axiosConfig";
-import {reloadToken} from "../utils/Utils";
+import {reloadToken, decodeJwtToken, getRoleFromToken, getUsernameFromToken} from "../utils/Utils";
 
 export const UserContext = createContext();
 
@@ -30,9 +30,33 @@ export const UserProvider = ({ children }) => {
         if(isInitialized.current) return;
         async function initialize() {
             try{
-                const cachedUser = sessionStorage.getItem('user');
-                if (cachedUser) {
-                    setUser(JSON.parse(cachedUser));
+                const token = sessionStorage.getItem('Bearer');
+                if (token) {
+                    const tokenData = decodeJwtToken(token);
+                    if (tokenData) {
+                        const cachedUser = sessionStorage.getItem('user');
+                        if (cachedUser) {
+                            const user = JSON.parse(cachedUser);
+                            user.role = tokenData.role;
+                            user.username = tokenData.username;
+                            setUser(user);
+                        } else {
+                            setUser({
+                                username: tokenData.username,
+                                role: tokenData.role
+                            });
+                        }
+                    } else {
+                        const cachedUser = sessionStorage.getItem('user');
+                        if (cachedUser) {
+                            setUser(JSON.parse(cachedUser));
+                        }
+                    }
+                } else {
+                    const cachedUser = sessionStorage.getItem('user');
+                    if (cachedUser) {
+                        setUser(JSON.parse(cachedUser));
+                    }
                 }
 
                 await checkAuth();

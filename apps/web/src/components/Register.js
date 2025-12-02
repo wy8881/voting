@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import api from "../api/axiosConfig";
 import '../styles/Register.css';
 import { UserContext } from "../contexts/UserContext";
-import {isEmailValid, isPasswordValid, isUsernameValid, setToken} from "../utils/Utils";
+import {isEmailValid, isPasswordValid, isUsernameValid, setToken, decodeJwtToken} from "../utils/Utils";
 import withNoLogged from "./witNotLogged";
 import PasswordHelp from "./PasswordHelp";
 
@@ -112,10 +112,11 @@ const Register = () => {
                 "email": email
             })
             setToken(resp, api, "Register Success! Please log in.")
+            const tokenData = decodeJwtToken(resp.data.token);
             const newUser = {
                 username: resp.data.username,
                 email: resp.data.email,
-                role: resp.data.role,
+                role: tokenData ? tokenData.role : resp.data.role,
                 isVoted: resp.data.isVoted
             }
             setUser(newUser);
@@ -148,6 +149,17 @@ const Register = () => {
         <div className="register-container">
             <Toaster position="top-center" />
             <h1>Register</h1>
+            <div className="demo-notice" style={{
+                padding: '12px 16px',
+                backgroundColor: '#fff3cd',
+                border: '1px solid #ffc107',
+                borderRadius: '6px',
+                marginBottom: '24px',
+                color: '#856404',
+                fontSize: '0.9rem'
+            }}>
+                <strong>Notice:</strong> This is a demo project. Account registration is not available. Please use the existing demo accounts provided on the login page.
+            </div>
             <form onSubmit={handleSubmit}>
                 <div className="input-container">
                     <label className="input-label" htmlFor="username">Username</label>
@@ -205,9 +217,10 @@ const Register = () => {
                     <button
                         className="button primary-loginbutton"
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={true}
+                        style={{ opacity: 0.6, cursor: 'not-allowed' }}
                     >
-                        {isSubmitting ? 'Registering...' : 'Register'}
+                        Register
                     </button>
                     <Link to={"/login"} className="button button-link secondary-loginbutton">Back to log in</Link>
                 </div>

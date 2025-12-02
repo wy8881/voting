@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import api from '../api/axiosConfig';
 import { ClipLoader } from 'react-spinners';
+import { UserContext } from '../contexts/UserContext';
+import toast from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
+import { confirm } from '../utils/confirmDialog';
 import '../styles/AdminManagement.css';
 import withRoleAccess from './withRoleAcess';
 
 const AdminManagement = () => {
+    const { user } = useContext(UserContext);
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showCreateForm, setShowCreateForm] = useState(false);
@@ -15,27 +20,9 @@ const AdminManagement = () => {
         role: 'ROLE_DELEGATE'
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isResetting, setIsResetting] = useState(false);
 
     useEffect(() => {
-        // 1. 检查 token 是否存在
-        const token = sessionStorage.getItem('Bearer');
-        console.log('Token exists:', !!token);
-        console.log('Token value:', token);
-
-        // 2. 检查 token 是否过期
-        if (token) {
-            try {
-                const tokenValue = token.startsWith('Bearer ') ? token.substring(7) : token;
-                const payload = JSON.parse(atob(tokenValue.split('.')[1]));
-                console.log('Token payload:', payload);
-                console.log('Token exp:', new Date(payload.exp * 1000));
-                console.log('Current time:', new Date());
-                console.log('Token expired:', payload.exp * 1000 < Date.now());
-            } catch (e) {
-                console.error('Invalid token format:', e);
-            }
-        }
-
         fetchAccounts();
     }, []);
 
@@ -46,7 +33,7 @@ const AdminManagement = () => {
             setAccounts(response.data);
         } catch (error) {
             console.error('Error fetching accounts:', error);
-            window.alert('Failed to load accounts');
+            toast.error('Failed to load accounts');
         } finally {
             setLoading(false);
         }
@@ -57,7 +44,7 @@ const AdminManagement = () => {
         setIsSubmitting(true);
         try {
             await api.post('api/admin/accounts', formData);
-            window.alert('Account created successfully!');
+            toast.success('Account created successfully!');
             setFormData({
                 username: '',
                 email: '',
@@ -68,39 +55,83 @@ const AdminManagement = () => {
             fetchAccounts();
         } catch (error) {
             const message = error.response?.data?.message || 'Failed to create account';
-            window.alert(message);
+            toast.error(message);
         } finally {
             setIsSubmitting(false);
         }
     };
 
     const handleDeleteAccount = async (username) => {
-        if (!window.confirm(`Are you sure you want to delete account "${username}"?`)) {
-            return;
-        }
+        const confirmed = await confirm({
+            title: 'Delete Account',
+            message: `Are you sure you want to delete account "${username}"?`,
+            confirmText: 'Delete',
+            variant: 'danger'
+        });
+        
+        if (!confirmed) return;
+        
         try {
             await api.delete(`api/admin/accounts/${username}`);
-            window.alert('Account deleted successfully!');
+            toast.success('Account deleted successfully!');
             fetchAccounts();
         } catch (error) {
             const message = error.response?.data?.message || 'Failed to delete account';
-            window.alert(message);
+            toast.error(message);
         }
     };
+
+    const handleResetDatabase = async () => {
+        const confirmed = await confirm({
+            title: 'Reset Database',
+            message: '⚠️ WARNING: This will delete all non-preset parties, candidates, and votes. Are you sure you want to reset the database?',
+            confirmText: 'Reset Database',
+            variant: 'danger'
+        });
+        
+        if (!confirmed) return;
+        
+        setIsResetting(true);
+        try {
+            await api.post('api/admin/resetDatabase');
+            toast.success('Database reset completed successfully!');
+        } catch (error) {
+            const message = error.response?.data?.message || 'Failed to reset database';
+            toast.error(message);
+        } finally {
+            setIsResetting(false);
+        }
+    };
+
+    const isDemoAdmin = user && user.isDemoAccount === true;
 
     const delegates = accounts.filter(account => account.role === 'ROLE_DELEGATE');
     const loggers = accounts.filter(account => account.role === 'ROLE_LOGGER');
 
     return (
         <div className="admin-management-container">
+            <Toaster position="top-center" />
             <div className="admin-management-header">
                 <h1>Manage Accounts</h1>
-                <button 
-                    className="button admin-create-button" 
-                    onClick={() => setShowCreateForm(!showCreateForm)}
-                >
-                    {showCreateForm ? 'Cancel' : 'Create New Account'}
-                </button>
+                <div className="button-container">
+                    {!isDemoAdmin && (
+                        <button 
+                            className="button admin-reset-button" 
+                            onClick={handleResetDatabase}
+                            disabled={isResetting}
+                            style={{ backgroundColor: '#dc3545', color: 'white' }}
+                        >
+                            {isResetting ? 'Resetting...' : 'Reset Database'}
+                        </button>
+                    )}
+                    <button 
+                        className="button admin-create-button" 
+                        onClick={() => setShowCreateForm(!showCreateForm)}
+                        disabled={isDemoAdmin}
+                    >
+                        {showCreateForm ? 'Cancel' : 'Create New Account'}
+                    </button>
+                </div>
             </div>
 
             {showCreateForm && (

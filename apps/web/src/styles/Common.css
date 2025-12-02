@@ -70,8 +70,7 @@ p {
 .register-container {
     padding: 48px 40px;
     border-radius: 16px;
-    width: 100%;
-    max-width: 450px;
+    width: clamp(400px, 66.67vw, 1200px);
     margin: 5vh auto;
     background-color: var(--white);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -119,13 +118,19 @@ p {
     transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.3s ease;
     outline: none;
     font-size: 1rem;
-    width: 100%;
+    width: fit-content;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
 .register-container .button,
 .register-container .register-button {
-    width: 100%;
+    width: fit-content;
+    margin: 32px auto 0;
+    display: block;
+}
+
+.register-container .button-container {
+    align-items: center;
 }
 
 .button:hover,
@@ -147,14 +152,14 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: stretch;
+    align-items: center;
     gap: 12px;
     margin-top: 32px;
 }
 
 .button-link {
-    display: block;
-    width: 100%;
+    display: inline-block;
+    width: fit-content;
     text-decoration: none;
     text-align: center;
 }
@@ -185,9 +190,11 @@ p {
 
 .button-wrapper {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     max-width: 300px;
+    gap: 12px;
 }
 
 .input-container {
@@ -197,6 +204,13 @@ p {
     justify-content: center;
     margin-bottom: 24px;
     width: 100%;
+}
+
+.register-container .input-container,
+.admin-create-form .input-container {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .input-label {

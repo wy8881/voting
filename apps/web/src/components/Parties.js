@@ -6,6 +6,8 @@ import '../styles/AdminManagement.css';
 import { FaCat, FaDog } from "react-icons/fa6";
 import { GiEgyptianBird } from "react-icons/gi";
 import { ClipLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
+import { confirm } from '../utils/confirmDialog';
 import withRoleAccess from "./withRoleAcess";
 
 const Parties = () => {
@@ -19,7 +21,7 @@ const Parties = () => {
             setParties(resp.data || []);
         } catch (error) {
             console.error('Error fetching parties:', error);
-            window.alert('Failed to load parties');
+            toast.error('Failed to load parties');
         } finally {
             setLoading(false);
         }
@@ -30,16 +32,22 @@ const Parties = () => {
     }, []);
 
     const handleDeleteParty = async (partyName) => {
-        if (!window.confirm(`Are you sure you want to delete party "${partyName}"? This will also delete all candidates in this party.`)) {
-            return;
-        }
+        const confirmed = await confirm({
+            title: 'Delete Party',
+            message: `Are you sure you want to delete party "${partyName}"? This will also delete all candidates in this party.`,
+            confirmText: 'Delete',
+            variant: 'danger'
+        });
+        
+        if (!confirmed) return;
+        
         try {
             await api.delete(`api/delegate/parties/${partyName}`);
-            window.alert('Party deleted successfully!');
+            toast.success('Party deleted successfully!');
             fetchParties();
         } catch (error) {
             const message = error.response?.data?.message || 'Failed to delete party';
-            window.alert(message);
+            toast.error(message);
         }
     };
 

@@ -6,6 +6,7 @@ public class JWTResponse {
     private String email;
     private String role;
     private Boolean isVoted;
+    private Boolean isDemoAccount;
 
     public JWTResponse() {
     }
@@ -16,6 +17,15 @@ public class JWTResponse {
         this.email = email;
         this.role = role;
         this.isVoted = isVoted;
+    }
+
+    public JWTResponse(String token, String username, String email, String role, Boolean isVoted, Boolean isDemoAccount) {
+        this.token = token;
+        this.username = username;
+        this.email = email;
+        this.role = role;
+        this.isVoted = isVoted;
+        this.isDemoAccount = isDemoAccount;
     }
 
     public String getToken() {
@@ -56,6 +66,14 @@ public class JWTResponse {
 
     public void setIsVoted(Boolean isVoted) {
         this.isVoted = isVoted;
+    }
+
+    public Boolean getIsDemoAccount() {
+        return isDemoAccount;
+    }
+
+    public void setIsDemoAccount(Boolean isDemoAccount) {
+        this.isDemoAccount = isDemoAccount;
     }
 }
 

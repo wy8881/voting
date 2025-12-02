@@ -1,7 +1,6 @@
 package com.example.voting.jwt;
 
-import com.example.voting.service.MyUserDetails;
-import com.example.voting.service.MyUserDetailsService;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter{
@@ -27,28 +27,31 @@ public class AuthTokenFilter extends OncePerRequestFilter{
     @Autowired
     private JwtUtils jwtUtils;
 
-    @Autowired
-    private MyUserDetailsService myUserDetailsService;
-
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
+        String path = request.getRequestURI();
+        
+        if (path.startsWith("/api/auth/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
-                MyUserDetails userDetails = myUserDetailsService.loadUserByUsername(username);
-                var authorities = userDetails.getAuthorities();
-                logger.info("AuthTokenFilter - Username: {}, Authorities: {}", username, authorities);
-                authorities.forEach(auth -> logger.info("AuthTokenFilter - Role: {}", auth.getAuthority()));
-                String role = authorities.stream()
-                        .map(auth -> auth.getAuthority())
-                        .findFirst()
-                        .orElse("NO_ROLE");
-                logger.info("AuthTokenFilter - Extracted role: {}", role);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-                        authorities);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String role = jwtUtils.getRoleFromJwtToken(jwt);
+                
+                if (username != null && role != null) {
+                    var authorities = Collections.singletonList(
+                        new SimpleGrantedAuthority(role)
+                    );
+                    logger.info("AuthTokenFilter - Username: {}, Role: {}", username, role);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            username, null, authorities);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
