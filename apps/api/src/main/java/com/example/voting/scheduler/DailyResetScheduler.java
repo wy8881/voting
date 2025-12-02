@@ -24,18 +24,7 @@ public class DailyResetScheduler {
         logger.info("Starting daily reset at 3:00 AM");
         
         try {
-            logger.info("Deleting all data from database");
-            electionService.deleteAllData();
-            logger.info("Deleted all data from database");
-            
-            logger.info("Initializing preset data");
-            dataInitializationService.initializePresetData();
-            logger.info("Initialized preset data");
-            
-            logger.info("Initializing fixed accounts");
-            dataInitializationService.initializeFixedAccountsAfterReset();
-            logger.info("Initialized fixed accounts");
-            
+            electionService.resetDatabase(dataInitializationService);
             logger.info("Daily reset completed successfully");
         } catch (Exception e) {
             logger.error("Error during daily reset: {}", e.getMessage(), e);

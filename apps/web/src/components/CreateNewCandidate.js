@@ -1,14 +1,36 @@
 import '../styles/Register.css'
 import {isNameValid} from "../utils/Utils";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import api from "../api/axiosConfig";
 import toast from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
+import { ClipLoader } from 'react-spinners';
 import withRoleAccess from "./withRoleAcess";
 const CreateNewCandidate = ()  => {
     const [name, setName] = useState("");
     const [party, setParty] = useState("");
     const [rank, setRank] = useState("");
+    const [parties, setParties] = useState([]);
+    const [loadingParties, setLoadingParties] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        fetchParties();
+    }, []);
+
+    const fetchParties = async () => {
+        try {
+            setLoadingParties(true);
+            const resp = await api.get('api/user/allParties');
+            setParties(resp.data || []);
+        } catch (error) {
+            console.error('Error fetching parties:', error);
+            const message = error.response?.data?.message || 'Failed to load parties';
+            toast.error(message);
+        } finally {
+            setLoadingParties(false);
+        }
+    };
     function handleMsg(message, isError = false) {
         if (isError) {
             toast.error(message);
@@ -62,6 +84,7 @@ const CreateNewCandidate = ()  => {
 
     return (
         <div className={"container"}>
+            <Toaster position="top-center" />
             <div className={"register-container"}>
                 <h1> Create New Candidate </h1>
                 <form onSubmit={handleSubmit}>
@@ -80,16 +103,27 @@ const CreateNewCandidate = ()  => {
                     </div>
                     <div className={"input-container"}>
                         <label className={"input-label"} htmlFor={"partyName"}>Party</label>
-                        <input
-                            className={"input-field"}
-                            id={"partyName"}
-                            type={"partyName"}
-                            placeholder={"party name"}
-                            value={party}
-                            maxLength={50}
-                            onChange={(e) => setParty(e.target.value)}
-                        />
-                        <span className={"helper-text"}>Only alphabets and space for party name</span>
+                        {loadingParties ? (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <ClipLoader color="#2563EB" size={20} />
+                            </div>
+                        ) : (
+                            <select
+                                className={"input-field"}
+                                id={"partyName"}
+                                value={party}
+                                onChange={(e) => setParty(e.target.value)}
+                                required
+                            >
+                                <option value="">Select a party</option>
+                                {parties.map((p) => (
+                                    <option key={p.name} value={p.name}>
+                                        {p.name}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
+                        <span className={"helper-text"}>Select a party from the list</span>
                     </div>
                     <div className={"input-container"}>
                         <label className={"input-label"} htmlFor={"partyName"}>Rank</label>

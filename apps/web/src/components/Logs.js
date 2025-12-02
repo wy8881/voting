@@ -4,6 +4,7 @@ import '../styles/Logs.css'
 import api from "../api/axiosConfig";
 import {isUsernameValid} from "../utils/Utils";
 import toast from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 const  Logs = () => {
     const [logs, setLogs] = useState([]);
@@ -79,6 +80,7 @@ const  Logs = () => {
 
     return (
         <div className={"logs-container"}>
+            <Toaster position="top-center" />
             <h1>Logs</h1>
             <div className={"search-container"}>
                 <div className={"search-bar"}>

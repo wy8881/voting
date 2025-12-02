@@ -5,6 +5,7 @@ import { useRoleCheck } from '../hooks/useRoleCheck';
 import api from '../api/axiosConfig';
 import { ClipLoader } from 'react-spinners';
 import toast from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { confirm } from '../utils/confirmDialog';
 import '../styles/Dashboard.css';
 import withRoleAccess from "./withRoleAcess";
@@ -105,6 +106,7 @@ const Dashboard = () => {
 
     return (
         <>
+            <Toaster position="top-center" />
             {user && user.username ? (
                 <div className="dashboardContainer">
                     <div className="dashboard-card">

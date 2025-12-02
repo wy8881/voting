@@ -7,6 +7,7 @@ import { FaCat, FaDog } from "react-icons/fa6";
 import { GiEgyptianBird } from "react-icons/gi";
 import { ClipLoader } from 'react-spinners';
 import toast from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { confirm } from '../utils/confirmDialog';
 import withRoleAccess from "./withRoleAcess";
 
@@ -14,35 +15,74 @@ const Ballot = () => {
     const [votes, setVotes] = useState({});
     const [parties, setParties] = useState([]);
     const [candidates, setCandidates] = useState([]);
-    const [receiveParties, setReceiveParties] = useState(false);
-    const [receiveCandidates, setReceiveCandidates] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [electionStarted, setElectionStarted] = useState(false);
+    const [error, setError] = useState(null);
     const [clickOrder, setClickOrder] = useState({ above: [], below: [] });
     const navigate = useNavigate();
     const {user, setUser} = useContext(UserContext);
 
     useEffect(() => {
-        async function fetchCandidates() {
-            try {
-                await api.get('api/user/allCandidates').then(resp => {
-                    setCandidates(resp.data);
-                })
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        async function fetchParties() {
-            try {
-                await api.get('api/user/allParties').then(resp => {
-                    setParties(resp.data);
-                })
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        fetchParties().then(() => setReceiveParties(true));
-        fetchCandidates().then(() => setReceiveCandidates(true));
+        checkElectionStatus();
     }, []);
+
+    async function checkElectionStatus() {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const response = await api.get('api/user/electionStatus');
+            const started = response.data?.electionStarted === true;
+            setElectionStarted(started);
+            
+            if (started) {
+                const hasVoted = user && user.isVoted === true;
+                
+                if (!hasVoted) {
+                    const partiesResp = await fetchParties();
+                    const candidatesResp = await fetchCandidates();
+                    
+                    if ((!partiesResp || partiesResp.length === 0) && (!candidatesResp || candidatesResp.length === 0)) {
+                        setError('There are no parties or candidates available. Voting is not possible at this time.');
+                    } else if (!partiesResp || partiesResp.length === 0) {
+                        setError('There are no parties available. Voting is not possible at this time.');
+                    } else if (!candidatesResp || candidatesResp.length === 0) {
+                        setError('There are no candidates available. Voting is not possible at this time.');
+                    }
+                }
+            }
+        } catch (error) {
+            console.log('Failed to check election status:', error);
+            setError('Failed to check election status. Please try again later.');
+            toast.error('Failed to check election status. Please try again later.');
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    async function fetchCandidates() {
+        try {
+            const resp = await api.get('api/user/allCandidates');
+            setCandidates(resp.data);
+            return resp.data;
+        } catch (error) {
+            console.log(error);
+            setError('Failed to fetch candidates. Please try again later.');
+            return null;
+        }
+    }
+
+    async function fetchParties() {
+        try {
+            const resp = await api.get('api/user/allParties');
+            setParties(resp.data);
+            return resp.data;
+        } catch (error) {
+            console.log(error);
+            setError('Failed to fetch parties. Please try again later.');
+            return null;
+        }
+    }
 
 
     function handleVoteChange (id, value) {
@@ -160,6 +200,25 @@ const Ballot = () => {
     function handleSubmit(e) {
         e.preventDefault();
         setIsSubmitting(true)
+        
+        if (!electionStarted) {
+            handleError("Cannot vote: Election has not started yet.");
+            return;
+        }
+        
+        if (parties.length === 0 && candidates.length === 0) {
+            handleError("Cannot vote: No parties or candidates available.");
+            return;
+        }
+        if (parties.length === 0) {
+            handleError("Cannot vote: No parties available.");
+            return;
+        }
+        if (candidates.length === 0) {
+            handleError("Cannot vote: No candidates available.");
+            return;
+        }
+        
         if(checkCorrectMethod() && checkCorrectNumber()) {
             if (Object.keys(votes).some(key => key.includes('above'))) {
                 const partiesPreferenceList = createPartiesPreferenceList(parties, votes);
@@ -285,13 +344,22 @@ const Ballot = () => {
 
     const hasAboveVotes = Object.keys(votes).some(key => key.startsWith('above') && votes[key] && votes[key] !== '');
     const hasBelowVotes = Object.keys(votes).some(key => key.startsWith('below') && votes[key] && votes[key] !== '');
-    const hasVoted = user && (user.isVoted === true || user.isVoted === 'true');
+    const hasVoted = user && user.isVoted === true;
 
     return (
         <>
-            {(receiveCandidates === false || receiveParties === false) ? (
+            <Toaster position="top-center" />
+            {isLoading ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
                 <ClipLoader color="#2563EB" size={50} />
+            </div>
+        ) : !electionStarted ? (
+            <div className="Ballot">
+                <div className="ballot-thanks-message">
+                    <h1>Election Not Started</h1>
+                    <p className="ballot-description">The election has not started yet. Voting is not available at this time.</p>
+                    <p className="ballot-description">Please wait for the election to begin before you can cast your vote.</p>
+                </div>
             </div>
         ) : hasVoted ? (
             <div className="Ballot">
@@ -301,6 +369,13 @@ const Ballot = () => {
                     <p className="ballot-description">Your participation is greatly appreciated.</p>
                     <p className="ballot-description">After the election is over, you can check the result <a href="/dashboard/voter_result">here</a>.</p>
                     <p className="ballot-description">You can now close this page now.</p>
+                </div>
+            </div>
+        ) : error ? (
+            <div className="Ballot">
+                <div className="ballot-thanks-message">
+                    <h1>Error</h1>
+                    <p className="ballot-description" style={{ color: '#dc2626' }}>{error}</p>
                 </div>
             </div>
         ) : (
@@ -389,9 +464,9 @@ const Ballot = () => {
                             className="button ballot-button"
                             type="submit"
                             onClick={handleSubmit}
-                            disabled={isSubmitting || user.isVoted.toString() === 'true'}
+                            disabled={isSubmitting || user.isVoted === true}
                         >
-                            {user.isVoted.toString() === 'true' ? "You have already voted" :
+                            {user.isVoted === true ? "You have already voted" :
                             isSubmitting ? "Submitting..." : "Submit"}
                         </button>
                         <button

@@ -7,9 +7,7 @@ import Ballot from './Ballot';
 import Candidates from "./Candidates";
 import Parties from "./Parties";
 import CreateNewParty from "./CreateNewParty";
-import ManageParties from "./ManageParties";
 import CreateNewCandidate from "./CreateNewCandidate";
-import ManageCandidates from "./ManageCandidates";
 import Logs from "./Logs";
 import CheckResult from "./CheckResult";
 import VoterResult from "./VoterResult";
@@ -45,9 +43,6 @@ function PageTitle() {
             case '/dashboard/parties/create':
                 title = "Create New Party";
                 break;
-            case '/dashboard/parties/manage':
-                title = "Manage Parties";
-                break;
             case '/dashboard/candidates/create':
                 title = "Create New Candidate";
                 break;
@@ -75,9 +70,7 @@ export default function RouterComponent() {
                 <Route path="/dashboard/candidates" element={<Layout><Candidates/></Layout>} />
                 <Route path="/dashboard/parties" element={<Layout><Parties/></Layout>} />
                 <Route path="/dashboard/parties/create" element={<Layout><CreateNewParty/></Layout>} />
-                <Route path="/dashboard/parties/manage" element={<Layout><ManageParties/></Layout>} />
                 <Route path="/dashboard/candidates/create" element={<Layout><CreateNewCandidate/></Layout>} />
-                <Route path="/dashboard/candidates/manage" element={<Layout><ManageCandidates/></Layout>} />
                 <Route path={"/dashboard/logs"} element={<Layout><Logs/></Layout>} />
                 <Route path = "/dashboard/result" element={<Layout><CheckResult/></Layout>} />
                 <Route path = "/dashboard/voter_result" element={<Layout><VoterResult/></Layout>} />

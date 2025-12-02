@@ -3,6 +3,7 @@ import { isNameValid} from "../utils/Utils";
 import {useState} from "react";
 import api from "../api/axiosConfig";
 import toast from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import withRoleAccess from "./withRoleAcess";
 const CreateNewParty = () => {
     const [partyName, setPartyName] = useState("");
@@ -50,6 +51,7 @@ const CreateNewParty = () => {
 
     return (
         <div className={"container"}>
+            <Toaster position="top-center" />
             <div className={"register-container"}>
                 <h1> Create New Party </h1>
                 <form onSubmit={handleSubmit}>

@@ -6,6 +6,7 @@ import com.example.voting.dto.response.MessageResponse;
 import com.example.voting.service.VoteService;
 import com.example.voting.service.PartyService;
 import com.example.voting.service.LogService;
+import com.example.voting.service.ElectionService;
 import com.example.voting.utils.Validation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class VoterController {
     PartyService partyService;
     @Autowired
     LogService logService;
+    @Autowired
+    ElectionService electionService;
     @GetMapping
     public String apiRoot() {
         return "hello";
@@ -32,6 +35,11 @@ public class VoterController {
     @PostMapping("/vote")
     public ResponseEntity<?> vote(@Valid @RequestBody VoteRequest voteRequest) {
         try {
+            if (!electionService.isElectionStarted()) {
+                return ResponseEntity.badRequest()
+                        .body(new MessageResponse("Error: Election is not started. Voting is not allowed."));
+            }
+            
             String voterName = voteRequest.getVoterName();
             String type = voteRequest.getType();
             List<String> preferences = voteRequest.getPreferences();

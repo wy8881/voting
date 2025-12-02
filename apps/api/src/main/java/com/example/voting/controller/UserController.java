@@ -43,6 +43,10 @@ public class UserController {
     @GetMapping("/electionResult")
     public ResponseEntity<?> getElectionResult() {
         try {
+            if (electionService.isElectionStarted()) {
+                return ResponseEntity.badRequest()
+                        .body(new MessageResponse("Error: Election has not ended yet. Results are not available."));
+            }
             return ResponseEntity.ok(electionService.getLatestElectionResult());
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));

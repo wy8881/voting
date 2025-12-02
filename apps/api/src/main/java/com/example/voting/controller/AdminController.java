@@ -51,7 +51,7 @@ public class AdminController {
         String adminUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         User admin = userService.getUserByUsername(adminUsername);
         
-        if (admin != null && Boolean.TRUE.equals(admin.getIsDemoAccount())) {
+        if (admin != null && admin.getIsDemoAccount() == Boolean.TRUE) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Error: Demo accounts cannot create new user accounts!"));
         }
@@ -105,8 +105,21 @@ public class AdminController {
     @DeleteMapping("/accounts/{username}")
     public ResponseEntity<?> deleteAccount(@PathVariable String username) {
         try {
-            userService.deleteUser(username);
             String adminUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+            User admin = userService.getUserByUsername(adminUsername);
+            
+            if (admin != null && admin.getIsDemoAccount() == Boolean.TRUE) {
+                User targetUser = userService.getUserByUsername(username);
+                if (targetUser == null) {
+                    return ResponseEntity.badRequest().body(new MessageResponse("Error: User not found!"));
+                }
+                if (targetUser.getIsDemoAccount() != Boolean.TRUE) {
+                    return ResponseEntity.badRequest()
+                            .body(new MessageResponse("Error: Demo accounts can only delete data created by demo accounts!"));
+                }
+            }
+            
+            userService.deleteUser(username);
             logService.log(adminUsername, Action.DELETE_DELEGATE);
             return ResponseEntity.ok(new MessageResponse("Account deleted successfully!"));
         } catch (RuntimeException e) {
@@ -136,17 +149,15 @@ public class AdminController {
     public ResponseEntity<?> resetDatabase() {
         try {
             String adminUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+            User admin = userService.getUserByUsername(adminUsername);
+            
+            if (admin != null && admin.getIsDemoAccount() == Boolean.TRUE) {
+                return ResponseEntity.badRequest()
+                        .body(new MessageResponse("Error: Demo accounts can not reset the database!"));
+            }
             
             logger.info("Starting full database reset by admin: {}", adminUsername);
-            electionService.deleteAllData();
-            logger.info("Deleted all data from database");
-            
-            dataInitializationService.initializePresetData();
-            logger.info("Initialized preset data");
-            
-            dataInitializationService.initializeFixedAccountsAfterReset();
-            logger.info("Initialized fixed accounts");
-            
+            electionService.resetDatabase(dataInitializationService);
             logger.info("Database reset completed by admin: {}", adminUsername);
             return ResponseEntity.ok(new MessageResponse("Database reset completed successfully!"));
         } catch (Exception e) {

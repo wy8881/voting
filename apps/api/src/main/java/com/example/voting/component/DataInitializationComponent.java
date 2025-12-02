@@ -22,13 +22,7 @@ public class DataInitializationComponent implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         logger.info("Starting database reset on application startup...");
-        logger.info("Deleting all data from database");
-        electionService.deleteAllData();
-        logger.info("Deleted all data from database");
-        
-        logger.info("Initializing preset data and fixed accounts...");
-        dataInitializationService.initializePresetData();
-        dataInitializationService.initializeFixedAccountsAfterReset();
+        electionService.resetDatabase(dataInitializationService);
         logger.info("Data initialization completed");
     }
 }

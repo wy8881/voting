@@ -7,6 +7,7 @@ import { FaCat, FaDog } from "react-icons/fa6";
 import { GiEgyptianBird } from "react-icons/gi";
 import { ClipLoader } from 'react-spinners';
 import toast from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { confirm } from '../utils/confirmDialog';
 import withRoleAccess from "./withRoleAcess";
 
@@ -21,7 +22,8 @@ const Candidates = () => {
             setCandidates(resp.data || []);
         } catch (error) {
             console.error('Error fetching candidates:', error);
-            toast.error('Failed to load candidates');
+            const message = error.response?.data?.message || 'Failed to load candidates';
+            toast.error(message);
         } finally {
             setLoading(false);
         }
@@ -53,6 +55,7 @@ const Candidates = () => {
 
     return (
         <div className="delegate-container">
+            <Toaster position="top-center" />
             <div className="admin-management-header">
                 <h1>Candidates</h1>
                 <Link to={"/dashboard/candidates/create"}>

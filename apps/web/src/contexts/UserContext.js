@@ -12,7 +12,6 @@ export const UserProvider = ({ children }) => {
             const response = await api.get('api/auth/checkAuth');
             const isAuth = response.data;
             if (isAuth === false ) {
-                console.log("not auth")
                 deleteUser();
             }
         } catch (error) {

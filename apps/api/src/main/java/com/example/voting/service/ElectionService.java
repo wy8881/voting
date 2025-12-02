@@ -48,6 +48,13 @@ public class ElectionService {
     @Autowired
     private LogRepository logRepository;
 
+    public void resetDatabase(DataInitializationService dataInitializationService) {
+        deleteAllData();
+        dataInitializationService.initializePresetData();
+        dataInitializationService.initializeFixedAccountsAfterReset();
+        startElection();
+    }
+
     public Optional<ElectionStatus> getLatestElectionStatus() {
         return electionStatusRepository.findFirstByOrderByStatusUpatedTimeDesc();
     }
