@@ -43,8 +43,13 @@ const AdminManagement = () => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            await api.post('api/admin/accounts', formData);
-            toast.success('Account created successfully!');
+            const response = await api.post('api/admin/accounts', formData);
+            const data = response.data;
+            if (data.remainingQuota !== undefined) {
+                toast.success(`${data.message} Remaining accounts slots: ${data.remainingQuota}`);
+            } else {
+                toast.success(data.message || 'Account created successfully!');
+            }
             setFormData({
                 username: '',
                 email: '',
@@ -127,7 +132,6 @@ const AdminManagement = () => {
                     <button 
                         className="button admin-create-button" 
                         onClick={() => setShowCreateForm(!showCreateForm)}
-                        disabled={isDemoAdmin}
                     >
                         {showCreateForm ? 'Cancel' : 'Create New Account'}
                     </button>

@@ -32,6 +32,7 @@ public class User {
     private ERole role;
     private Boolean voted;
     private Boolean isDemoAccount;
+    private String createdBy;
 
     public User() {
     }
@@ -105,5 +106,13 @@ public class User {
 
     public void setIsDemoAccount(Boolean isDemoAccount) {
         this.isDemoAccount = isDemoAccount;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 }

@@ -34,7 +34,12 @@ const CreateNewParty = () => {
             await api.post('api/delegate/createParty', {
                 "name": partyName
             }).then(resp => {
-                handleMsg(resp.data.message, false)
+                const data = resp.data;
+                if (data.remainingQuota !== undefined) {
+                    handleMsg(`${data.message} Remaining party slots: ${data.remainingQuota}`, false);
+                } else {
+                    handleMsg(data.message, false);
+                }
             })
         } catch (error) {
             if(error.response && error.response.status === 400) {

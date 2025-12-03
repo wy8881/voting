@@ -25,11 +25,31 @@ const  Logs = () => {
     async function onSearchByUsername() {
         if(username !== "" && isUsernameValid(username)) {
             await api.get('api/logs/username/'+username).then((response) => {
-                setLogs(response.data);
-                setAction("");
-                setUsername("");
+                const data = response.data;
+                if (data.logs !== undefined) {
+                    // Response is LogsWithQuotaResponse
+                    setLogs(data.logs);
+                    setAction("");
+                    setUsername("");
+                    if (data.remainingQuota !== undefined) {
+                        toast.success(`Logs retrieved successfully. Remaining quota: ${data.remainingQuota}`);
+                    } else {
+                        toast.success('Logs retrieved successfully');
+                    }
+                } else if (Array.isArray(data)) {
+                    // Response is array of logs (non-demo logger)
+                    setLogs(data);
+                    setAction("");
+                    setUsername("");
+                    if (data.length > 0) {
+                        toast.success('Logs retrieved successfully');
+                    }
+                } else {
+                    handleError('Invalid response format');
+                }
             }).catch((error) => {
-                console.log(error);
+                const message = error.response?.data?.message || 'Failed to retrieve logs';
+                handleError(message);
             })
         }
         else {
@@ -40,11 +60,31 @@ const  Logs = () => {
     async function onSearchByAction() {
         if(action !== "" && isActionValid(action)) {
             await api.get('api/logs/action/'+action).then((response) => {
-                setLogs(response.data);
-                setAction("")
-                setUsername("")
+                const data = response.data;
+                if (data.logs !== undefined) {
+                    // Response is LogsWithQuotaResponse
+                    setLogs(data.logs);
+                    setAction("")
+                    setUsername("")
+                    if (data.remainingQuota !== undefined) {
+                        toast.success(`Logs retrieved successfully. Remaining quota: ${data.remainingQuota}`);
+                    } else {
+                        toast.success('Logs retrieved successfully');
+                    }
+                } else if (Array.isArray(data)) {
+                    // Response is array of logs (non-demo logger)
+                    setLogs(data);
+                    setAction("")
+                    setUsername("")
+                    if (data.length > 0) {
+                        toast.success('Logs retrieved successfully');
+                    }
+                } else {
+                    handleError('Invalid response format');
+                }
             }).catch((error) => {
-                console.log(error);
+                const message = error.response?.data?.message || 'Failed to retrieve logs';
+                handleError(message);
             })
         }
         else {
@@ -54,9 +94,20 @@ const  Logs = () => {
 
     async function onDownloadAllLogs() {
         await api.get('api/logs/all').then((response) => {
+            const data = response.data;
+            let logsArray = [];
+            
+            if (data.logs !== undefined) {
+                logsArray = data.logs;
+            } else if (Array.isArray(data)) {
+                logsArray = data;
+            } else {
+                handleError('Invalid response format');
+                return;
+            }
+            
             let log_list = [];
-
-            response.data.forEach((log) => {
+            logsArray.forEach((log) => {
                 log_list.push(log.username + " " + log.action + " " + log.id.date);
             });
 
@@ -73,8 +124,16 @@ const  Logs = () => {
             element.click();
 
             URL.revokeObjectURL(element.href);
+            document.body.removeChild(element);
+            
+            if (data.remainingQuota !== undefined) {
+                toast.success(`Logs downloaded successfully. Remaining quota: ${data.remainingQuota}`);
+            } else {
+                toast.success('Logs downloaded successfully');
+            }
         }).catch((error) => {
-            console.log(error);
+            const message = error.response?.data?.message || 'Failed to download logs';
+            handleError(message);
         })
     }
 

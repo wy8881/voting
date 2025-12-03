@@ -12,6 +12,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -85,6 +88,20 @@ public class PartyService {
         return partyRepository.findAll().stream()
                 .filter(p -> p.getCreatedBy() != null && p.getCreatedBy().equals(createdBy))
                 .filter(p -> !Boolean.TRUE.equals(p.getIsSystemPreset()))
+                .count();
+    }
+
+    public long countTodayPartiesCreatedBy(String createdBy) {
+        LocalDate today = LocalDate.now();
+        return partyRepository.findAll().stream()
+                .filter(p -> p.getCreatedBy() != null && p.getCreatedBy().equals(createdBy))
+                .filter(p -> !Boolean.TRUE.equals(p.getIsSystemPreset()))
+                .filter(p -> {
+                    if (p.getId() == null) return false;
+                    Instant createTime = p.getId().getDate().toInstant();
+                    LocalDate createDate = createTime.atZone(ZoneId.systemDefault()).toLocalDate();
+                    return createDate.equals(today);
+                })
                 .count();
     }
 
@@ -169,6 +186,20 @@ public class PartyService {
         return candidateRepository.findAll().stream()
                 .filter(c -> c.getCreatedBy() != null && c.getCreatedBy().equals(createdBy))
                 .filter(c -> !Boolean.TRUE.equals(c.getIsSystemPreset()))
+                .count();
+    }
+
+    public long countTodayCandidatesCreatedBy(String createdBy) {
+        LocalDate today = LocalDate.now();
+        return candidateRepository.findAll().stream()
+                .filter(c -> c.getCreatedBy() != null && c.getCreatedBy().equals(createdBy))
+                .filter(c -> !Boolean.TRUE.equals(c.getIsSystemPreset()))
+                .filter(c -> {
+                    if (c.getId() == null) return false;
+                    Instant createTime = c.getId().getDate().toInstant();
+                    LocalDate createDate = createTime.atZone(ZoneId.systemDefault()).toLocalDate();
+                    return createDate.equals(today);
+                })
                 .count();
     }
 

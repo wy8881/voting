@@ -7,6 +7,9 @@ import com.example.voting.repositories.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +54,19 @@ public class LogService {
             decrypted.add(decryped_log);
         }
         return decrypted;
+    }
+
+    public long countTodayActionsByUsername(String username, Action action) {
+        List<Log> allLogs = findLogByUsername(username);
+        LocalDate today = LocalDate.now();
+        return allLogs.stream()
+                .filter(log -> {
+                    if (log.getId() == null) return false;
+                    Instant logTime = log.getId().getDate().toInstant();
+                    LocalDate logDate = logTime.atZone(ZoneId.systemDefault()).toLocalDate();
+                    return logDate.equals(today) && log.getAction().equals(action.toString());
+                })
+                .count();
     }
 
 }

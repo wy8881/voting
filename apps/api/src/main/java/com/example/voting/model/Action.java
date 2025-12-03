@@ -18,7 +18,8 @@ public enum Action {
     DELETE_PARTY,
     DELETE_DELEGATE,
     MODIFY_CANDIDATE,
-    MODIFY_PARTY;
+    MODIFY_PARTY,
+    DOWNLOAD_LOGS;
 
 
     public String getName() {

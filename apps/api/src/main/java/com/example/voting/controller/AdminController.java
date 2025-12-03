@@ -5,6 +5,7 @@ import com.example.voting.model.ERole;
 import com.example.voting.model.User;
 import com.example.voting.dto.request.CreateAccountRequest;
 import com.example.voting.dto.response.MessageResponse;
+import com.example.voting.dto.response.MessageWithQuotaResponse;
 import com.example.voting.service.UserService;
 import com.example.voting.service.ElectionService;
 import com.example.voting.service.DataInitializationService;
@@ -51,11 +52,6 @@ public class AdminController {
         String adminUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         User admin = userService.getUserByUsername(adminUsername);
         
-        if (admin != null && admin.getIsDemoAccount() == Boolean.TRUE) {
-            return ResponseEntity.badRequest()
-                    .body(new MessageResponse("Error: Demo accounts cannot create new user accounts!"));
-        }
-
         if (!Validation.isPasswordValid(request.getPassword())) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Error: Password is not valid!"));
@@ -92,12 +88,35 @@ public class AdminController {
                     .body(new MessageResponse("Error: Can only create delegate or logger accounts!"));
         }
 
+        // Check daily limit for demo admin
+        if (admin != null && admin.getIsDemoAccount() == Boolean.TRUE) {
+            Action logAction = role == ERole.ROLE_DELEGATE ? Action.REGISTER_DELEGATE : Action.REGISTER_LOGGER;
+            long todayCount = logService.countTodayActionsByUsername(adminUsername, logAction);
+            if (todayCount >= 5) {
+                return ResponseEntity.badRequest()
+                        .body(new MessageResponse("Error: Daily limit of 5 " + role.getName().toLowerCase() + " accounts reached!"));
+            }
+        }
+
         User user = new User(request.getUsername(), request.getEmail(), request.getPassword());
         user.setRole(role);
+        if (admin != null && admin.getIsDemoAccount() == Boolean.TRUE) {
+            user.setIsDemoAccount(Boolean.TRUE);
+            user.setCreatedBy(adminUsername);
+        }
         userService.createUser(user);
 
         Action logAction = role == ERole.ROLE_DELEGATE ? Action.REGISTER_DELEGATE : Action.REGISTER_LOGGER;
         logService.log(adminUsername, logAction);
+
+        // Calculate remaining quota for demo admin
+        Integer remainingQuota = null;
+        if (admin != null && admin.getIsDemoAccount() == Boolean.TRUE) {
+            long todayCount = logService.countTodayActionsByUsername(adminUsername, logAction);
+            remainingQuota = (int) (5 - todayCount);
+            return ResponseEntity.ok(new MessageWithQuotaResponse(
+                    role.getName() + " account created successfully!", remainingQuota));
+        }
 
         return ResponseEntity.ok(new MessageResponse(role.getName() + " account created successfully!"));
     }

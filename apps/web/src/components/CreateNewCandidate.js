@@ -65,7 +65,12 @@ const CreateNewCandidate = ()  => {
                 "party": party,
                 "rank": rank
             }).then(resp => {
-                handleMsg(resp.data.message, false)
+                const data = resp.data;
+                if (data.remainingQuota !== undefined) {
+                    handleMsg(`${data.message} Remaining candidate slots: ${data.remainingQuota}`, false);
+                } else {
+                    handleMsg(data.message, false);
+                }
             })
         } catch (error) {
             console.log(error)
