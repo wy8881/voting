@@ -97,9 +97,9 @@ public class DataInitializationService {
         createAccount("delegate", "delegate@gmail.com", fixedAccountPassword, ERole.ROLE_DELEGATE, false);
         createAccount("admin", "admin@gmail.com", fixedAccountPassword, ERole.ROLE_ADMIN, false);
         
-        createAccount("voter_demo", "voter_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_VOTER, true);
-        createAccount("delegate_demo", "delegate_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_DELEGATE, true);
-        createAccount("admin_demo", "admin_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_ADMIN, true);
+        createAccount("voterdemo", "voter_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_VOTER, true);
+        createAccount("delegatedemo", "delegate_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_DELEGATE, true);
+        createAccount("admindemo", "admin_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_ADMIN, true);
     }
 
     private void createAccount(String username, String email, String password, ERole role, boolean isDemo) {
