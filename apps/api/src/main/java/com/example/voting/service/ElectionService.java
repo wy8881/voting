@@ -5,6 +5,7 @@ import com.example.voting.dto.response.ElectionResultResponse;
 import com.example.voting.model.*;
 import com.example.voting.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class ElectionService {
+    
+    @Value("${app.db.reset.enabled:true}")
+    private boolean dbResetEnabled;
     @Autowired
     private ElectionStatusRepository electionStatusRepository;
     
@@ -49,6 +53,9 @@ public class ElectionService {
     private LogRepository logRepository;
 
     public void resetDatabase(DataInitializationService dataInitializationService) {
+        if (!dbResetEnabled) {
+            return;
+        }
         deleteAllData();
         dataInitializationService.initializePresetData();
         dataInitializationService.initializeFixedAccountsAfterReset();

@@ -13,6 +13,9 @@ app:
   jwt:
     secret: ${JWTSECRET}
     expire-ms: ${JWT_EXPIRE_MS}
+  db:
+    reset:
+      enabled: ${DB_RESET_ENABLED:true}
   cors:
     allowed-origins:
       - https://voting.wyprojects.com

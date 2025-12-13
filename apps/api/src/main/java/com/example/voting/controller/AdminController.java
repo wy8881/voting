@@ -13,6 +13,7 @@ import com.example.voting.service.LogService;
 import com.example.voting.utils.Validation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,6 +41,9 @@ public class AdminController {
 
     @Autowired
     private DataInitializationService dataInitializationService;
+
+    @Value("${app.db.reset.enabled:true}")
+    private boolean dbResetEnabled;
 
     @GetMapping("/accounts")
     public ResponseEntity<List<User>> getAllAccounts() {
@@ -167,6 +171,11 @@ public class AdminController {
     @PostMapping("/resetDatabase")
     public ResponseEntity<?> resetDatabase() {
         try {
+            if (!dbResetEnabled) {
+                return ResponseEntity.badRequest()
+                        .body(new MessageResponse("Error: Database reset is disabled by configuration!"));
+            }
+            
             String adminUsername = SecurityContextHolder.getContext().getAuthentication().getName();
             User admin = userService.getUserByUsername(adminUsername);
             

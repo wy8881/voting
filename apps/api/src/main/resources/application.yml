@@ -20,6 +20,9 @@ app:
     allowed-methods:
       - GET
       - POST
+  db:
+    reset:
+      enabled: ${DB_RESET_ENABLED:true}
 
 
 management:
