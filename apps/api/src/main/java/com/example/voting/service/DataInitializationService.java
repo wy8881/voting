@@ -3,6 +3,7 @@ package com.example.voting.service;
 import com.example.voting.model.*;
 import com.example.voting.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class DataInitializationService {
 
     @Autowired
     private CandidateRepository candidateRepository;
+
+    @Value("${app.db.reset.fixed-account-password}")
+    private String fixedAccountPassword;
 
     private static final String DEMO_PASSWORD = "2qmbWuNHy!HI";
 
@@ -84,24 +88,18 @@ public class DataInitializationService {
         }
     }
 
-    public void initializeFixedAccounts() {
-        createAccountIfNotExists("voter", "voter@gmail.com", "VOter123!", ERole.ROLE_VOTER, false);
-        createAccountIfNotExists("delegate", "delegate@gmail.com", "DElegate123!", ERole.ROLE_DELEGATE, false);
-        createAccountIfNotExists("admin", "admin@gmail.com", "ADmin123!", ERole.ROLE_ADMIN, false);
-        
-        createAccountIfNotExists("voter_demo", "voter_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_VOTER, true);
-        createAccountIfNotExists("delegate_demo", "delegate_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_DELEGATE, true);
-        createAccountIfNotExists("admin_demo", "admin_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_ADMIN, true);
-    }
-
     public void initializeFixedAccountsAfterReset() {
-        createAccount("voter", "voter@gmail.com", "VOter123!", ERole.ROLE_VOTER, false);
-        createAccount("delegate", "delegate@gmail.com", "DElegate123!", ERole.ROLE_DELEGATE, false);
-        createAccount("admin", "admin@gmail.com", "ADmin123!", ERole.ROLE_ADMIN, false);
+        if (fixedAccountPassword == null || fixedAccountPassword.trim().isEmpty()) {
+            throw new IllegalStateException("app.db.reset.fixed-account-password (or FIXED_ACCOUNT_PASSWORD environment variable) is required but not set");
+        }
         
-        createAccount("voterdemo", "voter_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_VOTER, true);
-        createAccount("delegatedemo", "delegate_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_DELEGATE, true);
-        createAccount("admindemo", "admin_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_ADMIN, true);
+        createAccount("voter", "voter@gmail.com", fixedAccountPassword, ERole.ROLE_VOTER, false);
+        createAccount("delegate", "delegate@gmail.com", fixedAccountPassword, ERole.ROLE_DELEGATE, false);
+        createAccount("admin", "admin@gmail.com", fixedAccountPassword, ERole.ROLE_ADMIN, false);
+        
+        createAccount("voter_demo", "voter_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_VOTER, true);
+        createAccount("delegate_demo", "delegate_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_DELEGATE, true);
+        createAccount("admin_demo", "admin_demo@gmail.com", DEMO_PASSWORD, ERole.ROLE_ADMIN, true);
     }
 
     private void createAccount(String username, String email, String password, ERole role, boolean isDemo) {
@@ -110,29 +108,6 @@ public class DataInitializationService {
         user.setIsDemoAccount(isDemo);
         userService.createUser(user);
         System.out.println("Created account: " + username);
-    }
-
-    private void createAccountIfNotExists(String username, String email, String password, ERole role, boolean isDemo) {
-        User existingUser = userService.getUserByUsername(username);
-        if (existingUser == null) {
-            createAccount(username, email, password, role, isDemo);
-        } else {
-            boolean needsUpdate = !existingUser.getEmail().equals(email) || 
-                                  existingUser.getRole() != role || 
-                                  !java.util.Objects.equals(Boolean.valueOf(isDemo), existingUser.getIsDemoAccount());
-            if (needsUpdate) {
-                existingUser.setEmail(email);
-                existingUser.setRole(role);
-                existingUser.setIsDemoAccount(isDemo);
-                existingUser.setPassword(password);
-                userService.createUser(existingUser);
-                System.out.println("Updated existing account: " + username + " (password reset)");
-            } else {
-                existingUser.setPassword(password);
-                userService.createUser(existingUser);
-                System.out.println("Reset password for existing account: " + username);
-            }
-        }
     }
 
     private static class PresetCandidate {

@@ -16,6 +16,7 @@ app:
   db:
     reset:
       enabled: ${DB_RESET_ENABLED:true}
+      fixed-account-password: ${FIXED_ACCOUNT_PASSWORD}
   cors:
     allowed-origins:
       - https://voting.wyprojects.com
