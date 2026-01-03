@@ -191,27 +191,3 @@ The system is deployed using a modern, production-style cloud setup:
 | **Logger** | View/export audit logs |
 | **Admin** | Election configuration + creating privileged accounts |
 
----
-
-## 📌 Why This Architecture Matters
-
-This project demonstrates:
-
-- Real-world **full-stack engineering**  
-- End-to-end **cloud deployment**  
-- Understanding of **security, JWT, RBAC, encryption**  
-- Practical **DevOps practices**  
-- Full **CI-ready architecture**  
-- Production-level design with Cloudflare protection  
-
-This is not a toy project—it behaves like a **small-scale professional voting platform**.
-
----
-
-## 👩‍💻 Author
-
-**Yi Wang**  
-Full-Stack Developer  
-
-🌐 Portfolio  
-🔗 [LinkedIn](www.linkedin.com/in/yi-wang-meow99)
